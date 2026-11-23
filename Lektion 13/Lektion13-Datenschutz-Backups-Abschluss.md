@@ -625,6 +625,25 @@ router.get('/backup-status', async (req, res) => {
 });
 ```
 
+## Buffet (optional): MongoDB auf dem Raspberry Pi
+
+Wer im Projekt fertig ist, kann MongoDB aus Lektion 10 auf dem eigenen Raspberry Pi betreiben. Am einfachsten geht das mit Docker:
+
+```bash
+ssh <benutzer>@<pi-host>
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER      # danach neu anmelden
+
+# Raspberry Pi 5 (64-Bit-OS):
+docker run -d --name mongo -p 127.0.0.1:27017:27017 -v mongo-data:/data/db mongo:7
+# Raspberry Pi 4: aktuelle MongoDB-Versionen laufen dort nicht, nur 4.4
+# docker run -d --name mongo -p 127.0.0.1:27017:27017 -v mongo-data:/data/db mongo:4.4.18
+
+docker exec -it mongo mongosh      # bei mongo:4.4: mongo statt mongosh
+```
+
+Danach die Übungen aus Lektion 10 (CRUD, Aggregation) auf dem Raspberry Pi ausführen und eine Node.js-Anwendung mit `mongodb://127.0.0.1:27017` verbinden. Vom Laptop aus geht das wie bei MariaDB über einen SSH-Tunnel: `ssh -L 27017:127.0.0.1:27017 <benutzer>@<pi-host>`.
+
 ## Projektpräsentationen
 
 ### Vorbereitung

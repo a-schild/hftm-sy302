@@ -200,18 +200,19 @@ SY302 Databases/
 |------|-------|----------|
 | 1 | Daten / Datenbanken / DBMS | Credit 1 |
 | 2 | Datenbankdesign, SQL DDL | Credit 2 |
-| 3 | SQL DML | Credit 3 |
-| 4 | SQL JOIN / UNION | Credit 4 |
-| 5 | SQL DCL / TCL | Credit 5 |
+| 3 | SQL DML | Credit 3, Raspberry Pi: MariaDB installieren |
+| 4 | SQL JOIN / UNION | Credit 4, Raspberry Pi: HeidiSQL über SSH-Tunnel |
+| 5 | SQL DCL / TCL | Credit 5, Raspberry Pi: MariaDB im Netzwerk freigeben (0.0.0.0) |
 | 6 | SQL-Repetition | Projektstart |
-| 7 | Theorieprüfung SQL / Node.js + DB | Theorieprüfung SQL, Credit 6 |
+| 7 | Theorieprüfung SQL / Node.js + DB | Theorieprüfung SQL, Credit 6, Raspberry Pi: Node.js Hello World |
 | 8 | REST API | Abgabe DB-Design, Credit 7 |
 | 9 | KI / AI, Projektarbeit | Credit 8 |
 | 10 | NoSQL & MongoDB | Credit 9 |
 | 11 | Express / REST API / ORM | Credit 10 |
 | 12 | MQTT, Sicherheit | Abgabe Projekt auf GitLab (nach Unit 12) |
-| 13 | Datenschutz, Backups, Kursabschluss | Präsentation Projekt |
+| 13 | Datenschutz, Backups, Kursabschluss | Präsentation Projekt, Buffet (optional): MongoDB auf dem Raspberry Pi |
 
+Die Theorieprüfung ist erst in Unit 7, weil in den Units 3–7 zusätzlich Übungen auf dem Raspberry Pi stattfinden.
 Die konkreten Daten stehen in der Kursplanung auf Moodle (der Kurs wird jährlich durchgeführt).
 
 **Credits:** Jeder Credit wird mit 0–5 Punkten bewertet; eine fristgerechte, vollständige Abgabe gibt 5 Punkte, eine nicht abgegebene 0 Punkte, eine verspätete höchstens 5 Punkte. Die Punkteraster in `Uebungen/` sind interne Bewertungsraster und werden auf 0–5 Punkte skaliert.

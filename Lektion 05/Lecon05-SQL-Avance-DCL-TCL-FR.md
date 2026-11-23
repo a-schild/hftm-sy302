@@ -7,6 +7,7 @@ L'étudiant(e) est capable de...
 - Reconnaître quand les transactions doivent être utilisées dans les bases de données SQL
 - Expliquer le but des transactions
 - Créer un concept de permissions et la matrice de permissions correspondante
+- Ouvrir un serveur MariaDB à l'accès réseau et créer des utilisateurs avec la partie hôte appropriée
 
 ## DCL - Data Control Language
 
@@ -488,6 +489,50 @@ Transaction A:                  Transaction B:
 2. **Garder les transactions courtes**
 3. **Niveaux d'isolation plus bas** (si possible)
 4. **Logique de retry** dans l'application
+
+## Raspberry Pi: ouvrir MariaDB au réseau
+
+Jusqu'ici, MariaDB sur le Raspberry Pi n'est accessible que via le tunnel SSH (leçon 4). Nous ouvrons maintenant le serveur au réseau et voyons pourquoi la partie hôte d'un utilisateur (`'student'@'...'`) est importante.
+
+### 1. Modifier bind-address
+
+```bash
+ssh <utilisateur>@<pi-host>
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+
+```ini
+[mysqld]
+# bind-address = 127.0.0.1
+bind-address = 0.0.0.0
+```
+
+```bash
+sudo systemctl restart mariadb
+sudo ss -tlnp | grep 3306      # doit afficher 0.0.0.0:3306
+```
+
+### 2. Utilisateur pour l'accès réseau
+
+`'student'@'localhost'` ne vaut que pour les connexions depuis le Raspberry Pi lui-même (y compris via le tunnel SSH). Pour l'accès direct depuis le réseau, il faut un utilisateur séparé avec la partie hôte correspondante:
+
+```sql
+-- sudo mariadb
+CREATE USER 'student'@'192.168.%' IDENTIFIED BY 'mot_de_passe_sur';
+GRANT SELECT, INSERT, UPDATE, DELETE ON hftm_library.* TO 'student'@'192.168.%';
+FLUSH PRIVILEGES;
+
+SELECT User, Host FROM mysql.user WHERE User = 'student';
+SHOW GRANTS FOR 'student'@'192.168.%';
+```
+
+`192.168.%` est un exemple. Utilisez le réseau de la salle de classe (indiqué en cours).
+
+### 3. Se connecter directement avec HeidiSQL
+
+Nouvelle session avec le type de réseau **MariaDB or MySQL (TCP/IP)**, nom d'hôte `<pi-host>`, utilisateur `student`, port `3306`. Comparez: quels droits `student` a-t-il maintenant, et lesquels via le tunnel SSH?
+
+**Sécurité:** ne jamais ouvrir le port 3306 sur Internet. Dans le réseau, ne créer que des utilisateurs avec une partie hôte restreinte et des droits minimaux, jamais `'root'@'%'`. Le tunnel SSH reste la variante la plus sûre.
 
 ## Exercices pratiques
 

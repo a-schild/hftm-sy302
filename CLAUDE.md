@@ -19,6 +19,9 @@
 - Unit N = Lektion N. Credits: L01–L05 = Credit 1–5, L06 keiner (Repetition + Projektstart),
   L07 = Theorieprüfung SQL (30%) + Credit 6, L08 = Abgabe DB-Design + Credit 7, L09–L11 = Credit 8–10.
   Projektabgabe auf GitLab nach Unit 12, Präsentation in Unit 13.
+- Raspberry-Pi-Übungen: L03 MariaDB installieren, L04 HeidiSQL über SSH-Tunnel, L05 MariaDB auf 0.0.0.0 freigeben,
+  L07 Node.js Hello World, L13 Buffet (optional): MongoDB auf dem Pi
+  (deshalb Theorieprüfung erst in Unit 7).
 - Jeder Credit 0–5 Punkte (20% total); Punkte in `Uebungen/` sind interne Raster.
 - Keine konkreten Daten in die Unterlagen schreiben (Kurs läuft jährlich).
 - Offene Punkte stehen in `TODO.md`.

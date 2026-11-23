@@ -14,6 +14,11 @@
 - [ ] Packages installés (mysql2, dotenv, express)
 - [ ] package.json présent
 
+### Raspberry Pi: Node.js
+- [ ] Node.js et npm installés sur le Raspberry Pi
+- [ ] Hello World (`node hello.js`) fonctionne
+- [ ] Serveur web sur le port 3000 accessible dans le navigateur
+
 ### Connexion à la base de données
 - [ ] Fichier .env créé
 - [ ] .gitignore pour .env et node_modules
@@ -233,6 +238,10 @@
 - [ ] Cas limites vérifiés
 - [ ] Gestion des erreurs testée
 - [ ] Pas de bugs critiques
+
+### Buffet (optionnel): MongoDB sur le Raspberry Pi
+- [ ] MongoDB démarré avec Docker sur le Raspberry Pi
+- [ ] Exercices de la leçon 10 exécutés sur le Raspberry Pi
 
 ### Présentation
 - [ ] Présentation préparée (5-7 min)

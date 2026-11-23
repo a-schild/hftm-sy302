@@ -103,6 +103,11 @@
 - [ ] Je comprends la différence DELETE vs TRUNCATE
 - [ ] Je teste les commandes DELETE d'abord avec SELECT
 
+### Raspberry Pi: MariaDB
+- [ ] Connecté(e) au Raspberry Pi avec SSH
+- [ ] MariaDB installé et sécurisé (mariadb-secure-installation)
+- [ ] Utilisateur `student` créé
+
 ### Credit 3 - HFTM Library
 - [ ] Base de données HFTM Library importée
 - [ ] Tous les exercices INSERT résolus
@@ -134,6 +139,11 @@
 - [ ] Je comprends UNION
 - [ ] Je connais la différence UNION vs UNION ALL
 - [ ] Je peux combiner les résultats de différentes requêtes
+
+### Raspberry Pi: HeidiSQL via tunnel SSH
+- [ ] Tunnel SSH configuré (HeidiSQL ou `ssh -L`)
+- [ ] HFTM Library importée sur le Raspberry Pi
+- [ ] Exercices JOIN exécutés sur le Raspberry Pi
 
 ### Credit 4
 - [ ] Tous les exercices INNER JOIN résolus
@@ -170,6 +180,11 @@
   - [ ] ROLLBACK
 - [ ] Je sais quand les transactions sont nécessaires
 - [ ] Je comprends les niveaux d'isolation
+
+### Raspberry Pi: MariaDB dans le réseau
+- [ ] bind-address mis à 0.0.0.0, MariaDB redémarré
+- [ ] Utilisateur `student`@`192.168.%` créé avec des droits minimaux
+- [ ] Connecté(e) directement (sans tunnel) avec HeidiSQL
 
 ### Credit 5 - Centre médical
 - [ ] Concept de permissions créé

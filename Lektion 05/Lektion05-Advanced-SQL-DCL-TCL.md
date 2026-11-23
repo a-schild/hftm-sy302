@@ -7,6 +7,7 @@ Der/die Studierende ist in der Lage...
 - Zu erkennen wann Transaktionen in SQL Datenbanken eingesetzt werden sollen
 - Den Einsatzzweck von Transaktionen zu erklären
 - Ein Berechtigungskonzept und die entsprechende Berechtigungsmatrix zu erstellen
+- Einen MariaDB-Server für den Netzwerkzugriff freizugeben und Benutzer mit passendem Host-Teil anzulegen
 
 ## DCL - Data Control Language
 
@@ -488,6 +489,50 @@ Transaktion A:                  Transaktion B:
 2. **Transaktionen kurz halten**
 3. **Niedrigere Isolation Levels** (wenn möglich)
 4. **Retry-Logik** in Applikation
+
+## Raspberry Pi: MariaDB im Netzwerk freigeben
+
+Bisher ist MariaDB auf dem Raspberry Pi nur über den SSH-Tunnel erreichbar (Lektion 4). Jetzt geben wir den Server im Netzwerk frei und sehen dabei, warum der Host-Teil eines Benutzers (`'student'@'...'`) wichtig ist.
+
+### 1. bind-address ändern
+
+```bash
+ssh <benutzer>@<pi-host>
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+
+```ini
+[mysqld]
+# bind-address = 127.0.0.1
+bind-address = 0.0.0.0
+```
+
+```bash
+sudo systemctl restart mariadb
+sudo ss -tlnp | grep 3306      # muss 0.0.0.0:3306 zeigen
+```
+
+### 2. Benutzer für den Netzwerkzugriff
+
+`'student'@'localhost'` gilt nur für Verbindungen vom Raspberry Pi selbst (auch über den SSH-Tunnel). Für den direkten Zugriff aus dem Netzwerk braucht es einen eigenen Benutzer mit passendem Host-Teil:
+
+```sql
+-- sudo mariadb
+CREATE USER 'student'@'192.168.%' IDENTIFIED BY 'sicheres_passwort';
+GRANT SELECT, INSERT, UPDATE, DELETE ON hftm_library.* TO 'student'@'192.168.%';
+FLUSH PRIVILEGES;
+
+SELECT User, Host FROM mysql.user WHERE User = 'student';
+SHOW GRANTS FOR 'student'@'192.168.%';
+```
+
+`192.168.%` ist ein Beispiel. Verwendet das Netz des Schulzimmers (Angabe im Unterricht).
+
+### 3. Direkt mit HeidiSQL verbinden
+
+Neue Sitzung mit Netzwerktyp **MariaDB or MySQL (TCP/IP)**, Hostname `<pi-host>`, Benutzer `student`, Port `3306`. Vergleicht: Welche Rechte hat `student` jetzt, welche über den SSH-Tunnel?
+
+**Sicherheit:** Port 3306 nie ins Internet öffnen. Im Netzwerk nur Benutzer mit eingeschränktem Host-Teil und minimalen Rechten anlegen, nie `'root'@'%'`. Der SSH-Tunnel bleibt die sicherere Variante.
 
 ## Praktische Aufgaben
 

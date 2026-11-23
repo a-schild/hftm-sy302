@@ -17,6 +17,7 @@ Die/der Studierende ist in der Lage...
 - Die grundlegenden CRUD-Operationen zu implementieren
 - Prepared Statements zur Vermeidung von SQL-Injection zu verstehen und anzuwenden
 - Transaktionen und Fehlerbehandlung in Node.js einzusetzen
+- Ein Node.js-Programm auf einem Raspberry Pi auszuführen
 
 ## Vorbereitung
 
@@ -700,6 +701,63 @@ console.log('Anzahl Zeilen:', rows.length);
 console.log('Erste Zeile:', rows[0]);
 console.log('Alle Zeilen:', JSON.stringify(rows, null, 2));
 ```
+
+## Raspberry Pi: Node.js Hello World
+
+Node.js läuft auch auf dem Raspberry Pi. Dort liegt die Datenbank lokal, eine Node.js-Anwendung kann also direkt mit `127.0.0.1` verbinden.
+
+### 1. Node.js installieren
+
+```bash
+ssh <benutzer>@<pi-host>
+sudo apt update
+sudo apt install -y nodejs npm
+node --version
+npm --version
+```
+
+### 2. Hello World
+
+```bash
+mkdir ~/hello-node && cd ~/hello-node
+nano hello.js
+```
+
+```javascript
+// hello.js
+console.log('Hello World vom Raspberry Pi!');
+console.log('Node.js-Version:', process.version);
+```
+
+```bash
+node hello.js
+```
+
+### 3. Kleiner Webserver
+
+```javascript
+// server.js
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Hello World vom Raspberry Pi!\n');
+});
+
+server.listen(3000, () => {
+    console.log('Server läuft auf Port 3000');
+});
+```
+
+```bash
+node server.js
+```
+
+Im Browser des Laptops: `http://<pi-host>:3000`. Beenden mit `Ctrl+C`.
+
+### 4. Zusatz: Datenbank auf dem Raspberry Pi abfragen
+
+Kopiert `db-nodejs-demo/` auf den Raspberry Pi (z.B. mit `scp -r`), kopiert dort `env.sample` nach `.env` und setzt den Benutzer `student` aus Lektion 3. Danach `npm install`, `node test-connection.js` und `node test-read.js`.
 
 ## Praktische Übungen
 

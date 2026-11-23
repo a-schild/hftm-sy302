@@ -214,7 +214,7 @@ mongosh
 
 ### MongoDB Atlas (Cloud)
 
-Alternative zur lokalen Installation: MongoDB Atlas (kostenlos für den Einstieg)
+Alternative zur lokalen Installation: MongoDB Atlas (kostenlos für den Einstieg). MongoDB auf dem Raspberry Pi folgt als optionales Buffet in Lektion 13.
 
 1. **Account erstellen:** <https://www.mongodb.com/atlas>
 2. **Cluster erstellen:** Free Tier (M0)

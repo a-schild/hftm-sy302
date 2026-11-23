@@ -7,6 +7,7 @@ L'étudiant(e) est capable de...
 - Remplir une base de données simple avec des données et exécuter des requêtes
 - Comprendre et appliquer les JOINs
 - Combiner des données de plusieurs tables
+- Accéder à une base de données distante avec HeidiSQL via un tunnel SSH
 
 ## Pourquoi les JOINs?
 
@@ -471,6 +472,40 @@ INNER JOIN books b ON g.ID = b.GenresID
 GROUP BY g.ID, g.Genre
 HAVING AVG(b.AmountInStock) > 100;
 ```
+
+## Raspberry Pi: accès avec HeidiSQL via un tunnel SSH
+
+La base MariaDB du Raspberry Pi (leçon 3) n'est accessible que localement. Avec un tunnel SSH, nous redirigeons un port du portable de manière chiffrée vers le Raspberry Pi.
+
+```
+Portable (HeidiSQL) --SSH, port 22--> Raspberry Pi --> MariaDB 127.0.0.1:3306
+```
+
+### Variante A: tunnel directement dans HeidiSQL
+
+1. Gestionnaire de sessions → **Nouveau**
+2. Type de réseau: **MariaDB or MySQL (SSH tunnel)**
+3. Onglet **Paramètres**: nom d'hôte `127.0.0.1`, utilisateur `student`, mot de passe, port `3306`
+4. Onglet **Tunnel SSH**:
+   - Programme SSH: `plink.exe` (fourni avec HeidiSQL) ou `ssh.exe`
+   - Hôte et port SSH: `<pi-host>`, `22`
+   - Nom d'utilisateur et mot de passe (ou clé privée) de l'utilisateur du Raspberry Pi
+   - Port local: `3307`
+5. **Ouvrir**
+
+### Variante B: tunnel en ligne de commande
+
+```bash
+ssh -L 3307:127.0.0.1:3306 <utilisateur>@<pi-host>
+```
+
+Tant que cette connexion est ouverte, HeidiSQL se connecte normalement à `127.0.0.1`, port `3307`.
+
+### Charger HFTM Library sur le Raspberry Pi
+
+Dans HeidiSQL: **Fichier → Exécuter un fichier SQL** et choisir `HFTM Library.sql` (dossier `Lektion 03`). Le fichier crée lui-même la base `hftm_library`. Exécutez ensuite les exercices JOIN de cette leçon sur le Raspberry Pi.
+
+À la leçon 5, nous ouvrons ensuite MariaDB à l'accès direct depuis le réseau.
 
 ## Exercices pratiques
 

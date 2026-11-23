@@ -7,6 +7,7 @@ Der/die Studierende ist in der Lage...
 - Einfache SQL DML Befehle zu verwenden
 - Eine einfache Datenbank mit Daten zu füllen und Abfragen auszuführen
 - CREATE, UPDATE, DELETE Operationen durchzuführen
+- MariaDB auf einem Raspberry Pi zu installieren
 
 ## Was ist DML?
 
@@ -567,6 +568,41 @@ SELECT MOD(10, 3);           -- 1 (Rest von 10/3)
 SELECT RAND();               -- 0.xxx (zwischen 0 und 1)
 SELECT FLOOR(RAND() * 100);  -- 0-99
 ```
+
+## Raspberry Pi: MariaDB installieren
+
+Jede Gruppe erhält einen Raspberry Pi mit Raspberry Pi OS. Hostname, Benutzername und Passwort erhaltet ihr im Unterricht. Darauf installieren wir einen eigenen MariaDB-Server.
+
+### 1. Mit SSH verbinden
+
+```bash
+ssh <benutzer>@<pi-host>
+```
+
+### 2. MariaDB installieren und absichern
+
+```bash
+sudo apt update
+sudo apt install -y mariadb-server
+sudo systemctl status mariadb        # muss "active (running)" zeigen
+sudo mariadb-secure-installation     # Root-Zugang absichern, Test-DB entfernen
+```
+
+### 3. Datenbank-Benutzer anlegen
+
+```sql
+-- sudo mariadb
+CREATE USER 'student'@'localhost' IDENTIFIED BY 'sicheres_passwort';
+GRANT ALL PRIVILEGES ON hftm_library.* TO 'student'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+```bash
+mariadb -u student -p -e "SELECT VERSION();"
+```
+
+**Hinweis:** MariaDB hört auf dem Raspberry Pi standardmässig nur auf `127.0.0.1` (Port 3306) und ist von aussen nicht erreichbar. Das ist gewollt: In Lektion 4 greifen wir mit HeidiSQL über einen SSH-Tunnel darauf zu, ohne den Port zu öffnen.
 
 ## Praktische Aufgaben
 
