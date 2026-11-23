@@ -15,20 +15,20 @@ In relationalen Datenbanken sind Daten über **mehrere Tabellen verteilt**. Mit 
 ### Beispiel
 
 ```
-Tabelle: books                 Tabelle: authors
-┌────┬────────┬──────────┐    ┌────┬──────────┬───────────┐
-│ id │ title  │ author_id│    │ id │ name     │ country   │
-├────┼────────┼──────────┤    ├────┼──────────┼───────────┤
-│ 1  │ Hobbit │ 10       │    │ 10 │ Tolkien  │ UK        │
-│ 2  │ 1984   │ 15       │    │ 15 │ Orwell   │ UK        │
-└────┴────────┴──────────┘    └────┴──────────┴───────────┘
+Tabelle: books                Tabelle: authors
+┌────┬────────┬───────────┐   ┌────┬───────────┬──────────┐
+│ ID │ Titel  │ AuthorsID │   │ ID │ Firstname │ Lastname │
+├────┼────────┼───────────┤   ├────┼───────────┼──────────┤
+│ 1  │ Hobbit │ 10        │   │ 10 │ J.R.R.    │ Tolkien  │
+│ 2  │ 1984   │ 15        │   │ 15 │ George    │ Orwell   │
+└────┴────────┴───────────┘   └────┴───────────┴──────────┘
 ```
 
 **Ziel:** Bücher mit Autorennamen anzeigen
 
 ```
 ┌────────┬──────────┐
-│ title  │ name     │
+│ Titel  │ Lastname │
 ├────────┼──────────┤
 │ Hobbit │ Tolkien  │
 │ 1984   │ Orwell   │
@@ -67,44 +67,44 @@ INNER JOIN tabelle2 ON tabelle1.spalte = tabelle2.spalte;
 **Bücher mit Autorennamen:**
 ```sql
 SELECT 
-    books.Title,
-    authors.lastname,
-    authors.firstname
+    books.Titel,
+    authors.Lastname,
+    authors.Firstname
 FROM books
-INNER JOIN authors ON books.AutorID = authors.ID;
+INNER JOIN authors ON books.AuthorsID = authors.ID;
 ```
 
 **Mit Aliassen (kürzer):**
 ```sql
 SELECT 
-    b.Title,
-    a.lastname,
-    a.firstname
+    b.Titel,
+    a.Lastname,
+    a.Firstname
 FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID;
+INNER JOIN authors a ON b.AuthorsID = a.ID;
 ```
 
 **Mehrere JOINs:**
 ```sql
 SELECT 
-    b.Title,
-    a.lastname AS author,
+    b.Titel,
+    a.Lastname AS author,
     g.Genre,
     p.Name AS publisher
 FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID
+INNER JOIN authors a ON b.AuthorsID = a.ID
 INNER JOIN genres g ON b.GenresID = g.ID
-INNER JOIN Publishers p ON b.PublishersID = p.ID;
+INNER JOIN publishers p ON b.PublishersID = p.ID;
 ```
 
 **Mit WHERE-Bedingung:**
 ```sql
 SELECT 
-    b.Title,
-    a.lastname
+    b.Titel,
+    a.Lastname
 FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID
-WHERE a.lastname = 'Tolkien';
+INNER JOIN authors a ON b.AuthorsID = a.ID
+WHERE a.Lastname = 'Tolkien';
 ```
 
 ## LEFT JOIN (LEFT OUTER JOIN)
@@ -139,34 +139,34 @@ LEFT JOIN tabelle2 ON tabelle1.spalte = tabelle2.spalte;
 **Alle Autoren mit ihren Büchern (auch Autoren ohne Bücher):**
 ```sql
 SELECT 
-    a.lastname,
-    a.firstname,
-    b.Title
+    a.Lastname,
+    a.Firstname,
+    b.Titel
 FROM authors a
-LEFT JOIN books b ON a.ID = b.AutorID
-ORDER BY a.lastname;
+LEFT JOIN books b ON a.ID = b.AuthorsID
+ORDER BY a.Lastname;
 ```
 
 **Autoren OHNE Bücher finden:**
 ```sql
 SELECT 
-    a.lastname,
-    a.firstname
+    a.Lastname,
+    a.Firstname
 FROM authors a
-LEFT JOIN books b ON a.ID = b.AutorID
+LEFT JOIN books b ON a.ID = b.AuthorsID
 WHERE b.ID IS NULL;
 ```
 
 **Kunden mit Anzahl Ausleihen:**
 ```sql
 SELECT 
-    c.lastname,
-    c.firstname,
-    COUNT(l.ID) AS anzahl_ausleihen
-FROM Customers c
+    c.Lastname,
+    c.Firstname,
+    COUNT(l.ID) AS loan_count
+FROM customers c
 LEFT JOIN lends l ON c.ID = l.CustomerID
-GROUP BY c.ID, c.lastname, c.firstname
-ORDER BY anzahl_ausleihen DESC;
+GROUP BY c.ID, c.Lastname, c.Firstname
+ORDER BY loan_count DESC;
 ```
 
 ## RIGHT JOIN (RIGHT OUTER JOIN)
@@ -201,11 +201,11 @@ RIGHT JOIN tabelle2 ON tabelle1.spalte = tabelle2.spalte;
 **Alle Bücher mit Autoren (auch Bücher ohne zugeordneten Autor):**
 ```sql
 SELECT 
-    b.Title,
-    a.lastname,
-    a.firstname
+    b.Titel,
+    a.Lastname,
+    a.Firstname
 FROM authors a
-RIGHT JOIN books b ON a.ID = b.AutorID;
+RIGHT JOIN books b ON a.ID = b.AuthorsID;
 ```
 
 **Hinweis:** RIGHT JOIN wird seltener verwendet. Meist kann man den Query mit LEFT JOIN umschreiben:
@@ -213,11 +213,11 @@ RIGHT JOIN books b ON a.ID = b.AutorID;
 ```sql
 -- Gleiche Abfrage mit LEFT JOIN
 SELECT 
-    b.Title,
-    a.lastname,
-    a.firstname
+    b.Titel,
+    a.Lastname,
+    a.Firstname
 FROM books b
-LEFT JOIN authors a ON b.AutorID = a.ID;
+LEFT JOIN authors a ON b.AuthorsID = a.ID;
 ```
 
 ## FULL OUTER JOIN
@@ -246,18 +246,18 @@ Der **FULL OUTER JOIN** gibt **alle Zeilen** aus beiden Tabellen zurück.
 ```sql
 -- Simulation mit UNION
 SELECT 
-    a.lastname,
-    b.Title
+    a.Lastname,
+    b.Titel
 FROM authors a
-LEFT JOIN books b ON a.ID = b.AutorID
+LEFT JOIN books b ON a.ID = b.AuthorsID
 
 UNION
 
 SELECT 
-    a.lastname,
-    b.Title
+    a.Lastname,
+    b.Titel
 FROM authors a
-RIGHT JOIN books b ON a.ID = b.AutorID;
+RIGHT JOIN books b ON a.ID = b.AuthorsID;
 ```
 
 ## CROSS JOIN
@@ -269,7 +269,7 @@ Der **CROSS JOIN** erstellt das **kartesische Produkt** beider Tabellen (jede Ze
 ```sql
 -- Alle Kombinationen von Autoren und Genres
 SELECT 
-    a.lastname,
+    a.Lastname,
     g.Genre
 FROM authors a
 CROSS JOIN genres g;
@@ -289,6 +289,8 @@ ergibt das 100 * 10 = 1000 Zeilen!
 ## SELF JOIN
 
 Ein **SELF JOIN** verbindet eine Tabelle mit sich selbst.
+
+Das folgende Beispiel verwendet die separate Beispieltabelle `employees`; sie ist nicht Teil der HFTM-Library-Datenbank.
 
 ### Beispiel: Mitarbeiter und ihre Vorgesetzten
 
@@ -326,12 +328,12 @@ Bei N:M Beziehungen müssen wir über die **Zwischentabelle** joinen.
 ```sql
 -- Alle Autoren mit ihren Verlagen
 SELECT 
-    a.lastname,
-    a.firstname,
+    a.Lastname,
+    a.Firstname,
     p.Name AS publisher
 FROM authors a
-INNER JOIN authors_Publishers ap ON a.ID = ap.autorid
-INNER JOIN Publishers p ON ap.PublishersID = p.ID;
+INNER JOIN authors_publishers ap ON a.ID = ap.AuthorsID
+INNER JOIN publishers p ON ap.PublishersID = p.ID;
 ```
 
 ### Beispiel: Autoren und ihre Genres
@@ -339,13 +341,13 @@ INNER JOIN Publishers p ON ap.PublishersID = p.ID;
 ```sql
 -- Autoren mit allen ihren Genres
 SELECT 
-    a.lastname,
-    a.firstname,
+    a.Lastname,
+    a.Firstname,
     GROUP_CONCAT(g.Genre SEPARATOR ', ') AS genres
 FROM authors a
-INNER JOIN authors_genres ag ON a.ID = ag.autorsid
+INNER JOIN authors_genres ag ON a.ID = ag.AuthorsID
 INNER JOIN genres g ON ag.GenresID = g.ID
-GROUP BY a.ID, a.lastname, a.firstname;
+GROUP BY a.ID, a.Lastname, a.Firstname;
 ```
 
 ## UNION
@@ -373,39 +375,39 @@ SELECT spalten FROM tabelle2;
 **Einfache UNION:**
 ```sql
 -- Alle Autoren und alle Kunden in einer Liste
-SELECT lastname, firstname, 'Author' AS type
+SELECT Lastname, Firstname, 'Author' AS type
 FROM authors
 UNION
-SELECT lastname, firstname, 'Customer' AS type
-FROM Customers
-ORDER BY lastname;
+SELECT Lastname, Firstname, 'Customer' AS type
+FROM customers
+ORDER BY Lastname;
 ```
 
 **UNION ALL (mit Duplikaten):**
 ```sql
-SELECT lastname FROM authors
+SELECT Lastname FROM authors
 UNION ALL
-SELECT lastname FROM Customers;
+SELECT Lastname FROM customers;
 -- Wenn ein Name in beiden Tabellen ist, erscheint er 2x
 ```
 
 **Praktisches Beispiel: Vollständige Kontaktliste**
 ```sql
 SELECT 
-    CONCAT(firstname, ' ', lastname) AS name,
-    email,
+    CONCAT(Firstname, ' ', Lastname) AS name,
+    Email,
     'Author' AS category
 FROM authors
-WHERE email IS NOT NULL
+WHERE Email IS NOT NULL
 
 UNION
 
 SELECT 
-    CONCAT(firstname, ' ', lastname) AS name,
-    email,
+    CONCAT(Firstname, ' ', Lastname) AS name,
+    Email,
     'Customer' AS category
-FROM Customers
-WHERE email IS NOT NULL
+FROM customers
+WHERE Email IS NOT NULL
 
 ORDER BY name;
 ```
@@ -417,20 +419,20 @@ ORDER BY name;
 ```sql
 -- Anzahl Bücher pro Autor
 SELECT 
-    a.lastname,
-    a.firstname,
-    COUNT(b.ID) AS anzahl_buecher
+    a.Lastname,
+    a.Firstname,
+    COUNT(b.ID) AS book_count
 FROM authors a
-LEFT JOIN books b ON a.ID = b.AutorID
-GROUP BY a.ID, a.lastname, a.firstname
-ORDER BY anzahl_buecher DESC;
+LEFT JOIN books b ON a.ID = b.AuthorsID
+GROUP BY a.ID, a.Lastname, a.Firstname
+ORDER BY book_count DESC;
 
 -- Durchschnittliche Anzahl Bücher pro Verlag
 SELECT 
     p.Name,
     AVG(b.AmountInStock) AS avg_stock,
     SUM(b.AmountInStock) AS total_stock
-FROM Publishers p
+FROM publishers p
 LEFT JOIN books b ON p.ID = b.PublishersID
 GROUP BY p.ID, p.Name;
 
@@ -451,14 +453,14 @@ GROUP BY g.ID, g.Genre;
 ```sql
 -- Autoren mit mehr als 5 Büchern
 SELECT 
-    a.lastname,
-    a.firstname,
-    COUNT(b.ID) AS anzahl_buecher
+    a.Lastname,
+    a.Firstname,
+    COUNT(b.ID) AS book_count
 FROM authors a
-INNER JOIN books b ON a.ID = b.AutorID
-GROUP BY a.ID, a.lastname, a.firstname
+INNER JOIN books b ON a.ID = b.AuthorsID
+GROUP BY a.ID, a.Lastname, a.Firstname
 HAVING COUNT(b.ID) > 5
-ORDER BY anzahl_buecher DESC;
+ORDER BY book_count DESC;
 
 -- Genres mit durchschnittlich mehr als 100 Büchern auf Lager
 SELECT 
@@ -475,7 +477,7 @@ HAVING AVG(b.AmountInStock) > 100;
 ### Aufgabe 1: Einfache JOINs
 
 1. Liste alle Bücher mit Autor-Namen, Genre und Verlag
-2. Zeige alle Kunden mit ihrem Wohnort (city)
+2. Zeige alle Kunden mit ihrem Wohnort (`places.City`, via `customers.LocationID`)
 3. Finde alle aktuellen Ausleihen mit Kunden- und Buchtitel
 
 ### Aufgabe 2: LEFT JOIN
@@ -503,28 +505,28 @@ HAVING AVG(b.AmountInStock) > 100;
 **Beispiel 1: Bücher mit allen Details**
 ```sql
 SELECT 
-    b.Title,
-    CONCAT(a.firstname, ' ', a.lastname) AS author,
+    b.Titel,
+    CONCAT(a.Firstname, ' ', a.Lastname) AS author,
     g.Genre,
     p.Name AS publisher,
     b.Published_Date,
     b.AmountInStock
 FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID
+INNER JOIN authors a ON b.AuthorsID = a.ID
 INNER JOIN genres g ON b.GenresID = g.ID
-INNER JOIN Publishers p ON b.PublishersID = p.ID
-ORDER BY b.Title;
+INNER JOIN publishers p ON b.PublishersID = p.ID
+ORDER BY b.Titel;
 ```
 
 **Beispiel 2: Top 10 Autoren nach Buchanzahl**
 ```sql
 SELECT 
-    a.lastname,
-    a.firstname,
+    a.Lastname,
+    a.Firstname,
     COUNT(b.ID) AS book_count
 FROM authors a
-LEFT JOIN books b ON a.ID = b.AutorID
-GROUP BY a.ID, a.lastname, a.firstname
+LEFT JOIN books b ON a.ID = b.AuthorsID
+GROUP BY a.ID, a.Lastname, a.Firstname
 ORDER BY book_count DESC
 LIMIT 10;
 ```
@@ -532,13 +534,13 @@ LIMIT 10;
 **Beispiel 3: Überfällige Ausleihen**
 ```sql
 SELECT 
-    CONCAT(c.firstname, ' ', c.lastname) AS customer,
-    b.Title,
+    CONCAT(c.Firstname, ' ', c.Lastname) AS customer,
+    b.Titel,
     l.Date_From,
     l.Date_To,
     DATEDIFF(CURDATE(), l.Date_To) AS days_overdue
 FROM lends l
-INNER JOIN Customers c ON l.CustomerID = c.ID
+INNER JOIN customers c ON l.CustomerID = c.ID
 INNER JOIN books b ON l.BookID = b.ID
 WHERE l.Date_To < CURDATE()
 ORDER BY days_overdue DESC;
@@ -558,16 +560,16 @@ ORDER BY days_overdue DESC;
 ```sql
 -- Gut formatiert
 SELECT 
-    b.Title,
-    a.lastname,
+    b.Titel,
+    a.Lastname,
     g.Genre
 FROM books b
 INNER JOIN authors a 
-    ON b.AutorID = a.ID
+    ON b.AuthorsID = a.ID
 INNER JOIN genres g 
     ON b.GenresID = g.ID
 WHERE b.Published_Date > '2000-01-01'
-ORDER BY b.Title;
+ORDER BY b.Titel;
 ```
 
 ### Aliasse verwenden
@@ -575,12 +577,12 @@ ORDER BY b.Title;
 ```sql
 -- Eindeutige Aliasse verwenden
 SELECT 
-    b.Title,          -- b für books
-    a.lastname,       -- a für authors
-    pub.Name          -- pub für Publishers
+    b.Titel,          -- b für books
+    a.Lastname,       -- a für authors
+    pub.Name          -- pub für publishers
 FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID
-INNER JOIN Publishers pub ON b.PublishersID = pub.ID;
+INNER JOIN authors a ON b.AuthorsID = a.ID
+INNER JOIN publishers pub ON b.PublishersID = pub.ID;
 ```
 
 ## Häufige Fehler vermeiden
@@ -596,23 +598,23 @@ SELECT * FROM books, authors;
 ✅ **Richtig:**
 ```sql
 SELECT * FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID;
+INNER JOIN authors a ON b.AuthorsID = a.ID;
 ```
 
 ### 2. Ambiguous Column Names
 
 ❌ **Falsch:**
 ```sql
--- Wenn beide Tabellen 'id' haben
-SELECT id FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID;
--- Error: Column 'id' in field list is ambiguous
+-- Wenn beide Tabellen 'ID' haben
+SELECT ID FROM books b
+INNER JOIN authors a ON b.AuthorsID = a.ID;
+-- Error: Column 'ID' in field list is ambiguous
 ```
 
 ✅ **Richtig:**
 ```sql
-SELECT b.id, a.id FROM books b
-INNER JOIN authors a ON b.AutorID = a.ID;
+SELECT b.ID, a.ID FROM books b
+INNER JOIN authors a ON b.AuthorsID = a.ID;
 ```
 
 ### 3. GROUP BY ohne Aggregat-Funktion
@@ -620,15 +622,15 @@ INNER JOIN authors a ON b.AutorID = a.ID;
 ❌ **Falsch:**
 ```sql
 -- Ohne Aggregat-Funktion macht GROUP BY keinen Sinn
-SELECT a.lastname FROM authors a
-GROUP BY a.lastname;
+SELECT a.Lastname FROM authors a
+GROUP BY a.Lastname;
 ```
 
 ✅ **Richtig:**
 ```sql
 -- Mit COUNT
-SELECT a.lastname, COUNT(*) AS count FROM authors a
-GROUP BY a.lastname;
+SELECT a.Lastname, COUNT(*) AS count FROM authors a
+GROUP BY a.Lastname;
 ```
 
 ## Zusammenfassung

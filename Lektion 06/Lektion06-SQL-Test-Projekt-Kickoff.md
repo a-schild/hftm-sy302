@@ -11,7 +11,7 @@
 
 - **Dauer:** 90 Minuten
 - **Gewichtung:** 30% der Gesamtnote
-- **Hilfsmittel:** Keine (außer Stift und Papier)
+- **Hilfsmittel:** Keine (ausser Stift und Papier)
 - **Format:** Schriftlich oder am Computer
 
 ### Prüfungsthemen
@@ -503,7 +503,7 @@ Im Moodle findest du Beispiel-Projekte von vorherigen Semestern zur Inspiration.
 ✅ README und API-Docs von Anfang an pflegen
 
 ❌ **Kein Testing**
-✅ Regelmäßig testen (Postman für API)
+✅ Regelmässig testen (Postman für API)
 
 ❌ **Keine Versionskontrolle**
 ✅ Git von Anfang an nutzen

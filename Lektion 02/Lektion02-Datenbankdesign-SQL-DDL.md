@@ -247,10 +247,10 @@ SQL-Befehle zum **Definieren** der Datenbankstruktur.
 **Numerische Typen:**
 ```sql
 INT             -- Ganzzahl (-2147483648 bis 2147483647)
-BIGINT          -- Große Ganzzahl
+BIGINT          -- Grosse Ganzzahl
 DECIMAL(10,2)   -- Festkommazahl (10 Stellen, 2 Nachkommastellen)
-FLOAT           -- Fließkommazahl
-DOUBLE          -- Doppelt-genaue Fließkommazahl
+FLOAT           -- Fliesskommazahl
+DOUBLE          -- Doppelt-genaue Fliesskommazahl
 ```
 
 **Text-Typen:**
@@ -282,21 +282,21 @@ BLOB            -- Binärdaten (z.B. Bilder)
 
 ```sql
 -- Datenbank erstellen
-CREATE DATABASE arztpraxis;
+CREATE DATABASE medical_center;
 
 -- Mit Character Set
-CREATE DATABASE arztpraxis 
+CREATE DATABASE medical_center 
     CHARACTER SET utf8mb4 
     COLLATE utf8mb4_unicode_ci;
 
 -- Datenbank auswählen
-USE arztpraxis;
+USE medical_center;
 
 -- Datenbank löschen (VORSICHT!)
-DROP DATABASE arztpraxis;
+DROP DATABASE medical_center;
 
 -- Datenbank nur löschen wenn sie existiert
-DROP DATABASE IF EXISTS arztpraxis;
+DROP DATABASE IF EXISTS medical_center;
 ```
 
 ### CREATE TABLE
@@ -597,7 +597,7 @@ TRUNCATE TABLE     -- Alle Daten löschen
 - Nie natürliche Schlüssel (E-Mail, Username) als PK
 
 ✅ **Datentypen:**
-- VARCHAR statt CHAR (außer fixe Länge bekannt)
+- VARCHAR statt CHAR (ausser fixe Länge bekannt)
 - DECIMAL für Geld (nicht FLOAT!)
 - TIMESTAMP für Zeitstempel mit Auto-Update
 - ENUM für fixe Werte-Listen

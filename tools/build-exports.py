@@ -2,7 +2,7 @@
 template (Vorlage/Vorlage_KleineDokumente.dotx).
 
 Usage (from the repository root):
-    python tools/build-exports.py                 # default set (Lektion 07-13, Checklisten)
+    python tools/build-exports.py                 # default set (Lektion 01-13, Checklisten)
     python tools/build-exports.py "Lektion 08/Lektion08-REST-API.md" ...
 
 Options (environment variables):
@@ -41,6 +41,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 
 DEFAULT_GLOBS = [
+    "Lektion 01/*.md",
+    "Lektion 02/*.md",
+    "Lektion 03/*.md",
+    "Lektion 04/*.md",
+    "Lektion 05/*.md",
+    "Lektion 06/*.md",
     "Lektion 07/*.md",
     "Lektion 08/*.md",
     "Lektion 09/*.md",

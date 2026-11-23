@@ -25,11 +25,11 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 **Themen:** INNER JOIN, LEFT JOIN, RIGHT JOIN, UNION, Aggregationen
 
 ### ✅ Lektion 5: SQL Erweitert - DCL & TCL
-**Pfad:** `Lektion 05/Lektion05-SQL-Erweitert-DCL-TCL.md`
+**Pfad:** `Lektion 05/Lektion05-Advanced-SQL-DCL-TCL.md`
 **Themen:** GRANT, REVOKE, Transactions, ACID, Berechtigungen
 
 ### ✅ Lektion 6: SQL Test & Projektstart
-**Pfad:** `Lektion 06/Lektion06-SQL-Test-Projektstart.md`
+**Pfad:** `Lektion 06/Lektion06-SQL-Test-Projekt-Kickoff.md`
 **Themen:** Testvorbereitung, Projektthemen, Anforderungen
 
 ### ✅ Lektion 7: Node.js und Datenbanken
@@ -130,7 +130,7 @@ Die Markdown-Dateien sind die Quelle. Die PDFs werden mit der HFTM-Vorlage
 Fusszeile Dateiname/Seite/Datum). Word-Dokumente werden nicht mehr gepflegt.
 
 ```powershell
-python tools/build-exports.py                               # Lektion 07-13 + Checklisten
+python tools/build-exports.py                               # Lektion 01-13 + Checklisten
 python tools/build-exports.py "Lektion 08/Lektion08-REST-API.md"   # einzelne Datei
 ```
 
