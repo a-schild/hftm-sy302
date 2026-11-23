@@ -730,7 +730,3 @@ Projet complet avec:
 ## Prochaines étapes
 
 Dans la leçon 13, tous présenteront leurs projets et nous conclurons le cours avec des thèmes sur la protection des données et les sauvegardes.
-
----
-
-© 2024 HFTM - Tous droits réservés

@@ -312,55 +312,55 @@ mysqldump -u root -p dbname > dump.sql
 ## Éviter les erreurs fréquentes
 
 ### Backend
-❌ Credentials dans le code
-❌ Pas de gestion des erreurs
-❌ SQL Injection possible
-❌ CORS non configuré
-❌ Pas de validation des entrées
+- ❌ Credentials dans le code
+- ❌ Pas de gestion des erreurs
+- ❌ SQL Injection possible
+- ❌ CORS non configuré
+- ❌ Pas de validation des entrées
 
-✅ .env pour les credentials
-✅ Try-catch partout
-✅ Prepared Statements
-✅ CORS correctement configuré
-✅ Middleware de validation
+- ✅ .env pour les credentials
+- ✅ Try-catch partout
+- ✅ Prepared Statements
+- ✅ CORS correctement configuré
+- ✅ Middleware de validation
 
 ### Frontend
-❌ URL API codée en dur
-❌ Pas de messages d'erreur
-❌ Pas d'état de chargement
-❌ Pas de confirmation pour DELETE
+- ❌ URL API codée en dur
+- ❌ Pas de messages d'erreur
+- ❌ Pas d'état de chargement
+- ❌ Pas de confirmation pour DELETE
 
-✅ API_URL en variable
-✅ Retour utilisateur sur erreurs
-✅ Indicateurs de chargement
-✅ Dialogue de confirmation pour DELETE
+- ✅ API_URL en variable
+- ✅ Retour utilisateur sur erreurs
+- ✅ Indicateurs de chargement
+- ✅ Dialogue de confirmation pour DELETE
 
 ### Projet
-❌ Commencé trop tard
-❌ Planifié trop complexe
-❌ Pas de sauvegardes
-❌ Git pas utilisé
+- ❌ Commencé trop tard
+- ❌ Planifié trop complexe
+- ❌ Pas de sauvegardes
+- ❌ Git pas utilisé
 
-✅ Commencer tôt
-✅ MVP d'abord, puis étendre
-✅ Commits réguliers
-✅ Git dès le début
+- ✅ Commencer tôt
+- ✅ MVP d'abord, puis étendre
+- ✅ Commits réguliers
+- ✅ Git dès le début
 
 ---
 
 ## Conseils pour la présentation
 
 ### Préparation
-✅ Répéter la démo plusieurs fois
-✅ Enregistrer une vidéo de secours
-✅ Chronométrer (5-7 min)
-✅ Anticiper les questions
+- ✅ Répéter la démo plusieurs fois
+- ✅ Enregistrer une vidéo de secours
+- ✅ Chronométrer (5-7 min)
+- ✅ Anticiper les questions
 
 ### Pendant la présentation
-✅ Rester calme
-✅ Parler lentement
-✅ Montrer les fonctions, pas le code
-✅ En cas d'erreur: montrer le backup
+- ✅ Rester calme
+- ✅ Parler lentement
+- ✅ Montrer les fonctions, pas le code
+- ✅ En cas d'erreur: montrer le backup
 
 ### Questions fréquentes
 - Pourquoi cette technologie?

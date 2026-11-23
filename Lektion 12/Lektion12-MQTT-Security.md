@@ -36,7 +36,7 @@
 | Feature | MQTT | HTTP/REST |
 |---------|------|-----------|
 | **Kommunikation** | Publish/Subscribe | Request/Response |
-| **Overhead** | Klein (~2 Bytes) | Groß (Header) |
+| **Overhead** | Klein (~2 Bytes) | Gross (Header) |
 | **Persistent** | Ja (Keep-Alive) | Nein (Stateless) |
 | **Bandbreite** | Niedrig | Höher |
 | **Use Case** | IoT, Real-time | Web APIs |
@@ -677,7 +677,7 @@ Führe einen Security-Audit deines Projekts durch:
 3. Füge Rate Limiting hinzu
 4. Setze Helmet ein
 5. Validiere alle Inputs
-6. Dokumentiere alle Security-Maßnahmen
+6. Dokumentiere alle Security-Massnahmen
 
 ### Übung 3: JWT Authentication
 
@@ -729,4 +729,4 @@ Vollständiges Projekt mit:
 
 ## Nächste Schritte
 
-In Lektion 13 präsentieren alle ihre Projekte und wir schließen den Kurs mit Themen zu Datenschutz und Backups ab.
+In Lektion 13 präsentieren alle ihre Projekte und wir schliessen den Kurs mit Themen zu Datenschutz und Backups ab.

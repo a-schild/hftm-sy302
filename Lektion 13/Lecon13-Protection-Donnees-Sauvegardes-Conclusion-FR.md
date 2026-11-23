@@ -773,7 +773,3 @@ Merci pour votre participation au cours! Bonne chance avec vos futurs projets et
 **Mots de conclusion:**
 
 Les bases de données sont au cœur de presque toutes les applications modernes. Les concepts que vous avez appris dans ce cours sont intemporels et vous accompagneront tout au long de votre carrière. Bonne chance!
-
----
-
-© 2024 HFTM - Tous droits réservés

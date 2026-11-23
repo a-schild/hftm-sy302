@@ -3,105 +3,149 @@
 ## Objectifs d'apprentissage
 
 L'étudiant(e) est capable de...
-- Expliquer ce qu'est une API REST
-- Créer une API REST avec Express.js
-- Implémenter les méthodes HTTP (GET, POST, PUT, DELETE)
-- Structurer une API de manière professionnelle
-- Tester l'API avec Postman
+
+- Expliquer l'idée de base de REST
+- Concevoir une API REST et la réaliser avec Express.js
+- Utiliser correctement les méthodes HTTP (GET, POST, PUT, DELETE) et les codes de statut HTTP
+- Utiliser JSON comme format de données pour les API
+- Structurer une API de manière professionnelle (routes, controllers, middleware)
+- Valider les entrées et gérer les erreurs de manière centralisée
+- Tester l'API avec Postman, Thunder Client ou curl et la documenter
+
+## Préparation
+
+- Le projet de la leçon 7 avec une connexion fonctionnelle à la base de données (`db.js` et `.env`)
+- Le serveur MariaDB fonctionne, la base de données HFTM Library (`hftm_library`) est importée
+- Postman ou l'extension VS Code Thunder Client est installé
 
 ## Qu'est-ce qu'une API REST?
 
-**REST** = **RE**presentational **S**tate **T**ransfer
+**REST** (**RE**presentational **S**tate **T**ransfer) est un style d'architecture pour les systèmes distribués, en particulier pour les services web. Une API REST rend des données (p. ex. d'une base de données) accessibles via HTTP.
 
 ### Principes REST
 
-1. **Client-Server**: Séparation des préoccupations
-2. **Stateless**: Chaque requête est indépendante
-3. **Uniform Interface**: Interface uniforme
-4. **Ressources**: Tout est une ressource (books, authors, etc.)
-5. **HTTP Methods**: Utiliser correctement GET, POST, PUT, DELETE
+1. **Architecture client-serveur**: Séparation du frontend et du backend
+2. **Stateless**: Chaque requête est indépendante et contient toutes les informations nécessaires
+3. **Cacheable**: Les réponses peuvent être mises en cache
+4. **Uniform Interface**: Interface uniforme, les méthodes HTTP sont utilisées correctement
+5. **Ressources**: Tout est une ressource (books, authors, lends, etc.) et possède sa propre URI
+6. **Layered System**: Architecture en couches possible (p. ex. proxy, load balancer)
 
 ### Ressources et URIs
 
-```
-GET    /api/books           # Tous les livres
-GET    /api/books/5         # Livre avec ID 5
-POST   /api/books           # Créer un nouveau livre
-PUT    /api/books/5         # Mettre à jour le livre 5
-DELETE /api/books/5         # Supprimer le livre 5
+```text
+GET    /api/books              - Tous les livres
+GET    /api/books/5            - Livre avec ID 5
+POST   /api/books              - Créer un nouveau livre
+PUT    /api/books/5            - Mettre à jour le livre 5
+DELETE /api/books/5            - Supprimer le livre 5
+
+GET    /api/books/5/lends      - Emprunts du livre 5
+POST   /api/lends              - Enregistrer un nouvel emprunt
 ```
 
-## Express.js
+**Règles:**
 
-**Express** est le framework web le plus populaire pour Node.js.
+- Utiliser le pluriel: `/books` au lieu de `/book`
+- Utiliser les minuscules: `/books` au lieu de `/Books`
+- Pas de verbes dans les URLs: `/books` au lieu de `/getBooks`
+- Représenter les hiérarchies: `/books/:id/lends`
+- Versionnage: `/api/v1/books`
+
+## Méthodes HTTP et codes de statut
+
+### Méthodes HTTP (verbes)
+
+| Méthode | Signification | Opération CRUD | Utilisation | Idempotent |
+|---------|---------------|----------------|-------------|------------|
+| GET | Lire | Read | Récupérer des données | Oui |
+| POST | Créer | Create | Créer une nouvelle ressource | Non |
+| PUT | Mettre à jour (complet) | Update | Remplacer entièrement une ressource | Oui |
+| PATCH | Mettre à jour (partiel) | Update | Modifier partiellement une ressource | Non |
+| DELETE | Supprimer | Delete | Supprimer une ressource | Oui |
+
+**Idempotent** signifie: exécuter la requête plusieurs fois a le même effet que l'exécuter une seule fois.
+
+### Codes de statut HTTP
+
+Les codes de statut sont répartis en classes: **2xx** = succès, **4xx** = erreur du client, **5xx** = erreur du serveur.
+
+| Code | Signification | Exemple |
+|------|---------------|---------|
+| 200 | OK | Requête GET/PUT réussie |
+| 201 | Created | Ressource créée (POST) |
+| 204 | No Content | Requête DELETE réussie, pas de données dans la réponse |
+| 400 | Bad Request | Données d'entrée invalides |
+| 401 | Unauthorized | Authentification requise |
+| 403 | Forbidden | Pas d'autorisation |
+| 404 | Not Found | La ressource n'existe pas |
+| 409 | Conflict | L'enregistrement existe déjà ou est encore référencé |
+| 500 | Internal Server Error | Erreur serveur |
+
+## Configuration d'Express.js
+
+**Express** est le framework web le plus populaire pour Node.js. Il gère le routage, les middlewares et l'envoi des réponses.
 
 ### Installation
 
 ```bash
+# Dans le projet de la leçon 7 (mysql2 et dotenv sont déjà installés)
 npm install express
+npm install cors  # Pour les requêtes cross-origin
 ```
 
-### Serveur de base
+### Structure de base d'un serveur Express
+
+Créer `server.js`:
 
 ```javascript
 // server.js
+require('dotenv').config();
 const express = require('express');
-const app = express();
-const PORT = 3000;
 
-// Middleware pour parser le JSON
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware: parser le body JSON des requêtes
 app.use(express.json());
 
 // Route de test
 app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to the API' });
+    res.json({ message: 'HFTM Library API v1.0' });
 });
 
 // Démarrer le serveur
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
 ```
 
-## Méthodes HTTP
+### Démarrer le serveur
 
-| Méthode | Signification | Opération CRUD | Idempotent |
-|---------|---------------|----------------|------------|
-| GET | Lire | Read | ✅ Oui |
-| POST | Créer | Create | ❌ Non |
-| PUT | Mettre à jour (complet) | Update | ✅ Oui |
-| PATCH | Mettre à jour (partiel) | Update | ❌ Non |
-| DELETE | Supprimer | Delete | ✅ Oui |
+```bash
+node server.js
+```
 
-### Codes de statut HTTP
+Ouvrir ensuite `http://localhost:3000` dans le navigateur. La réponse est un objet JSON.
 
-**2xx - Succès:**
-- 200 OK - Requête réussie
-- 201 Created - Ressource créée
-- 204 No Content - Succès sans contenu
+## Endpoints CRUD pour Books
 
-**4xx - Erreur client:**
-- 400 Bad Request - Données invalides
-- 401 Unauthorized - Non authentifié
-- 403 Forbidden - Pas d'autorisation
-- 404 Not Found - Ressource non trouvée
-
-**5xx - Erreur serveur:**
-- 500 Internal Server Error - Erreur serveur
-
-## CRUD API pour Books
+Les exemples utilisent la table `books` de HFTM Library (`ID`, `Titel`, `ISBN`, `Published_Date`, `AmountInStock`, `AuthorsID`, `PublishersID`, `GenresID`) et le module `db.js` de la leçon 7, placé dans `config/db.js`. Les endpoints sont d'abord écrits directement dans `server.js`, puis répartis en controllers et routes dans le chapitre suivant.
 
 ### GET - Lire tous les livres
 
 ```javascript
-// GET /api/books
+const db = require('./config/db');
+
+// GET /api/books - tous les livres
 app.get('/api/books', async (req, res) => {
     try {
-        const [books] = await pool.query('SELECT * FROM books');
+        // La table contient plusieurs milliers de livres, donc limiter
+        const [books] = await db.query('SELECT * FROM books LIMIT 100');
         res.json(books);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erreur lors de la lecture des livres:', err);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
 ```
@@ -109,24 +153,24 @@ app.get('/api/books', async (req, res) => {
 ### GET - Lire un livre par ID
 
 ```javascript
-// GET /api/books/:id
+// GET /api/books/:id - un livre
 app.get('/api/books/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        
-        const [books] = await pool.query(
-            'SELECT * FROM books WHERE id = ?',
+
+        const [books] = await db.query(
+            'SELECT * FROM books WHERE ID = ?',
             [id]
         );
-        
+
         if (books.length === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
+
         res.json(books[0]);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erreur:', err);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
 ```
@@ -134,31 +178,37 @@ app.get('/api/books/:id', async (req, res) => {
 ### POST - Créer un nouveau livre
 
 ```javascript
-// POST /api/books
+// POST /api/books - créer un nouveau livre
 app.post('/api/books', async (req, res) => {
     try {
-        const { title, author_id, publisher_id, isbn } = req.body;
-        
-        // Validation
-        if (!title || !author_id) {
-            return res.status(400).json({ error: 'Title and author_id are required' });
+        const { Titel, ISBN, AmountInStock, AuthorsID, PublishersID } = req.body;
+
+        // Validation simple (détails dans le chapitre Validation des entrées)
+        if (!Titel || !AuthorsID || !PublishersID) {
+            return res.status(400).json({
+                error: 'Titel, AuthorsID et PublishersID sont obligatoires'
+            });
         }
-        
-        const [result] = await pool.query(
-            'INSERT INTO books (title, author_id, publisher_id, isbn) VALUES (?, ?, ?, ?)',
-            [title, author_id, publisher_id, isbn]
+
+        const stock = AmountInStock ?? 0;
+
+        const [result] = await db.query(
+            `INSERT INTO books (Titel, ISBN, AmountInStock, AuthorsID, PublishersID)
+             VALUES (?, ?, ?, ?, ?)`,
+            [Titel, ISBN, stock, AuthorsID, PublishersID]
         );
-        
+
         res.status(201).json({
-            id: result.insertId,
-            title,
-            author_id,
-            publisher_id,
-            isbn
+            ID: result.insertId,
+            Titel,
+            ISBN,
+            AmountInStock: stock,
+            AuthorsID,
+            PublishersID
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erreur lors de la création:', err);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
 ```
@@ -166,38 +216,28 @@ app.post('/api/books', async (req, res) => {
 ### PUT - Mettre à jour un livre
 
 ```javascript
-// PUT /api/books/:id
+// PUT /api/books/:id - mettre à jour un livre
 app.put('/api/books/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, author_id, publisher_id, isbn } = req.body;
-        
-        // Vérifier si le livre existe
-        const [existing] = await pool.query(
-            'SELECT * FROM books WHERE id = ?',
-            [id]
+        const { Titel, ISBN, AmountInStock, AuthorsID, PublishersID } = req.body;
+
+        const [result] = await db.query(
+            `UPDATE books
+             SET Titel = ?, ISBN = ?, AmountInStock = ?, AuthorsID = ?, PublishersID = ?
+             WHERE ID = ?`,
+            [Titel, ISBN, AmountInStock, AuthorsID, PublishersID, id]
         );
-        
-        if (existing.length === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+
+        // affectedRows = 0: il n'existe aucun livre avec cet ID
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
-        // Mettre à jour
-        await pool.query(
-            'UPDATE books SET title = ?, author_id = ?, publisher_id = ?, isbn = ? WHERE id = ?',
-            [title, author_id, publisher_id, isbn, id]
-        );
-        
-        res.json({
-            id,
-            title,
-            author_id,
-            publisher_id,
-            isbn
-        });
+
+        res.json({ ID: Number(id), Titel, ISBN, AmountInStock, AuthorsID, PublishersID });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erreur lors de la mise à jour:', err);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
 ```
@@ -205,173 +245,184 @@ app.put('/api/books/:id', async (req, res) => {
 ### DELETE - Supprimer un livre
 
 ```javascript
-// DELETE /api/books/:id
+// DELETE /api/books/:id - supprimer un livre
 app.delete('/api/books/:id', async (req, res) => {
     try {
-        const { id } = req.params;
-        
-        const [result] = await pool.query(
-            'DELETE FROM books WHERE id = ?',
-            [id]
+        const [result] = await db.query(
+            'DELETE FROM books WHERE ID = ?',
+            [req.params.id]
         );
-        
+
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
-        res.status(204).send();
+
+        res.status(204).send(); // No Content
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Erreur lors de la suppression:', err);
+        res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
 ```
 
-## Structure professionnelle du projet
+**Remarque:** Un livre référencé dans `lends` ne peut pas être supprimé à cause de la clé étrangère (code d'erreur `ER_ROW_IS_REFERENCED_2`). Ce cas est traité avec le statut 409 dans le chapitre Middleware de gestion des erreurs.
 
-### Organisation MVC
+## Structure du projet (MVC)
 
-```
-project/
+Lorsque tous les endpoints se trouvent dans `server.js`, le fichier devient vite illisible. C'est pourquoi le code est réparti selon le principe MVC: les **routes** définissent les URLs, les **controllers** contiennent la logique. Les models (modèles de données avec un ORM) suivent dans la leçon 11.
+
+### Organisation des dossiers
+
+```text
+library-api/
 ├── config/
-│   └── database.js          # Configuration DB
+│   └── db.js                # Connexion à la base de données (leçon 7)
 ├── controllers/
-│   ├── bookController.js    # Logique métier Books
-│   └── authorController.js  # Logique métier Authors
+│   ├── bookController.js    # Logique pour les livres
+│   ├── authorController.js  # Logique pour les auteurs
+│   └── lendController.js    # Logique pour les emprunts
 ├── routes/
-│   ├── bookRoutes.js        # Routes Books
-│   └── authorRoutes.js      # Routes Authors
+│   ├── bookRoutes.js        # Routes pour les livres
+│   ├── authorRoutes.js      # Routes pour les auteurs
+│   └── lendRoutes.js        # Routes pour les emprunts
 ├── middleware/
 │   ├── errorHandler.js      # Gestion centralisée des erreurs
-│   └── validation.js        # Validation des données
+│   └── validation.js        # Validation des entrées
 ├── .env
 ├── .gitignore
 ├── package.json
 └── server.js                # Point d'entrée
 ```
 
-### database.js
+### Connexion à la base de données (config/db.js)
+
+Le module de la leçon 7 est repris sans modification:
 
 ```javascript
-// config/database.js
+// config/db.js
 require('dotenv').config();
 const mysql = require('mysql2');
 
+// Créer un connection pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
+// Wrapper Promise pour async/await
 module.exports = pool.promise();
 ```
 
-### bookController.js
+### Controller (controllers/bookController.js)
+
+Dans le controller, les erreurs ne sont plus traitées directement, mais transmises avec `next(err)` au middleware central de gestion des erreurs (voir plus bas).
 
 ```javascript
 // controllers/bookController.js
-const pool = require('../config/database');
+const db = require('../config/db');
 
-// GET all books
-exports.getAllBooks = async (req, res) => {
+// GET /api/books - tous les livres
+exports.getAllBooks = async (req, res, next) => {
     try {
-        const [books] = await pool.query('SELECT * FROM books');
+        const [books] = await db.query('SELECT * FROM books LIMIT 100');
         res.json(books);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err); // transmettre au middleware de gestion des erreurs
     }
 };
 
-// GET book by ID
-exports.getBookById = async (req, res) => {
+// GET /api/books/:id - un livre
+exports.getBookById = async (req, res, next) => {
     try {
-        const [books] = await pool.query(
-            'SELECT * FROM books WHERE id = ?',
+        const [books] = await db.query(
+            'SELECT * FROM books WHERE ID = ?',
             [req.params.id]
         );
-        
+
         if (books.length === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
+
         res.json(books[0]);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
 };
 
-// CREATE book
-exports.createBook = async (req, res) => {
+// POST /api/books - créer un nouveau livre
+exports.createBook = async (req, res, next) => {
     try {
-        const { title, author_id, publisher_id, isbn } = req.body;
-        
-        const [result] = await pool.query(
-            'INSERT INTO books (title, author_id, publisher_id, isbn) VALUES (?, ?, ?, ?)',
-            [title, author_id, publisher_id, isbn]
+        const { Titel, ISBN, AmountInStock, AuthorsID, PublishersID } = req.body;
+        const stock = AmountInStock ?? 0;
+
+        const [result] = await db.query(
+            `INSERT INTO books (Titel, ISBN, AmountInStock, AuthorsID, PublishersID)
+             VALUES (?, ?, ?, ?, ?)`,
+            [Titel, ISBN, stock, AuthorsID, PublishersID]
         );
-        
+
         res.status(201).json({
-            id: result.insertId,
-            title,
-            author_id,
-            publisher_id,
-            isbn
+            ID: result.insertId,
+            Titel,
+            ISBN,
+            AmountInStock: stock,
+            AuthorsID,
+            PublishersID
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
 };
 
-// UPDATE book
-exports.updateBook = async (req, res) => {
+// PUT /api/books/:id - mettre à jour un livre
+exports.updateBook = async (req, res, next) => {
     try {
-        const { title, author_id, publisher_id, isbn } = req.body;
+        const { Titel, ISBN, AmountInStock, AuthorsID, PublishersID } = req.body;
         const { id } = req.params;
-        
-        const [result] = await pool.query(
-            'UPDATE books SET title = ?, author_id = ?, publisher_id = ?, isbn = ? WHERE id = ?',
-            [title, author_id, publisher_id, isbn, id]
+
+        const [result] = await db.query(
+            `UPDATE books
+             SET Titel = ?, ISBN = ?, AmountInStock = ?, AuthorsID = ?, PublishersID = ?
+             WHERE ID = ?`,
+            [Titel, ISBN, AmountInStock, AuthorsID, PublishersID, id]
         );
-        
+
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
-        res.json({ id, title, author_id, publisher_id, isbn });
+
+        res.json({ ID: Number(id), Titel, ISBN, AmountInStock, AuthorsID, PublishersID });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
 };
 
-// DELETE book
-exports.deleteBook = async (req, res) => {
+// DELETE /api/books/:id - supprimer un livre
+exports.deleteBook = async (req, res, next) => {
     try {
-        const [result] = await pool.query(
-            'DELETE FROM books WHERE id = ?',
+        const [result] = await db.query(
+            'DELETE FROM books WHERE ID = ?',
             [req.params.id]
         );
-        
+
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
+
         res.status(204).send();
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
 };
 ```
 
-### bookRoutes.js
+### Routes (routes/bookRoutes.js)
 
 ```javascript
 // routes/bookRoutes.js
@@ -379,7 +430,6 @@ const express = require('express');
 const router = express.Router();
 const bookController = require('../controllers/bookController');
 
-// Routes
 router.get('/', bookController.getAllBooks);
 router.get('/:id', bookController.getBookById);
 router.post('/', bookController.createBook);
@@ -389,26 +439,22 @@ router.delete('/:id', bookController.deleteBook);
 module.exports = router;
 ```
 
-### server.js
+### Point d'entrée (server.js)
 
 ```javascript
 // server.js
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+const { errorHandler } = require('./middleware/errorHandler');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// CORS (pour les requêtes cross-origin)
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-});
+app.use(cors());                                  // autoriser les requêtes cross-origin
+app.use(express.json());                          // parser le body JSON
+app.use(express.urlencoded({ extended: true }));  // parser les données de formulaire
 
 // Routes
 const bookRoutes = require('./routes/bookRoutes');
@@ -417,10 +463,10 @@ const authorRoutes = require('./routes/authorRoutes');
 app.use('/api/books', bookRoutes);
 app.use('/api/authors', authorRoutes);
 
-// Route racine
+// Route racine avec aperçu
 app.get('/', (req, res) => {
     res.json({
-        message: 'Welcome to Library API',
+        message: 'HFTM Library API v1.0',
         endpoints: {
             books: '/api/books',
             authors: '/api/authors'
@@ -428,281 +474,382 @@ app.get('/', (req, res) => {
     });
 });
 
-// Gestion des erreurs 404
+// Endpoints inconnus: 404
 app.use((req, res) => {
-    res.status(404).json({ error: 'Endpoint not found' });
+    res.status(404).json({ error: 'Endpoint non trouvé' });
 });
+
+// Gestion des erreurs: doit être après toutes les routes
+app.use(errorHandler);
 
 // Démarrer le serveur
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
 ```
 
 ## Query Parameters
 
+Les query parameters sont ajoutés à l'URL (`?key=value&key2=value2`) et lus dans Express via `req.query`. Ils conviennent pour le filtrage, le tri et la pagination. Les fonctions suivantes remplacent chacune `getAllBooks` dans le controller.
+
 ### Filtrage et recherche
 
 ```javascript
-// GET /api/books?search=harry&limit=10
-app.get('/api/books', async (req, res) => {
+// GET /api/books?search=harry&authorId=1&year=1997
+exports.getAllBooks = async (req, res, next) => {
     try {
-        const { search, limit, offset } = req.query;
-        
-        let sql = 'SELECT * FROM books';
-        let params = [];
-        
+        const { search, authorId, year } = req.query;
+
+        let sql = 'SELECT * FROM books WHERE 1=1';
+        const params = [];
+
         if (search) {
-            sql += ' WHERE title LIKE ?';
+            sql += ' AND Titel LIKE ?';
             params.push(`%${search}%`);
         }
-        
-        if (limit) {
-            sql += ' LIMIT ?';
-            params.push(parseInt(limit));
+
+        if (authorId) {
+            sql += ' AND AuthorsID = ?';
+            params.push(authorId);
         }
-        
-        if (offset) {
-            sql += ' OFFSET ?';
-            params.push(parseInt(offset));
+
+        if (year) {
+            sql += ' AND YEAR(Published_Date) = ?';
+            params.push(year);
         }
-        
-        const [books] = await pool.query(sql, params);
+
+        sql += ' LIMIT 100';
+
+        const [books] = await db.query(sql, params);
         res.json(books);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
-});
+};
 ```
 
 ### Tri
 
+Les noms de colonnes et l'ordre de tri ne peuvent pas être transmis avec des placeholders (`?`). C'est pourquoi ils sont vérifiés à l'aide d'une liste blanche (whitelist), afin qu'aucune injection SQL ne soit possible.
+
 ```javascript
-// GET /api/books?sortBy=title&order=asc
-app.get('/api/books', async (req, res) => {
+// GET /api/books?sortBy=Titel&order=asc
+exports.getAllBooks = async (req, res, next) => {
     try {
         const { sortBy, order } = req.query;
-        
+
         let sql = 'SELECT * FROM books';
-        
-        if (sortBy) {
-            const validColumns = ['title', 'published_date', 'author_id'];
-            const validOrder = ['asc', 'desc'];
-            
-            if (validColumns.includes(sortBy)) {
-                sql += ` ORDER BY ${sortBy}`;
-                
-                if (order && validOrder.includes(order.toLowerCase())) {
-                    sql += ` ${order.toUpperCase()}`;
-                }
+
+        const validColumns = ['ID', 'Titel', 'Published_Date', 'AmountInStock'];
+        const validOrder = ['asc', 'desc'];
+
+        if (sortBy && validColumns.includes(sortBy)) {
+            sql += ` ORDER BY ${sortBy}`;
+
+            if (order && validOrder.includes(order.toLowerCase())) {
+                sql += ` ${order.toUpperCase()}`;
             }
         }
-        
-        const [books] = await pool.query(sql);
+
+        sql += ' LIMIT 100';
+
+        const [books] = await db.query(sql);
         res.json(books);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
-});
+};
 ```
 
-## Relations et JOINs dans l'API
+### Pagination
+
+Pour les grandes tables, les données sont livrées page par page:
+
+```javascript
+// GET /api/books?page=2&limit=10
+exports.getAllBooks = async (req, res, next) => {
+    try {
+        const page = Math.max(parseInt(req.query.page) || 1, 1);
+        const limit = Math.min(parseInt(req.query.limit) || 10, 100); // max. 100
+        const offset = (page - 1) * limit;
+
+        const [books] = await db.query(
+            'SELECT * FROM books ORDER BY ID LIMIT ? OFFSET ?',
+            [limit, offset]
+        );
+
+        const [countResult] = await db.query(
+            'SELECT COUNT(*) AS total FROM books'
+        );
+        const total = countResult[0].total;
+
+        res.json({
+            data: books,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+```
+
+## Endpoints JOIN
+
+Avec des JOINs, l'API livre des données liées provenant de plusieurs tables en une seule réponse.
 
 ### Livres avec auteurs
 
 ```javascript
 // GET /api/books/with-authors
-app.get('/api/books/with-authors', async (req, res) => {
+exports.getBooksWithAuthors = async (req, res, next) => {
     try {
         const sql = `
-            SELECT 
-                b.id,
-                b.title,
-                b.isbn,
-                b.published_date,
-                a.id AS author_id,
-                a.firstname,
-                a.lastname
+            SELECT
+                b.ID,
+                b.Titel,
+                b.ISBN,
+                b.Published_Date,
+                a.ID AS AuthorID,
+                a.Firstname,
+                a.Lastname
             FROM books b
-            INNER JOIN authors a ON b.author_id = a.id
+            INNER JOIN authors a ON b.AuthorsID = a.ID
+            ORDER BY b.Titel
+            LIMIT 100
         `;
-        
-        const [books] = await pool.query(sql);
+
+        const [books] = await db.query(sql);
         res.json(books);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
-});
+};
 ```
 
 ### Livre avec tous les détails
 
 ```javascript
-// GET /api/books/:id/details
-app.get('/api/books/:id/details', async (req, res) => {
+// GET /api/books/:id/details - livre avec auteur, genre et éditeur
+exports.getBookDetails = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        
         const sql = `
-            SELECT 
-                b.id,
-                b.title,
-                b.isbn,
-                b.published_date,
-                b.amount_in_stock,
-                a.id AS author_id,
-                CONCAT(a.firstname, ' ', a.lastname) AS author_name,
-                g.genre,
-                p.name AS publisher
+            SELECT
+                b.ID,
+                b.Titel,
+                b.ISBN,
+                b.Published_Date,
+                b.AmountInStock,
+                a.ID AS AuthorID,
+                CONCAT(a.Firstname, ' ', a.Lastname) AS Author,
+                g.Genre,
+                p.Name AS Publisher
             FROM books b
-            LEFT JOIN authors a ON b.author_id = a.id
-            LEFT JOIN genres g ON b.genre_id = g.id
-            LEFT JOIN publishers p ON b.publisher_id = p.id
-            WHERE b.id = ?
+            LEFT JOIN authors a ON b.AuthorsID = a.ID
+            LEFT JOIN genres g ON b.GenresID = g.ID
+            LEFT JOIN publishers p ON b.PublishersID = p.ID
+            WHERE b.ID = ?
         `;
-        
-        const [books] = await pool.query(sql, [id]);
-        
+
+        const [books] = await db.query(sql, [req.params.id]);
+
         if (books.length === 0) {
-            return res.status(404).json({ error: 'Book not found' });
+            return res.status(404).json({ error: 'Livre non trouvé' });
         }
-        
+
         res.json(books[0]);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        next(err);
     }
-});
+};
 ```
 
-## Middleware
+### Emprunts d'un livre
 
-### Validation
+```javascript
+// GET /api/books/:id/lends - tous les emprunts d'un livre avec le client
+exports.getBookLends = async (req, res, next) => {
+    try {
+        const sql = `
+            SELECT
+                l.ID,
+                l.Date_From,
+                l.Date_To,
+                l.Price,
+                c.ID AS CustomerID,
+                c.Firstname,
+                c.Lastname
+            FROM lends l
+            INNER JOIN customers c ON l.CustomerID = c.ID
+            WHERE l.BookID = ?
+            ORDER BY l.Date_From DESC
+        `;
+
+        const [lends] = await db.query(sql, [req.params.id]);
+        res.json(lends);
+    } catch (err) {
+        next(err);
+    }
+};
+```
+
+Les nouveaux endpoints sont ajoutés dans `routes/bookRoutes.js`. **Important:** Les chemins fixes comme `/with-authors` doivent se trouver **avant** `/:id`, sinon `with-authors` est interprété comme un ID.
+
+```javascript
+// routes/bookRoutes.js
+router.get('/with-authors', bookController.getBooksWithAuthors); // avant '/:id'!
+router.get('/:id', bookController.getBookById);
+router.get('/:id/details', bookController.getBookDetails);
+router.get('/:id/lends', bookController.getBookLends);
+```
+
+## Validation des entrées
+
+Les entrées du client ne doivent jamais être écrites dans la base de données sans vérification. La validation est exécutée comme middleware avant le controller.
+
+### Validation manuelle comme middleware
 
 ```javascript
 // middleware/validation.js
 exports.validateBook = (req, res, next) => {
-    const { title, author_id } = req.body;
-    
-    if (!title || title.trim() === '') {
-        return res.status(400).json({ error: 'Title is required' });
+    const { Titel, ISBN, AmountInStock, AuthorsID, PublishersID } = req.body;
+    const errors = [];
+
+    if (!Titel || Titel.trim().length === 0) {
+        errors.push('Titel est obligatoire');
+    } else if (Titel.length > 50) {
+        errors.push('Titel peut contenir au maximum 50 caractères');
     }
-    
-    if (!author_id || isNaN(author_id)) {
-        return res.status(400).json({ error: 'Valid author_id is required' });
+
+    // ISBN dans HFTM Library: p. ex. 586-25-07337-83-2
+    if (ISBN && !/^\d{3}-\d{2}-\d{5}-\d{2}-\d$/.test(ISBN)) {
+        errors.push('ISBN doit être au format XXX-XX-XXXXX-XX-X');
     }
-    
-    next();
+
+    if (AmountInStock !== undefined && (!Number.isInteger(AmountInStock) || AmountInStock < 0)) {
+        errors.push('AmountInStock doit être un nombre entier >= 0');
+    }
+
+    if (!Number.isInteger(AuthorsID) || AuthorsID < 1) {
+        errors.push('Un AuthorsID valide est obligatoire');
+    }
+
+    if (!Number.isInteger(PublishersID) || PublishersID < 1) {
+        errors.push('Un PublishersID valide est obligatoire');
+    }
+
+    if (errors.length > 0) {
+        return res.status(400).json({ errors });
+    }
+
+    next(); // données valides: continuer vers le controller
 };
 ```
 
-**Utilisation:**
+**Utilisation dans les routes:**
+
 ```javascript
+// routes/bookRoutes.js
 const { validateBook } = require('../middleware/validation');
 
 router.post('/', validateBook, bookController.createBook);
 router.put('/:id', validateBook, bookController.updateBook);
 ```
 
-### Gestion centralisée des erreurs
+### Avec express-validator
+
+Le package `express-validator` offre des règles de validation prêtes à l'emploi:
+
+```bash
+npm install express-validator
+```
+
+```javascript
+// middleware/validation.js (variante avec express-validator)
+const { body, validationResult } = require('express-validator');
+
+exports.validateBook = [
+    body('Titel').trim().notEmpty().withMessage('Titel est obligatoire')
+        .isLength({ max: 50 }).withMessage('Titel peut contenir au maximum 50 caractères'),
+    body('ISBN').optional().matches(/^\d{3}-\d{2}-\d{5}-\d{2}-\d$/)
+        .withMessage('Format ISBN invalide'),
+    body('AmountInStock').optional().isInt({ min: 0 })
+        .withMessage('AmountInStock doit être un nombre entier >= 0'),
+    body('AuthorsID').isInt({ min: 1 }).withMessage('Un AuthorsID valide est obligatoire'),
+    body('PublishersID').isInt({ min: 1 }).withMessage('Un PublishersID valide est obligatoire'),
+
+    // évaluer le résultat des vérifications
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        next();
+    }
+];
+```
+
+L'utilisation dans les routes reste la même que pour la validation manuelle.
+
+## Middleware de gestion des erreurs
+
+Un middleware de gestion des erreurs a **quatre** paramètres `(err, req, res, next)`. Il intercepte toutes les erreurs transmises avec `next(err)` et traduit les erreurs typiques de la base de données en codes de statut HTTP appropriés.
+
+Créer `middleware/errorHandler.js`:
 
 ```javascript
 // middleware/errorHandler.js
 exports.errorHandler = (err, req, res, next) => {
     console.error(err.stack);
-    
+
     // Erreur de validation
     if (err.name === 'ValidationError') {
         return res.status(400).json({ error: err.message });
     }
-    
-    // Erreur de base de données
+
+    // L'enregistrement existe déjà (p. ex. contrainte UNIQUE)
     if (err.code === 'ER_DUP_ENTRY') {
-        return res.status(409).json({ error: 'Resource already exists' });
+        return res.status(409).json({ error: 'L\'enregistrement existe déjà' });
     }
-    
+
+    // La clé étrangère pointe vers un enregistrement inexistant
     if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-        return res.status(400).json({ error: 'Referenced resource does not exist' });
+        return res.status(400).json({ error: 'L\'enregistrement référencé n\'existe pas' });
     }
-    
-    // Erreur par défaut
-    res.status(500).json({ error: 'Internal server error' });
+
+    // L'enregistrement est encore référencé (p. ex. supprimer un livre avec des emprunts)
+    if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+        return res.status(409).json({ error: 'L\'enregistrement est encore utilisé' });
+    }
+
+    // Par défaut: 500, détails uniquement en développement
+    res.status(500).json({
+        error: 'Une erreur inattendue s\'est produite',
+        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
 };
 ```
 
 **Utilisation dans server.js:**
+
 ```javascript
 const { errorHandler } = require('./middleware/errorHandler');
 
-// ... routes ...
+// ... toutes les routes ...
 
 // Doit être après toutes les routes
 app.use(errorHandler);
 ```
 
-## Postman - Tester l'API
-
-### Installation
-
-Télécharger depuis [postman.com](https://www.postman.com/downloads/)
-
-### Créer une collection
-
-1. **New Collection** → "Library API"
-2. Ajouter les requêtes:
-
-### GET - Tous les livres
-
-```
-GET http://localhost:3000/api/books
-```
-
-### GET - Livre par ID
-
-```
-GET http://localhost:3000/api/books/1
-```
-
-### POST - Créer un livre
-
-```
-POST http://localhost:3000/api/books
-Content-Type: application/json
-
-{
-    "title": "New Book",
-    "author_id": 1,
-    "publisher_id": 1,
-    "isbn": "978-1234567890"
-}
-```
-
-### PUT - Mettre à jour un livre
-
-```
-PUT http://localhost:3000/api/books/1
-Content-Type: application/json
-
-{
-    "title": "Updated Book",
-    "author_id": 1,
-    "publisher_id": 1,
-    "isbn": "978-1234567890"
-}
-```
-
-### DELETE - Supprimer un livre
-
-```
-DELETE http://localhost:3000/api/books/1
-```
+**Remarque:** Dans Express 4, les erreurs dans les fonctions `async` ne sont pas transmises automatiquement au middleware de gestion des erreurs. C'est pourquoi chaque controller a besoin de `try/catch` avec `next(err)`. À partir d'Express 5, les promesses rejetées sont transmises automatiquement.
 
 ## CORS
 
-**CORS** = Cross-Origin Resource Sharing
+**CORS** (Cross-Origin Resource Sharing) détermine si un navigateur peut accéder à l'API depuis une autre origine (p. ex. un frontend sur `http://localhost:5173`). Sans en-têtes CORS, le navigateur bloque de telles requêtes.
 
 ### Installation
 
@@ -715,10 +862,10 @@ npm install cors
 ```javascript
 const cors = require('cors');
 
-// Tous les origines (développement)
+// Autoriser toutes les origines (développement)
 app.use(cors());
 
-// Origines spécifiques (production)
+// Autoriser seulement certaines origines (production)
 app.use(cors({
     origin: 'https://myapp.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -726,45 +873,191 @@ app.use(cors({
 }));
 ```
 
+### Alternative sans package
+
+Les en-têtes CORS peuvent aussi être définis avec un middleware personnalisé:
+
+```javascript
+// Définir les en-têtes CORS manuellement
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+```
+
+## Tester l'API
+
+### Postman / Thunder Client
+
+- **Postman**: Téléchargement sur [postman.com](https://www.postman.com/downloads/)
+- **Thunder Client**: Extension directement dans VS Code (Extensions, rechercher "Thunder Client")
+
+Procédure dans Postman:
+
+1. Créer une **New Collection**, p. ex. "HFTM Library API"
+2. Ajouter une requête pour chaque endpoint
+3. Pour POST et PUT, choisir sous **Body** l'option **raw** et **JSON**
+4. Exporter la collection (pour la remise)
+
+### Cas de test
+
+**1. GET tous les livres**
+
+```http
+GET http://localhost:3000/api/books
+```
+
+**2. GET un livre**
+
+```http
+GET http://localhost:3000/api/books/1
+```
+
+**3. POST nouveau livre**
+
+```http
+POST http://localhost:3000/api/books
+Content-Type: application/json
+
+{
+    "Titel": "The Hobbit",
+    "ISBN": "978-05-47928-22-7",
+    "AmountInStock": 3,
+    "AuthorsID": 1,
+    "PublishersID": 1
+}
+```
+
+**4. PUT mettre à jour un livre**
+
+```http
+PUT http://localhost:3000/api/books/1
+Content-Type: application/json
+
+{
+    "Titel": "The Hobbit - Updated",
+    "ISBN": "978-05-47928-22-7",
+    "AmountInStock": 5,
+    "AuthorsID": 1,
+    "PublishersID": 1
+}
+```
+
+**5. DELETE supprimer un livre**
+
+```http
+DELETE http://localhost:3000/api/books/1
+```
+
+**6. GET livre avec détails (JOIN)**
+
+```http
+GET http://localhost:3000/api/books/2/details
+```
+
+**7. Vérifier les cas d'erreur**
+
+```http
+# Le livre n'existe pas: 404 attendu
+GET http://localhost:3000/api/books/999999
+
+# Titel manquant: 400 attendu
+POST http://localhost:3000/api/books
+Content-Type: application/json
+
+{
+    "AuthorsID": 1,
+    "PublishersID": 1
+}
+```
+
+### Tests avec curl
+
+```bash
+# Requête GET
+curl http://localhost:3000/api/books
+
+# Requête POST
+curl -X POST http://localhost:3000/api/books \
+  -H "Content-Type: application/json" \
+  -d '{"Titel":"Test Book","ISBN":"123-45-67890-12-3","AuthorsID":1,"PublishersID":1}'
+
+# Requête PUT
+curl -X PUT http://localhost:3000/api/books/1 \
+  -H "Content-Type: application/json" \
+  -d '{"Titel":"Updated Title","ISBN":"123-45-67890-12-3","AmountInStock":2,"AuthorsID":1,"PublishersID":1}'
+
+# Requête DELETE (-i affiche le code de statut 204)
+curl -i -X DELETE http://localhost:3000/api/books/1
+```
+
+**Remarque pour Windows:** Exécuter les exemples dans Git Bash. Dans PowerShell, utiliser `curl.exe` au lieu de `curl`, car `curl` peut y être un alias de `Invoke-WebRequest`.
+
 ## Exercices pratiques
 
-### Exercice 1: API complète pour Authors
+### Exercice 1: API REST pour HFTM Library
 
-Créer une API REST complète pour les auteurs:
-- GET /api/authors
-- GET /api/authors/:id
-- POST /api/authors
-- PUT /api/authors/:id
-- DELETE /api/authors/:id
+Créer une API REST complète pour HFTM Library avec:
+
+1. Books CRUD (les 5 opérations)
+2. Authors CRUD: `GET /api/authors`, `GET /api/authors/:id`, `POST /api/authors`, `PUT /api/authors/:id`, `DELETE /api/authors/:id`
+3. `GET /api/books/:id/lends` - Emprunts d'un livre
+4. `POST /api/lends` - Enregistrer un nouvel emprunt (utiliser la transaction de la leçon 7)
+5. `PUT /api/lends/:id/return` - Rendre un livre (mettre `Date_To` à la date actuelle, augmenter `AmountInStock`)
 
 ### Exercice 2: Recherche avancée
 
 Implémenter:
+
 - Recherche par titre: `GET /api/books?search=harry`
-- Filtrage par auteur: `GET /api/books?author_id=1`
-- Pagination: `GET /api/books?limit=10&offset=20`
-- Tri: `GET /api/books?sortBy=title&order=asc`
+- Filtrage par auteur: `GET /api/books?authorId=1`
+- Pagination: `GET /api/books?page=2&limit=10`
+- Tri: `GET /api/books?sortBy=Titel&order=asc`
 
 ### Exercice 3: Relations
 
 Implémenter:
+
 - Livres d'un auteur: `GET /api/authors/:id/books`
-- Auteurs d'un genre: `GET /api/genres/:id/authors`
-- Statistiques: `GET /api/stats/books-by-genre`
+- Auteurs d'un genre: `GET /api/genres/:id/authors` (via la table `authors_genres`)
+- Statistiques: `GET /api/stats/books-by-genre` (nombre de livres par genre)
+
+### Exercice 4: API du centre médical
+
+Implémenter les endpoints suivants pour le centre médical:
+
+1. `/api/patients` - CRUD pour les patients
+2. `/api/doctors` - CRUD pour les médecins
+3. `/api/appointments` - CRUD pour les rendez-vous
+4. `GET /api/doctors/:id/appointments` - Rendez-vous d'un médecin
+5. `GET /api/patients/:id/appointments` - Rendez-vous d'un patient
+
+### Exercice 5: Documentation API
+
+Documenter votre API (modèle voir chapitre Documentation API) avec:
+
+- Tous les endpoints (URL, méthode)
+- Des exemples de body de requête
+- Des exemples de réponse
+- Les codes d'erreur
 
 ## Bonnes pratiques
 
 ### Conventions de nommage
 
-✅ **URI (Pluriel, lowercase):**
-```
+**Bien (pluriel, minuscules):**
+
+```text
 GET /api/books
 GET /api/authors
-GET /api/books/5/reviews
+GET /api/books/5/lends
 ```
 
-❌ **À éviter:**
-```
+**À éviter:**
+
+```text
 GET /api/getBooks
 GET /api/Book
 GET /api/books/getAllBooks
@@ -783,51 +1076,60 @@ res.status(201).json(newResource);
 res.status(204).send();
 
 // 400 - Bad Request (données invalides)
-res.status(400).json({ error: 'Invalid data' });
+res.status(400).json({ error: 'Données invalides' });
 
 // 404 - Not Found (ressource inexistante)
-res.status(404).json({ error: 'Resource not found' });
+res.status(404).json({ error: 'Ressource non trouvée' });
 
 // 500 - Internal Server Error
-res.status(500).json({ error: 'Internal server error' });
+res.status(500).json({ error: 'Erreur interne du serveur' });
 ```
 
 ### Validation
 
 ```javascript
 // Toujours valider les données entrantes
-if (!title || title.trim() === '') {
-    return res.status(400).json({ error: 'Title is required' });
+if (!Titel || Titel.trim() === '') {
+    return res.status(400).json({ error: 'Titel est obligatoire' });
 }
 
-if (isbn && !/^978-\d{10}$/.test(isbn)) {
-    return res.status(400).json({ error: 'Invalid ISBN format' });
+if (ISBN && !/^\d{3}-\d{2}-\d{5}-\d{2}-\d$/.test(ISBN)) {
+    return res.status(400).json({ error: 'Format ISBN invalide' });
 }
 ```
 
 ### Sécurité
 
 ```javascript
-// ✅ Prepared Statements (toujours!)
-const [books] = await pool.query(
-    'SELECT * FROM books WHERE title = ?',
+// BIEN: Prepared Statements (toujours!)
+const [books] = await db.query(
+    'SELECT * FROM books WHERE Titel = ?',
     [searchTerm]
 );
 
-// ❌ Injection SQL vulnérable
-const [books] = await pool.query(
-    `SELECT * FROM books WHERE title = '${searchTerm}'`
+// MAUVAIS: injection SQL possible!
+const [unsafeBooks] = await db.query(
+    `SELECT * FROM books WHERE Titel = '${searchTerm}'`
 );
 ```
 
+Autres points:
+
+- N'accepter les noms de colonnes pour `ORDER BY` que depuis une liste blanche
+- Données d'accès uniquement dans le fichier `.env`, jamais dans le code
+- N'afficher les messages d'erreur avec détails techniques qu'en développement
+
 ## Documentation API
+
+Une API ne vaut que par sa documentation. Une variante simple est un fichier `README.md` dans le projet.
 
 ### README.md
 
-```markdown
-# Library API
+````markdown
+# HFTM Library API
 
 ## Base URL
+
 `http://localhost:3000/api`
 
 ## Endpoints
@@ -835,88 +1137,113 @@ const [books] = await pool.query(
 ### Books
 
 #### GET /books
-Retourne tous les livres
+
+Retourne tous les livres.
 
 **Query Parameters:**
-- `search` (optional): Recherche dans le titre
-- `limit` (optional): Nombre de résultats
-- `offset` (optional): Offset pour la pagination
 
-**Response:**
+- `search` (optionnel): Recherche dans le titre
+- `page` (optionnel): Page pour la pagination (par défaut: 1)
+- `limit` (optionnel): Nombre de résultats par page (par défaut: 10)
+
+**Response:** 200 OK
+
 ```json
 [
     {
-        "id": 1,
-        "title": "Harry Potter",
-        "author_id": 1,
-        "isbn": "978-1234567890"
+        "ID": 2,
+        "Titel": "Paradise Lost",
+        "ISBN": "586-25-07337-83-2",
+        "AmountInStock": 5,
+        "AuthorsID": 1252,
+        "PublishersID": 15
     }
 ]
 ```
 
 #### POST /books
-Crée un nouveau livre
+
+Crée un nouveau livre.
 
 **Body:**
+
 ```json
 {
-    "title": "New Book",
-    "author_id": 1,
-    "isbn": "978-1234567890"
+    "Titel": "New Book",
+    "ISBN": "978-12-34567-89-0",
+    "AmountInStock": 1,
+    "AuthorsID": 1,
+    "PublishersID": 1
 }
 ```
 
 **Response:** 201 Created
-```
+
+**Erreur:** 400 Bad Request (données invalides)
+````
 
 ## Résumé
 
 ### Structure d'un endpoint REST
 
 ```javascript
-app.METHOD('/api/resource/:id?', async (req, res) => {
+exports.handler = async (req, res, next) => {
     try {
-        // 1. Récupérer les paramètres
-        const { id } = req.params;
-        const { search } = req.query;
-        const { title } = req.body;
-        
+        // 1. Lire les paramètres
+        const { id } = req.params;    // de l'URL: /api/books/:id
+        const { search } = req.query; // de la query string: ?search=...
+        const { Titel } = req.body;   // du body JSON
+
         // 2. Valider
-        if (!title) {
-            return res.status(400).json({ error: 'Title required' });
+        if (!Titel) {
+            return res.status(400).json({ error: 'Titel est obligatoire' });
         }
-        
-        // 3. Opération DB
-        const [result] = await pool.query(sql, params);
-        
-        // 4. Répondre
+
+        // 3. Opération sur la base de données (Prepared Statement)
+        const [result] = await db.query(sql, params);
+
+        // 4. Répondre (avec le code de statut approprié)
         res.status(200).json(result);
-        
+
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        // 5. Transmettre l'erreur au middleware de gestion des erreurs
+        next(err);
     }
-});
+};
 ```
 
 ## Devoirs
 
 1. **Créer une API REST complète** pour votre projet
 2. **Au moins 2 ressources** avec toutes les opérations CRUD
-3. **Tester avec Postman** (screenshots)
-4. **Documentation** de tous les endpoints
+3. **Tester avec Postman** (captures d'écran)
+4. **Documenter** tous les endpoints
+
+## Liste de contrôle pour le crédit 7
+
+- [ ] Express installé, le serveur démarre sans erreur
+- [ ] Les 5 endpoints CRUD pour Books fonctionnent
+- [ ] Controller et routes séparés
+- [ ] Au moins un endpoint JOIN implémenté
+- [ ] Entrées validées, codes de statut HTTP corrects (200, 201, 204, 400, 404, 500)
+- [ ] Tous les endpoints testés (collection Postman exportée, captures d'écran)
+- [ ] Documentation API (README.md) créée
+- [ ] API REST fonctionnelle et documentation remises
 
 ## Ressources
 
 - [Express.js Documentation](https://expressjs.com/)
 - [REST API Best Practices](https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/)
-- [HTTP Status Codes](https://httpstatuses.com/)
+- [Codes de statut HTTP (MDN)](https://developer.mozilla.org/fr/docs/Web/HTTP/Status)
+- [express-validator Documentation](https://express-validator.github.io/docs/)
+- [Package CORS](https://github.com/expressjs/cors)
 - [Postman Learning Center](https://learning.postman.com/)
 
 ## Prochaines étapes
 
-Dans la leçon 9:
+Dans la leçon 9, nous verrons comment les outils d'IA peuvent aider au développement de bases de données et nous continuerons le travail de projet:
+
 - Intelligence artificielle dans l'environnement de bases de données
-- Intégration de Claude AI
+- Intégration de Claude AI dans votre application
 - Génération de données de test
 - Analyse de données avec l'IA

@@ -33,27 +33,27 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 **Themen:** Testvorbereitung, Projektthemen, Anforderungen
 
 ### ✅ Lektion 7: Node.js und Datenbanken
-**Pfad:** `Lektion 07/Lektion07-NodeJS-Datenbanken.md`
-**Themen:** Node.js Setup, mysql2, Connection Pool, CRUD
+**Pfad:** `Lektion 07/Lektion07-NodeJS-Databases.md`
+**Themen:** Node.js Setup, NPM, dotenv, mysql2, Connection Pool, CRUD, Prepared Statements, JOINs, Transaktionen
 
 ### ✅ Lektion 8: REST API mit Express.js
-**Pfad:** `Lektion 08/Lektion08-REST-API-Express.md`
+**Pfad:** `Lektion 08/Lektion08-REST-API.md`
 **Themen:** Express, REST Principles, CRUD API, Middleware
 
-### ✅ Lektion 9: KI im Datenbank-Umfeld
-**Pfad:** `Lektion 09/Lektion09-KI-Datenbank-Umfeld.md`
-**Themen:** Claude AI, SQL-Generierung, Testdaten, Optimierung
+### ✅ Lektion 9: KI/AI im Datenbankumfeld & Projektarbeit
+**Pfad:** `Lektion 09/Lektion09-KI-AI-Projektarbeit.md` (Vorbereitungsauftrag: `Vorbereitungsauftrag-L09-Ideen.md`)
+**Themen:** Prompting, SQL-Generierung, Testdaten, DB-Design-Review, typische KI-Fehler, Claude-API-Integration, Datenschutz & Ethik
 
 ### ✅ Lektion 10: NoSQL & MongoDB
 **Pfad:** `Lektion 10/Lektion10-NoSQL-MongoDB.md`
-**Themen:** NoSQL Konzepte, MongoDB, CRUD, Mongoose, SQL vs NoSQL
+**Themen:** NoSQL-Konzepte und -Typen, MongoDB, CRUD, Aggregation, Datenmodellierung, Mongoose, SQL vs. NoSQL, Polyglot Persistence
 
 ### ✅ Lektion 11: Express Frameworks & ORM
-**Pfad:** `Lektion 11/Lektion11-Express-ORM.md`
-**Themen:** Sequelize, Models, Migrations, Associations
+**Pfad:** `Lektion 11/Lektion11-Frameworks-ORM.md`
+**Themen:** MVC, Sequelize (Models, Associations, Migrations, Seeders), Prisma, Raw SQL vs. ORM, Service Layer
 
 ### ✅ Lektion 12: MQTT & Sicherheit
-**Pfad:** `Lektion 12/Lektion12-MQTT-Sicherheit.md`
+**Pfad:** `Lektion 12/Lektion12-MQTT-Security.md`
 **Themen:** MQTT Protocol, JWT, bcrypt, API Security, Rate Limiting
 
 ### ✅ Lektion 13: Datenschutz, Backups & Abschluss
@@ -88,8 +88,8 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 ### ✅ Leçon 8: API REST avec Express.js
 **Pfad:** `Lektion 08/Lecon08-REST-API-Express-FR.md`
 
-### ✅ Leçon 9: IA dans l'environnement de base de données
-**Pfad:** `Lektion 09/Lecon09-IA-Databases-FR.md`
+### ✅ Leçon 9: IA dans l'environnement de base de données & travail de projet
+**Pfad:** `Lektion 09/Lecon09-IA-Databases-FR.md` (devoir préparatoire: `Devoir-Preparatoire-L09-Idees-FR.md`)
 
 ### ✅ Leçon 10: NoSQL & MongoDB
 **Pfad:** `Lektion 10/Lecon10-NoSQL-MongoDB-FR.md`
@@ -101,7 +101,7 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 **Pfad:** `Lektion 12/Lecon12-MQTT-Securite-FR.md`
 
 ### ✅ Leçon 13: Protection des données, Sauvegardes & Conclusion
-**Pfad:** `Lektion 13/Lecon13-Protection-Donnees-Conclusion-FR.md`
+**Pfad:** `Lektion 13/Lecon13-Protection-Donnees-Sauvegardes-Conclusion-FR.md`
 
 ---
 
@@ -121,6 +121,23 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 **Struktur:**
 - ✅ Jede Lektion hat die gleiche Struktur
 - ✅ Lernziele, Theorie, Beispiele, Übungen, Ressourcen
+- ✅ DE- und FR-Fassung einer Lektion sind inhaltlich identisch (gleiche Abschnitte in gleicher Reihenfolge, gleiche Codeblöcke). Änderungen immer in beiden Sprachen nachführen.
+
+### PDF-Handouts erzeugen
+
+Die Markdown-Dateien sind die Quelle. Die PDFs werden mit der HFTM-Vorlage
+`Vorlage/Vorlage_KleineDokumente.dotx` erzeugt (Kopfzeile Kurs/Autor/Version, Logo,
+Fusszeile Dateiname/Seite/Datum). Word-Dokumente werden nicht mehr gepflegt.
+
+```powershell
+python tools/build-exports.py                               # Lektion 07-13 + Checklisten
+python tools/build-exports.py "Lektion 08/Lektion08-REST-API.md"   # einzelne Datei
+```
+
+Voraussetzungen: pandoc, Microsoft Word (Windows). Das Skript setzt «schlaue»
+Seitenumbrüche: Überschriften bleiben beim folgenden Inhalt, Codeblöcke, kurze
+Listen (Checklisten-Abschnitte) und kurze Tabellen werden nicht getrennt, Tabellen-
+zeilen nie geteilt, der Tabellenkopf wird auf jeder Seite wiederholt.
 
 ### Beispieldatenbank
 
