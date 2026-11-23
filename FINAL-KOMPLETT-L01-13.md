@@ -41,7 +41,7 @@ SY302 Databases/Calude/
 │   └── Uebung13-Praesentation.md ✅
 │
 ├── SQL-Dumps/
-│   └── HFTM_Library.sql ✅
+│   └── HFTM Library.sql ✅
 │
 ├── Code-Templates/
 │   ├── SQL-Templates-L01-06.md (10 Templates) ✅

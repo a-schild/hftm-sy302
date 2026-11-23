@@ -44,7 +44,7 @@ C:\Users\a.schild\HFTM\Fachbereich Systemtechnik - SY302 Databases\Calude\
 │   └── Uebung13-Praesentation.md ✅
 │
 ├── SQL-Dumps/
-│   └── HFTM_Library.sql ✅
+│   └── HFTM Library.sql ✅
 │
 ├── Code-Templates/
 │   ├── SQL-Templates-L01-06.md ✅
@@ -96,7 +96,7 @@ Die Datei enthält:
 ### Paket 1: Zu Semesterbeginn
 - ✅ **Skript-Kompakt-DE.md** oder **Skript-Kompakt-FR.md**
 - ✅ **Checkliste-L01-06** (DE oder FR)
-- ✅ **HFTM_Library.sql**
+- ✅ **HFTM Library.sql**
 - ✅ **SQL-Templates-L01-06.md**
 
 ### Paket 2: Ab Woche 7
