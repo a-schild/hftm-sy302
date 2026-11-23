@@ -91,11 +91,11 @@ Die finale Präsentation ist der Höhepunkt des Kurses. Sie demonstrieren Ihr vo
 
 #### Minute 7: Technologie & Learnings (1 Min)
 - Welche Technologien verwendet?
-- Was war die größte Herausforderung?
+- Was war die grösste Herausforderung?
 - Was hast du gelernt?
 
 **Beispiel:**
-> "Ich habe Node.js mit Express für das Backend verwendet, MySQL für die Datenbank, und React für das Frontend. Die größte Herausforderung war die Implementierung der N:M Beziehung für die Ausleihen. Ich habe viel über JOINs und Datenbank-Design gelernt."
+> "Ich habe Node.js mit Express für das Backend verwendet, MySQL für die Datenbank, und React für das Frontend. Die grösste Herausforderung war die Implementierung der N:M Beziehung für die Ausleihen. Ich habe viel über JOINs und Datenbank-Design gelernt."
 
 ---
 
@@ -109,7 +109,7 @@ Die finale Präsentation ist der Höhepunkt des Kurses. Sie demonstrieren Ihr vo
 
 **Vorbereitung:**
 - Überlege dir mögliche Fragen
-- Sei ehrlich wenn du etwas nicht weißt
+- Sei ehrlich wenn du etwas nicht weisst
 - Zeige, dass du verstehst was du gebaut hast
 
 ---
@@ -305,8 +305,8 @@ Fragen?
 - Schneller sprechen (aber verständlich!)
 
 #### ...du eine Frage nicht beantworten kannst?
-- Ehrlich sagen "Das weiß ich nicht genau"
-- Erklären was du weißt
+- Ehrlich sagen "Das weiss ich nicht genau"
+- Erklären was du weisst
 - Anbieten, es nachzuschauen
 
 #### ...Technik-Probleme?
@@ -403,7 +403,7 @@ Fragen?
 ## Beispiel-Timing (7 Minuten)
 
 ```
-00:00 - 00:30  Intro & Begrüßung
+00:00 - 00:30  Intro & Begrüssung
 00:30 - 01:00  Projektidee erklären
 01:00 - 03:00  Datenbank-Design (ER-Diagramm)
 03:00 - 06:00  Live Demo (3 Features)
@@ -415,7 +415,7 @@ Fragen?
 
 ## Motivations-Spruch
 
-> "Eine gute Präsentation zeigt nicht, dass du ALLES weißt,  
+> "Eine gute Präsentation zeigt nicht, dass du ALLES weisst,  
 > sondern dass du verstehst, was du gebaut hast.  
 > Fokussiere dich auf deine Stärken!" 
 

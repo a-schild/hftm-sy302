@@ -309,7 +309,7 @@ Am Ende deiner Vorbereitung, beantworte kurz:
 ## Tipps für effektive KI-Nutzung
 
 ✅ **Sei spezifisch** - Je genauer dein Prompt, desto besser die Antwort
-✅ **Kontext geben** - Erkläre was du bereits hast/weißt
+✅ **Kontext geben** - Erkläre was du bereits hast/weisst
 ✅ **Iterieren** - Erste Antwort nicht perfekt? Nachfragen!
 ✅ **Verifizieren** - Teste den Code, verlasse dich nicht blind darauf
 ✅ **Verstehen** - Nutze KI zum Lernen, nicht nur zum Copy-Paste
@@ -335,7 +335,7 @@ Am Ende deiner Vorbereitung, beantworte kurz:
 
 ---
 
-**Viel Spaß beim Experimentieren mit KI-Tools!** 🤖
+**Viel Spass beim Experimentieren mit KI-Tools!** 🤖
 
 Die Erfahrungen aus diesem Vorbereitungsauftrag werden wir in Lektion 9 diskutieren und vertiefen.
 

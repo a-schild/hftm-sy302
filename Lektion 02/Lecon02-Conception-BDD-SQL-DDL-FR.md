@@ -330,7 +330,7 @@ CREATE TABLE patients (
 CREATE TABLE doctors (
     doctor_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-    specialty VARCHAR(50),
+    specialization VARCHAR(50),
     phone VARCHAR(20),
     email VARCHAR(100) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

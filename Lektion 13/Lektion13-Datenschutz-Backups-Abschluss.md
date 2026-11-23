@@ -34,7 +34,7 @@ Die **Datenschutz-Grundverordnung (DSGVO)** / **General Data Protection Regulati
 
 ### Grundprinzipien der DSGVO
 
-1. **Rechtmäßigkeit, Verarbeitung nach Treu und Glauben, Transparenz**
+1. **Rechtmässigkeit, Verarbeitung nach Treu und Glauben, Transparenz**
    - Daten nur mit Einwilligung oder rechtlicher Grundlage verarbeiten
    - Nutzer über Datenverarbeitung informieren
 
@@ -55,7 +55,7 @@ Die **Datenschutz-Grundverordnung (DSGVO)** / **General Data Protection Regulati
    - Löschfristen definieren
 
 6. **Integrität und Vertraulichkeit**
-   - Angemessene Sicherheitsmaßnahmen
+   - Angemessene Sicherheitsmassnahmen
    - Schutz vor unbefugtem Zugriff
 
 ### Betroffenenrechte
@@ -479,7 +479,7 @@ mysql -u root -p < full_backup.sql
 
 ### Backup-Testing
 
-**WICHTIG:** Regelmäßig testen ob Backups funktionieren!
+**WICHTIG:** Regelmässig testen ob Backups funktionieren!
 
 ```bash
 # Test-Restore in separate Datenbank
@@ -770,6 +770,6 @@ Vielen Dank für eure Teilnahme am Kurs! Viel Erfolg mit euren zukünftigen Proj
 
 ---
 
-**Abschließende Worte:**
+**Abschliessende Worte:**
 
 Datenbanken sind das Herzstück fast jeder modernen Applikation. Die Konzepte, die ihr in diesem Kurs gelernt habt, sind zeitlos und werden euch in eurer gesamten Karriere begleiten. Viel Erfolg!

@@ -45,7 +45,7 @@ CREATE DATABASE hftm_library;
 USE hftm_library;
 
 -- 2. Exécuter le script SQL
-SOURCE /path/to/HFTM_Library.sql;
+SOURCE /path/to/HFTM Library.sql;   -- fichier dans le dossier "Lektion 03"
 
 -- 3. Vérifier les tables
 SHOW TABLES;
@@ -79,14 +79,14 @@ INSERT INTO table (column1, column2) VALUES
 **INSERT simple:**
 ```sql
 -- Ajouter un auteur
-INSERT INTO authors (lastname, firstname) 
+INSERT INTO authors (Lastname, Firstname) 
 VALUES ('Tolkien', 'J.R.R.');
 ```
 
 **Plusieurs enregistrements:**
 ```sql
 -- Plusieurs lieux en une fois
-INSERT INTO places (zip, city) VALUES 
+INSERT INTO places (ZIP, City) VALUES 
     (33016, 'Ottawa'), 
     (33017, 'Mississauga'), 
     (33018, 'Hamilton'), 
@@ -96,12 +96,12 @@ INSERT INTO places (zip, city) VALUES
 **Avec sous-requête:**
 ```sql
 -- Auteur avec LocationID de la table places
-INSERT INTO authors (lastname, firstname, address, location_id, email) 
+INSERT INTO authors (Lastname, Firstname, Address, LocationID, Email) 
 VALUES ( 
     'Jordan', 
     'Robert',
-    'Fiction Street 12',
-    (SELECT id FROM places WHERE zip='25000'),
+    'Fiktionsstrasse 12',
+    (SELECT ID FROM places WHERE ZIP='25000'),
     'robert.jordan@hftm.ch'
 );
 ```
@@ -112,7 +112,7 @@ Avec PRIMARY KEY et AUTO_INCREMENT, l'ID **ne doit pas** être spécifié:
 
 ```sql
 -- L'ID est attribué automatiquement
-INSERT INTO authors (lastname, firstname) 
+INSERT INTO authors (Lastname, Firstname) 
 VALUES ('King', 'Stephen');
 
 -- Récupérer le dernier ID inséré
@@ -165,107 +165,107 @@ SELECT * FROM table LIMIT 10 OFFSET 20;  -- Lignes 21-30
 **Opérateurs de comparaison:**
 ```sql
 -- Égal
-SELECT * FROM authors WHERE lastname = 'Tolkien';
+SELECT * FROM authors WHERE Lastname = 'Tolkien';
 
 -- Différent
-SELECT * FROM authors WHERE lastname != 'Tolkien';
+SELECT * FROM authors WHERE Lastname != 'Tolkien';
 -- ou
-SELECT * FROM authors WHERE lastname <> 'Tolkien';
+SELECT * FROM authors WHERE Lastname <> 'Tolkien';
 
 -- Plus grand / Plus petit
-SELECT * FROM places WHERE zip > 33015;
-SELECT * FROM books WHERE published_date < '2000-01-01';
+SELECT * FROM places WHERE ZIP > 33015;
+SELECT * FROM books WHERE Published_Date < '2000-01-01';
 
 -- Plus grand ou égal / Plus petit ou égal
-SELECT * FROM places WHERE zip >= 33016 AND zip <= 33019;
+SELECT * FROM places WHERE ZIP >= 33016 AND ZIP <= 33019;
 ```
 
 **Opérateurs logiques:**
 ```sql
 -- AND
 SELECT * FROM authors 
-WHERE lastname = 'Matthews' AND firstname = 'Summer';
+WHERE Lastname = 'Matthews' AND Firstname = 'Summer';
 
 -- OR
 SELECT * FROM authors 
-WHERE lastname = 'Hornby' OR lastname = 'Rowling';
+WHERE Lastname = 'Hornby' OR Lastname = 'Rowling';
 
 -- Combiné (attention aux parenthèses!)
 SELECT * FROM books 
-WHERE (published_date > '2000-01-01' AND genre_id = 3) 
-   OR (published_date < '1950-01-01');
+WHERE (Published_Date > '2000-01-01' AND GenresID = 3) 
+   OR (Published_Date < '1950-01-01');
 
 -- NOT
-SELECT * FROM authors WHERE NOT lastname = 'Tolkien';
+SELECT * FROM authors WHERE NOT Lastname = 'Tolkien';
 ```
 
 **LIKE - Recherche de motifs:**
 ```sql
 -- Nom de famille commence par 'M'
-SELECT * FROM authors WHERE lastname LIKE 'M%';
+SELECT * FROM authors WHERE Lastname LIKE 'M%';
 
 -- Nom de famille se termine par 'son'
-SELECT * FROM authors WHERE lastname LIKE '%son';
+SELECT * FROM authors WHERE Lastname LIKE '%son';
 
 -- Nom de famille contient 'ann'
-SELECT * FROM authors WHERE lastname LIKE '%ann%';
+SELECT * FROM authors WHERE Lastname LIKE '%ann%';
 
 -- Exactement 5 caractères (avec _)
-SELECT * FROM authors WHERE lastname LIKE '_____';
+SELECT * FROM authors WHERE Lastname LIKE '_____';
 
 -- Case-insensitive dans MySQL/MariaDB (par défaut)
-SELECT * FROM authors WHERE lastname LIKE 'tolkien';
+SELECT * FROM authors WHERE Lastname LIKE 'tolkien';
 ```
 
 **IN - Liste de valeurs:**
 ```sql
 -- Nom de famille est Tolkien, Rowling ou King
 SELECT * FROM authors 
-WHERE lastname IN ('Tolkien', 'Rowling', 'King');
+WHERE Lastname IN ('Tolkien', 'Rowling', 'King');
 
 -- Avec sous-requête
 SELECT * FROM books 
-WHERE author_id IN (SELECT id FROM authors WHERE lastname LIKE 'M%');
+WHERE AuthorsID IN (SELECT ID FROM authors WHERE Lastname LIKE 'M%');
 ```
 
 **BETWEEN - Plage de valeurs:**
 ```sql
 -- ZIP entre 33016 et 33019
 SELECT * FROM places 
-WHERE zip BETWEEN 33016 AND 33019;
+WHERE ZIP BETWEEN 33016 AND 33019;
 
 -- Date entre deux valeurs
 SELECT * FROM books 
-WHERE published_date BETWEEN '2000-01-01' AND '2010-12-31';
+WHERE Published_Date BETWEEN '2000-01-01' AND '2010-12-31';
 ```
 
 **IS NULL / IS NOT NULL:**
 ```sql
 -- Email n'est pas défini
-SELECT * FROM authors WHERE email IS NULL;
+SELECT * FROM authors WHERE Email IS NULL;
 
 -- Email est défini
-SELECT * FROM authors WHERE email IS NOT NULL;
+SELECT * FROM authors WHERE Email IS NOT NULL;
 ```
 
 ### Tri (ORDER BY)
 
 ```sql
 -- Ascendant (par défaut)
-SELECT * FROM authors ORDER BY lastname ASC;
+SELECT * FROM authors ORDER BY Lastname ASC;
 -- ou simplement
-SELECT * FROM authors ORDER BY lastname;
+SELECT * FROM authors ORDER BY Lastname;
 
 -- Descendant
-SELECT * FROM authors ORDER BY lastname DESC;
+SELECT * FROM authors ORDER BY Lastname DESC;
 
 -- Plusieurs colonnes
 SELECT * FROM authors 
-ORDER BY lastname ASC, firstname ASC;
+ORDER BY Lastname ASC, Firstname ASC;
 
 -- Par colonne calculée
-SELECT firstname, lastname, YEAR(CURDATE()) - YEAR(birth_date) AS age
-FROM authors 
+SELECT Firstname, Lastname, YEAR(CURDATE()) - YEAR(Birthdate) AS age
+FROM customers 
 ORDER BY age DESC;
 ```
 
@@ -286,10 +286,10 @@ SELECT * FROM books LIMIT 10, 10;  -- Lignes 11-20
 
 ```sql
 -- Tous les genres différents
-SELECT DISTINCT genre_id FROM books;
+SELECT DISTINCT GenresID FROM books;
 
 -- Toutes les combinaisons différentes
-SELECT DISTINCT author_id, genre_id FROM books;
+SELECT DISTINCT AuthorsID, GenresID FROM books;
 ```
 
 ## UPDATE - Mettre à jour des données
@@ -310,33 +310,33 @@ WHERE condition;
 ```sql
 -- Changer le code postal d'Oshawa
 UPDATE places 
-SET zip = 33020
-WHERE city = 'Oshawa';
+SET ZIP = 33020
+WHERE City = 'Oshawa';
 ```
 
 **Plusieurs colonnes:**
 ```sql
 -- Mettre à jour les données de l'auteur
 UPDATE authors 
-SET lastname = 'Armistead', 
-    firstname = 'Maupin' 
-WHERE lastname = 'Matthews' AND firstname = 'Summer';
+SET Lastname = 'Armistead', 
+    Firstname = 'Maupin' 
+WHERE Lastname = 'Matthews' AND Firstname = 'Summer';
 ```
 
 **Avec sous-requête:**
 ```sql
 -- Changer l'éditeur pour tous les livres de 'B & W Publishing'
 UPDATE books 
-SET publisher_id = (SELECT id FROM publishers WHERE name = 'Lakewater Press') 
-WHERE publisher_id = (SELECT id FROM publishers WHERE name = 'B & W Publishing');
+SET PublishersID = (SELECT ID FROM publishers WHERE Name = 'Lakewater Press') 
+WHERE PublishersID = (SELECT ID FROM publishers WHERE Name = 'B & W Publishing');
 ```
 
 **Avec IN et sous-requête:**
 ```sql
--- Définir location_id pour tous les auteurs dont le nom commence par 'Z'
+-- Définir LocationID pour tous les auteurs dont le nom commence par 'Z'
 UPDATE authors 
-SET location_id = (SELECT id FROM places WHERE zip = 97499)
-WHERE lastname LIKE 'Z%';
+SET LocationID = (SELECT ID FROM places WHERE ZIP = 97499)
+WHERE Lastname LIKE 'Z%';
 ```
 
 ### Fonctions de chaîne dans UPDATE
@@ -344,20 +344,20 @@ WHERE lastname LIKE 'Z%';
 ```sql
 -- Supprimer les espaces au début
 UPDATE books 
-SET title = TRIM(title) 
-WHERE title LIKE ' %';
+SET Titel = TRIM(Titel) 
+WHERE Titel LIKE ' %';
 
 -- En majuscules
 UPDATE authors 
-SET lastname = UPPER(lastname);
+SET Lastname = UPPER(Lastname);
 
 -- En minuscules
 UPDATE authors 
-SET email = LOWER(email);
+SET Email = LOWER(Email);
 
 -- Remplacer une sous-chaîne
 UPDATE books 
-SET title = REPLACE(title, 'old', 'new');
+SET Titel = REPLACE(Titel, 'old', 'new');
 ```
 
 ### Fonctions de date dans UPDATE
@@ -365,25 +365,25 @@ SET title = REPLACE(title, 'old', 'new');
 ```sql
 -- Ajouter 14 jours à la date de retour
 UPDATE lends 
-SET date_to = DATE_ADD(date_to, INTERVAL 14 DAY) 
-WHERE date_to >= CURDATE();
+SET Date_To = DATE_ADD(Date_To, INTERVAL 14 DAY) 
+WHERE Date_To >= CURDATE();
 
--- Définir la date au premier du mois
-UPDATE events 
-SET event_date = DATE_FORMAT(event_date, '%Y-%m-01');
+-- Définir le début du prêt au premier du mois
+UPDATE lends 
+SET Date_From = DATE_FORMAT(Date_From, '%Y-%m-01');
 ```
 
 ### Calculs dans UPDATE
 
 ```sql
--- Augmenter le prix de 10%
-UPDATE books 
-SET price = price * 1.10;
+-- Augmenter le prix de prêt de 10%
+UPDATE lends 
+SET Price = Price * 1.10;
 
 -- Réduire le stock de 5
 UPDATE books 
-SET amount_in_stock = amount_in_stock - 5 
-WHERE isbn = 'ISBN-00001';
+SET AmountInStock = AmountInStock - 5 
+WHERE ISBN = '642-71-22112-41-5';
 ```
 
 ## DELETE - Supprimer des données
@@ -403,16 +403,16 @@ WHERE condition;
 ```sql
 -- Supprimer le lieu 'Oshawa'
 DELETE FROM places 
-WHERE city = 'Oshawa';
+WHERE City = 'Oshawa';
 ```
 
 **Avec sous-requête:**
 ```sql
 -- Supprimer tous les livres d'un auteur
 DELETE FROM books 
-WHERE author_id = (
-    SELECT id FROM authors 
-    WHERE firstname = 'Daphne' AND lastname = 'Scott'
+WHERE AuthorsID = (
+    SELECT ID FROM authors 
+    WHERE Firstname = 'Daphne' AND Lastname = 'Scott'
 );
 ```
 
@@ -420,11 +420,11 @@ WHERE author_id = (
 ```sql
 -- Supprimer tous les anciens prêts
 DELETE FROM lends 
-WHERE date_to < '2020-01-01';
+WHERE Date_To < '2020-01-01';
 
 -- Tous les livres sans stock
 DELETE FROM books 
-WHERE amount_in_stock = 0;
+WHERE AmountInStock = 0;
 ```
 
 ### TRUNCATE vs DELETE
@@ -455,18 +455,18 @@ Les sous-requêtes peuvent être utilisées dans INSERT, UPDATE, DELETE et SELEC
 ```sql
 -- Livres de tous les auteurs dont le nom commence par 'M'
 SELECT * FROM books 
-WHERE author_id IN (
-    SELECT id FROM authors WHERE lastname LIKE 'M%'
+WHERE AuthorsID IN (
+    SELECT ID FROM authors WHERE Lastname LIKE 'M%'
 );
 ```
 
 ### Dans INSERT
 
 ```sql
--- Client avec location_id de sous-requête
-INSERT INTO customers (lastname, firstname, location_id)
-VALUES ('Mueller', 'Max', 
-    (SELECT id FROM places WHERE zip = '25000')
+-- Client avec LocationID de sous-requête
+INSERT INTO customers (Lastname, Firstname, LocationID)
+VALUES ('Müller', 'Max', 
+    (SELECT ID FROM places WHERE ZIP = '25000')
 );
 ```
 
@@ -475,8 +475,8 @@ VALUES ('Mueller', 'Max',
 ```sql
 -- Changer le genre d'un livre
 UPDATE books 
-SET genre_id = (SELECT id FROM genres WHERE genre = 'Science fiction') 
-WHERE title = 'Nineteen Eighty Four';
+SET GenresID = (SELECT ID FROM genres WHERE Genre = 'Science Fiction') 
+WHERE Titel = 'Nineteen Eighty Four';
 ```
 
 ### Dans DELETE
@@ -484,8 +484,8 @@ WHERE title = 'Nineteen Eighty Four';
 ```sql
 -- Supprimer tous les livres d'un éditeur spécifique
 DELETE FROM books 
-WHERE publisher_id = (
-    SELECT id FROM publishers WHERE name = 'Unwanted Press'
+WHERE PublishersID = (
+    SELECT ID FROM publishers WHERE Name = 'Unwanted Press'
 );
 ```
 
@@ -585,13 +585,13 @@ SELECT FLOOR(RAND() * 100);  -- 0-99
 1. Changer l'e-mail de 'Sleepytown Press' en 'john.sleepy@mail.com'
 2. Supprimer les espaces de début de tous les titres de livres
 3. Mettre à jour l'adresse d'Abdul Murphy
-4. Changer le genre de "Nineteen Eighty Four" en "Science fiction"
+4. Changer le genre de "Nineteen Eighty Four" en "Science Fiction"
 5. Prolonger tous les prêts actifs de 14 jours
 
 ### Exercice 3: Ajouter et remplir des colonnes
 
 1. Ajouter des colonnes pour jour, mois, année de la date de naissance
-2. Remplir ces colonnes à partir du champ birth_date
+2. Remplir ces colonnes à partir du champ Birthdate
 3. Ajouter une colonne pour le format de date suisse (DD.MM.YYYY)
 4. Remplir cette colonne
 
@@ -625,10 +625,10 @@ SELECT FLOOR(RAND() * 100);  -- 0-99
 -- Toujours tester d'abord avec SELECT!
 
 -- 1. SELECT pour tester
-SELECT * FROM books WHERE publisher_id = 5;
+SELECT * FROM books WHERE PublishersID = 5;
 
 -- 2. Si correct, alors UPDATE
-UPDATE books SET price = price * 1.1 WHERE publisher_id = 5;
+UPDATE books SET AmountInStock = AmountInStock + 1 WHERE PublishersID = 5;
 ```
 
 ## Transactions
@@ -642,7 +642,7 @@ BEGIN;
 -- Plusieurs opérations
 INSERT INTO customers (...) VALUES (...);
 INSERT INTO lends (...) VALUES (...);
-UPDATE books SET amount_in_stock = amount_in_stock - 1 WHERE id = 1;
+UPDATE books SET AmountInStock = AmountInStock - 1 WHERE ID = 1;
 
 -- Tout confirmer
 COMMIT;

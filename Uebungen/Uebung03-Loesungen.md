@@ -7,7 +7,7 @@
 Stelle sicher, dass die HFTM Library Datenbank installiert ist:
 
 ```sql
-SOURCE HFTM_Library.sql;
+SOURCE HFTM Library.sql;   -- Datei liegt im Ordner "Lektion 03"
 USE hftm_library;
 ```
 
@@ -47,10 +47,12 @@ Füge den Verlag "HFTM Publishing" hinzu mit E-Mail: info@hftm.ch
 
 Füge 3 Bücher der Serie "Das Rad der Zeit" von Robert Jordan hinzu:
 - "Das Auge der Welt", ISBN: 978-3-492-26019-9, Jahr: 1990
-- "Die Große Jagd", ISBN: 978-3-492-26020-5, Jahr: 1990
+- "Die Grosse Jagd", ISBN: 978-3-492-26020-5, Jahr: 1990
 - "Der Drache erwacht", ISBN: 978-3-492-26021-2, Jahr: 1991
 
-Alle bei HFTM Publishing, Preis: 24.90 CHF, Stock: 5
+Alle bei HFTM Publishing, Genre: Fantasy, Lagerbestand (`AmountInStock`): 5
+
+> Hinweis: Die Tabelle `books` hat keine Preisspalte. Preise werden pro Ausleihe in `lends.Price` gespeichert.
 
 ```sql
 -- Deine Lösung hier
@@ -80,7 +82,7 @@ Alle bei HFTM Publishing, Preis: 24.90 CHF, Stock: 5
 -- Deine Lösung hier
 ```
 
-**d)** Die 10 teuersten Bücher:
+**d)** Die 10 teuersten Ausleihen (`lends.Price`):
 
 ```sql
 -- Deine Lösung hier
@@ -88,7 +90,7 @@ Alle bei HFTM Publishing, Preis: 24.90 CHF, Stock: 5
 
 ### Aufgabe 6: WHERE mit Operatoren (1 Punkt)
 
-**a)** Alle Bücher zwischen 10 und 30 CHF:
+**a)** Alle Ausleihen mit einem Preis zwischen 10 und 30 CHF:
 
 ```sql
 -- Deine Lösung hier
@@ -114,13 +116,13 @@ Alle bei HFTM Publishing, Preis: 24.90 CHF, Stock: 5
 -- Deine Lösung hier
 ```
 
-**b)** Durchschnittspreis aller Bücher:
+**b)** Durchschnittlicher Ausleihpreis aller Ausleihen:
 
 ```sql
 -- Deine Lösung hier
 ```
 
-**c)** Teuerstes und günstigstes Buch:
+**c)** Höchster und tiefster Ausleihpreis:
 
 ```sql
 -- Deine Lösung hier
@@ -135,8 +137,8 @@ Alle bei HFTM Publishing, Preis: 24.90 CHF, Stock: 5
 ### Aufgabe 8: Komplexe Abfrage (1 Punkt)
 
 Finde alle Bücher von Autoren, deren E-Mail-Adresse bei "gmail.com" endet, 
-die nach 2010 publiziert wurden und mehr als 20 CHF kosten.
-Sortiere nach Preis absteigend.
+die nach 2010 publiziert wurden und von denen mehr als 20 Exemplare an Lager sind.
+Sortiere nach Lagerbestand (`AmountInStock`) absteigend.
 
 ```sql
 -- Deine Lösung hier
@@ -148,13 +150,13 @@ Sortiere nach Preis absteigend.
 
 ### Aufgabe 9: Preisanpassungen (1 Punkt)
 
-**a)** Erhöhe den Preis aller Bücher von "HFTM Publishing" um 10%:
+**a)** Erhöhe den Ausleihpreis (`lends.Price`) aller Ausleihen von Büchern von "HFTM Publishing" um 10%:
 
 ```sql
 -- Deine Lösung hier
 ```
 
-**b)** Setze das Publikationsjahr auf 2000 für alle Bücher ohne Datum:
+**b)** Setze das Publikationsdatum (`Published_Date`) auf den 1.1.2000 für alle Bücher ohne Datum:
 
 ```sql
 -- Deine Lösung hier
@@ -180,7 +182,7 @@ Sortiere nach Preis absteigend.
 
 ### Aufgabe 11: Daten löschen (1 Punkt)
 
-**a)** Lösche alle Bücher, die 0 Stock haben:
+**a)** Lösche alle Bücher, die keinen Lagerbestand haben (`AmountInStock` = 0):
 
 ```sql
 -- Deine Lösung hier
@@ -200,121 +202,127 @@ Sortiere nach Preis absteigend.
 
 ```sql
 -- Aufgabe 1
-INSERT INTO places (zip, city) VALUES (25000, 'Biel/Bienne');
+INSERT INTO places (ZIP, City) VALUES (25000, 'Biel/Bienne');
 
 -- Aufgabe 2
-INSERT INTO authors (firstname, lastname, email, location_id) VALUES (
+INSERT INTO authors (Firstname, Lastname, Email, LocationID) VALUES (
     'Robert',
     'Jordan',
     'robert.jordan@fantasy.com',
-    (SELECT id FROM places WHERE zip = 25000)
+    (SELECT ID FROM places WHERE ZIP = 25000)
 );
 
 -- Aufgabe 3
-INSERT INTO publishers (name, email) VALUES 
+INSERT INTO publishers (Name, Email) VALUES 
     ('HFTM Publishing', 'info@hftm.ch');
 
 -- Aufgabe 4
-INSERT INTO books (title, isbn, author_id, publisher_id, published_date, price, amount_in_stock) VALUES
+INSERT INTO books (Titel, ISBN, AuthorsID, PublishersID, GenresID, Published_Date, AmountInStock) VALUES
     ('Das Auge der Welt', '978-3-492-26019-9', 
-     (SELECT id FROM authors WHERE lastname = 'Jordan' AND firstname = 'Robert'),
-     (SELECT id FROM publishers WHERE name = 'HFTM Publishing'),
-     '1990-01-15', 24.90, 5),
-    ('Die Große Jagd', '978-3-492-26020-5',
-     (SELECT id FROM authors WHERE lastname = 'Jordan' AND firstname = 'Robert'),
-     (SELECT id FROM publishers WHERE name = 'HFTM Publishing'),
-     '1990-11-15', 24.90, 5),
+     (SELECT ID FROM authors WHERE Lastname = 'Jordan' AND Firstname = 'Robert'),
+     (SELECT ID FROM publishers WHERE Name = 'HFTM Publishing'),
+     (SELECT ID FROM genres WHERE Genre = 'Fantasy'),
+     '1990-01-15', 5),
+    ('Die Grosse Jagd', '978-3-492-26020-5',
+     (SELECT ID FROM authors WHERE Lastname = 'Jordan' AND Firstname = 'Robert'),
+     (SELECT ID FROM publishers WHERE Name = 'HFTM Publishing'),
+     (SELECT ID FROM genres WHERE Genre = 'Fantasy'),
+     '1990-11-15', 5),
     ('Der Drache erwacht', '978-3-492-26021-2',
-     (SELECT id FROM authors WHERE lastname = 'Jordan' AND firstname = 'Robert'),
-     (SELECT id FROM publishers WHERE name = 'HFTM Publishing'),
-     '1991-10-15', 24.90, 5);
+     (SELECT ID FROM authors WHERE Lastname = 'Jordan' AND Firstname = 'Robert'),
+     (SELECT ID FROM publishers WHERE Name = 'HFTM Publishing'),
+     (SELECT ID FROM genres WHERE Genre = 'Fantasy'),
+     '1991-10-15', 5);
 ```
 
 ### Teil B: SELECT Queries
 
 ```sql
 -- Aufgabe 5a
-SELECT * FROM books WHERE published_date > '2000-12-31';
+SELECT * FROM books WHERE Published_Date > '2000-12-31';
 
 -- Aufgabe 5b
-SELECT * FROM authors WHERE lastname LIKE 'M%';
+SELECT * FROM authors WHERE Lastname LIKE 'M%';
 
 -- Aufgabe 5c
-SELECT * FROM publishers ORDER BY name;
+SELECT * FROM publishers ORDER BY Name;
 
 -- Aufgabe 5d
-SELECT * FROM books ORDER BY price DESC LIMIT 10;
+SELECT * FROM lends ORDER BY Price DESC LIMIT 10;
 
 -- Aufgabe 6a
-SELECT * FROM books WHERE price BETWEEN 10 AND 30;
+SELECT * FROM lends WHERE Price BETWEEN 10 AND 30;
 
 -- Aufgabe 6b
-SELECT * FROM books WHERE title LIKE '%Harry%' OR title LIKE '%Potter%';
+SELECT * FROM books WHERE Titel LIKE '%Harry%' OR Titel LIKE '%Potter%';
 
 -- Aufgabe 6c
-SELECT * FROM customers WHERE email IS NULL;
+SELECT * FROM customers WHERE Email IS NULL;
 
 -- Aufgabe 7a
 SELECT COUNT(*) AS total_books FROM books;
 
 -- Aufgabe 7b
-SELECT AVG(price) AS average_price FROM books;
+SELECT AVG(Price) AS average_price FROM lends;
 
 -- Aufgabe 7c
-SELECT MAX(price) AS most_expensive, MIN(price) AS cheapest FROM books;
+SELECT MAX(Price) AS most_expensive, MIN(Price) AS cheapest FROM lends;
 
 -- Aufgabe 7d
-SELECT p.name, COUNT(b.id) AS book_count
+SELECT p.Name, COUNT(b.ID) AS book_count
 FROM publishers p
-LEFT JOIN books b ON p.id = b.publisher_id
-GROUP BY p.id, p.name
+LEFT JOIN books b ON p.ID = b.PublishersID
+GROUP BY p.ID, p.Name
 ORDER BY book_count DESC;
 
 -- Aufgabe 8
 SELECT b.*
 FROM books b
-INNER JOIN authors a ON b.author_id = a.id
-WHERE a.email LIKE '%gmail.com'
-    AND b.published_date > '2010-12-31'
-    AND b.price > 20
-ORDER BY b.price DESC;
+INNER JOIN authors a ON b.AuthorsID = a.ID
+WHERE a.Email LIKE '%gmail.com'
+    AND b.Published_Date > '2010-12-31'
+    AND b.AmountInStock > 20
+ORDER BY b.AmountInStock DESC;
 ```
 
 ### Teil C: UPDATE Operations
 
 ```sql
 -- Aufgabe 9a
-UPDATE books 
-SET price = price * 1.10
-WHERE publisher_id = (SELECT id FROM publishers WHERE name = 'HFTM Publishing');
+UPDATE lends 
+SET Price = Price * 1.10
+WHERE BookID IN (
+    SELECT ID FROM books
+    WHERE PublishersID = (SELECT ID FROM publishers WHERE Name = 'HFTM Publishing')
+);
 
 -- Aufgabe 9b
 UPDATE books 
-SET published_date = '2000-01-01'
-WHERE published_date IS NULL;
+SET Published_Date = '2000-01-01'
+WHERE Published_Date IS NULL;
 
 -- Aufgabe 10a
 UPDATE authors 
-SET firstname = 'Armistead', lastname = 'Maupin'
-WHERE firstname = 'Summer' AND lastname = 'Matthews';
+SET Firstname = 'Armistead', Lastname = 'Maupin'
+WHERE Firstname = 'Summer' AND Lastname = 'Matthews';
 
 -- Aufgabe 10b
 UPDATE publishers 
-SET email = 'info@sleepytown.com'
-WHERE name = 'Sleepytown Press';
+SET Email = 'info@sleepytown.com'
+WHERE Name = 'Sleepytown Press';
 ```
 
 ### Teil D: DELETE Operations
 
 ```sql
 -- Aufgabe 11a
-DELETE FROM books WHERE amount_in_stock = 0;
+DELETE FROM books WHERE AmountInStock = 0;
 
 -- Aufgabe 11b
 -- Erst prüfen ob Autoren existieren
-SELECT COUNT(*) FROM authors WHERE location_id = (SELECT id FROM places WHERE city = 'Oshawa');
+SELECT COUNT(*) FROM authors WHERE LocationID = (SELECT ID FROM places WHERE City = 'Oshawa');
 -- Wenn 0, dann löschen:
-DELETE FROM places WHERE city = 'Oshawa';
+DELETE FROM places WHERE City = 'Oshawa';
 ```
 
 ---
@@ -345,7 +353,7 @@ DELETE FROM places WHERE city = 'Oshawa';
 ### UPDATE
 ✅ IMMER erst mit SELECT testen!
 ✅ WHERE nicht vergessen
-✅ Berechnungen: `price * 1.10` für +10%
+✅ Berechnungen: `Price * 1.10` für +10%
 
 ### DELETE
 ✅ IMMER erst mit SELECT testen!

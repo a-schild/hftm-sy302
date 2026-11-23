@@ -117,7 +117,7 @@ Analysiere das erste Blatt der Excel-Datei auf:
 5. **Mehrbenutzerzugriff**: Mehrere User gleichzeitig
 6. **Sicherheit**: Zugriffsrechte und Authentifizierung
 7. **Backup & Recovery**: Automatische Sicherung
-8. **Effiziente Suche**: Schnelle Queries auch bei großen Datenmengen
+8. **Effiziente Suche**: Schnelle Queries auch bei grossen Datenmengen
 
 ## DBMS - Datenbankmanagementsystem
 
@@ -245,7 +245,7 @@ GET user:1001  // Returns: "Max Müller"
 
 **Eigenschaften:**
 - Optimiert für Lese-Performance
-- Große Datenmengen
+- Grosse Datenmengen
 - Horizontal skalierbar
 - Eventual Consistency
 

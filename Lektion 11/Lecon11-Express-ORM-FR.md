@@ -3,48 +3,288 @@
 ## Objectifs d'apprentissage
 
 L'étudiant(e) est capable de...
-- Comprendre les ORM (Object-Relational Mapping)
-- Utiliser Sequelize avec Node.js
-- Effectuer des migrations de bases de données
-- Comparer SQL brut vs ORM
 
-## Qu'est-ce qu'un ORM?
+- évaluer un framework adapté pour l'accès à la base de données
+- évaluer un framework adapté pour la mise en œuvre d'une API REST
+- appliquer le pattern MVC dans Express.js
+- comprendre les ORM (Object-Relational Mapping) et les utiliser avec Sequelize
+- créer et exécuter des migrations et des seeders de base de données
+- comparer SQL brut et ORM et les utiliser de manière ciblée
+- structurer le code selon les bonnes pratiques
 
-**ORM** = Object-Relational Mapping
+## Qu'est-ce qu'un framework?
 
-Traduit entre objets (code) et tables (base de données).
+Un **framework** est un ensemble d'outils, de bibliothèques et de bonnes pratiques qui structurent et accélèrent le développement.
+
+### Framework vs bibliothèque
+
+| Bibliothèque | Framework |
+|--------------|-----------|
+| Le code appelle la bibliothèque | Le framework appelle le code |
+| Exemple: lodash, axios | Exemple: Express, NestJS |
+| Fonctions individuelles | Architecture complète |
+| Plus de flexibilité | Plus de structure |
+
+## Pattern MVC (Model-View-Controller)
+
+**MVC** sépare le code en trois domaines de responsabilité:
+
+```text
+┌─────────────┐
+│    View     │  ← Présentation (frontend, templates)
+│  (Frontend) │
+└──────┬──────┘
+       │
+       ↓
+┌─────────────┐
+│ Controller  │  ← Logique métier, traitement des requêtes
+│  (Routes)   │
+└──────┬──────┘
+       │
+       ↓
+┌─────────────┐
+│    Model    │  ← Modèle de données, accès à la BD
+│  (Database) │
+└─────────────┘
+```
+
+### Avantages du MVC
+
+- **Separation of Concerns**: chaque couche a une tâche claire
+- **Maintenabilité**: les modifications ne concernent qu'une seule couche
+- **Testabilité**: chaque couche peut être testée de manière isolée
+- **Réutilisabilité**: les modèles peuvent être utilisés dans plusieurs contrôleurs
+
+## Structure de projet Express.js avec MVC
+
+Les exemples utilisent la HFTM Library DB (MariaDB/MySQL) avec les tables `authors`, `books`, `categories` et `book_categories`. Le projet de démonstration complet se trouve dans `Lektion 11/project express/` (Sequelize) et `Lektion 11/prisma/` (Prisma).
+
+### Structure des dossiers
+
+```text
+project/
+├── src/
+│   ├── models/
+│   │   ├── Book.js
+│   │   ├── Author.js
+│   │   ├── Category.js
+│   │   └── index.js
+│   ├── controllers/
+│   │   ├── bookController.js
+│   │   ├── authorController.js
+│   │   └── categoryController.js
+│   ├── services/
+│   │   ├── bookService.js
+│   │   ├── authorService.js
+│   │   └── categoryService.js
+│   ├── routes/
+│   │   ├── books.js
+│   │   ├── authors.js
+│   │   ├── categories.js
+│   │   └── index.js
+│   ├── middleware/
+│   │   ├── errorHandler.js
+│   │   └── validator.js
+│   └── config/
+│       └── database.js
+├── .env
+├── .gitignore
+├── package.json
+└── server.js
+```
+
+### Couche Model
+
+Sans ORM, le modèle encapsule les requêtes SQL (pool mysql2 de la leçon 10).
+
+**models/Book.js**
+
+```javascript
+const db = require('../config/database');  // pool mysql2/promise
+
+class Book {
+    static async findAll() {
+        const [rows] = await db.query('SELECT * FROM books');
+        return rows;
+    }
+
+    static async findById(id) {
+        const [rows] = await db.query(
+            'SELECT * FROM books WHERE book_id = ?',
+            [id]
+        );
+        return rows[0];
+    }
+
+    static async create(bookData) {
+        const { title, author_id, isbn, publication_year, pages } = bookData;
+        const [result] = await db.query(
+            'INSERT INTO books (title, author_id, isbn, publication_year, pages) VALUES (?, ?, ?, ?, ?)',
+            [title, author_id, isbn, publication_year, pages]
+        );
+        return result.insertId;
+    }
+
+    static async update(id, bookData) {
+        const { title, author_id, isbn, publication_year, pages } = bookData;
+        const [result] = await db.query(
+            'UPDATE books SET title = ?, author_id = ?, isbn = ?, publication_year = ?, pages = ? WHERE book_id = ?',
+            [title, author_id, isbn, publication_year, pages, id]
+        );
+        return result.affectedRows;
+    }
+
+    static async delete(id) {
+        const [result] = await db.query(
+            'DELETE FROM books WHERE book_id = ?',
+            [id]
+        );
+        return result.affectedRows;
+    }
+
+    static async findByAuthor(authorName) {
+        const [rows] = await db.query(
+            `SELECT b.* FROM books b
+             INNER JOIN authors a ON b.author_id = a.author_id
+             WHERE a.name LIKE ?`,
+            [`%${authorName}%`]
+        );
+        return rows;
+    }
+}
+
+module.exports = Book;
+```
+
+### Couche Controller
+
+**controllers/bookController.js**
+
+```javascript
+const Book = require('../models/Book');
+
+exports.getAllBooks = async (req, res, next) => {
+    try {
+        const books = await Book.findAll();
+        res.json(books);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getBookById = async (req, res, next) => {
+    try {
+        const book = await Book.findById(req.params.id);
+
+        if (!book) {
+            return res.status(404).json({ error: 'Livre introuvable' });
+        }
+
+        res.json(book);
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.createBook = async (req, res, next) => {
+    try {
+        const bookId = await Book.create(req.body);
+        res.status(201).json({
+            message: 'Livre créé avec succès',
+            bookId
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.updateBook = async (req, res, next) => {
+    try {
+        const affected = await Book.update(req.params.id, req.body);
+
+        if (affected === 0) {
+            return res.status(404).json({ error: 'Livre introuvable' });
+        }
+
+        res.json({ message: 'Livre mis à jour avec succès' });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.deleteBook = async (req, res, next) => {
+    try {
+        const affected = await Book.delete(req.params.id);
+
+        if (affected === 0) {
+            return res.status(404).json({ error: 'Livre introuvable' });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        next(error);
+    }
+};
+```
+
+### Couche Route
+
+**routes/books.js**
+
+```javascript
+const express = require('express');
+const router = express.Router();
+const bookController = require('../controllers/bookController');
+const { validateBook } = require('../middleware/validator');
+
+router.get('/', bookController.getAllBooks);
+router.get('/:id', bookController.getBookById);
+router.post('/', validateBook, bookController.createBook);
+router.put('/:id', validateBook, bookController.updateBook);
+router.delete('/:id', bookController.deleteBook);
+
+module.exports = router;
+```
+
+## ORM - Object-Relational Mapping
+
+Un **ORM** fait correspondre les tables de la base de données à des objets et traduit entre objets (code) et tables (base de données). Les requêtes SQL sont ainsi abstraites.
 
 ### Avantages des ORM
 
-✅ **Code plus lisible**
-✅ **Abstraction de la base de données**
-✅ **Protection contre SQL injection**
-✅ **Migrations gérées**
-✅ **Validation intégrée**
+- ✅ **Code plus court et plus lisible**
+- ✅ **Abstraction de la base de données** (compatibilité multi-SGBD)
+- ✅ **Protection contre l'injection SQL** (paramètres automatiques)
+- ✅ **Validation intégrée**
+- ✅ **Migrations gérées**
+- ✅ **Sécurité des types** (avec TypeScript)
 
 ### Inconvénients des ORM
 
-❌ **Courbe d'apprentissage**
-❌ **Performance overhead**
-❌ **Requêtes complexes difficiles**
-❌ **Moins de contrôle**
+- ❌ **Courbe d'apprentissage**
+- ❌ **Overhead de performance**
+- ❌ **Requêtes complexes difficiles**
+- ❌ **Moins de contrôle** sur le SQL généré
+- ❌ **La « magie » peut causer des problèmes**
 
-## Sequelize
+## Sequelize - ORM pour Node.js
 
-Le plus populaire ORM pour Node.js.
+**Sequelize** est l'ORM le plus répandu pour Node.js et prend en charge MySQL, MariaDB, PostgreSQL, SQLite et MSSQL.
 
 ### Installation
 
 ```bash
-npm install sequelize mysql2
+npm install sequelize mysql2 dotenv   # mysql2 fonctionne aussi avec MariaDB
 npm install --save-dev sequelize-cli
 ```
 
 ### Configuration
 
+**config/database.js**
+
 ```javascript
-// config/database.js
 const { Sequelize } = require('sequelize');
+require('dotenv').config();
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -52,29 +292,47 @@ const sequelize = new Sequelize(
     process.env.DB_PASSWORD,
     {
         host: process.env.DB_HOST,
+        port: process.env.DB_PORT || 3306,
         dialect: 'mysql',
-        logging: console.log,
+        // Journaliser les requêtes SQL uniquement en développement
+        logging: process.env.NODE_ENV === 'development' ? console.log : false,
         pool: {
             max: 5,
             min: 0,
             acquire: 30000,
             idle: 10000
+        },
+        define: {
+            timestamps: true,   // created_at / updated_at
+            underscored: true   // noms de colonnes en snake_case
         }
     }
 );
 
-module.exports = sequelize;
+// Tester la connexion
+const testConnection = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Base de données connectée');
+    } catch (error) {
+        console.error('Erreur de connexion:', error.message);
+        process.exit(1);
+    }
+};
+
+module.exports = { sequelize, testConnection };
 ```
 
-### Définir des modèles
+### Définition de modèles avec Sequelize
+
+**models/Book.js**
 
 ```javascript
-// models/Book.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
 
 const Book = sequelize.define('Book', {
-    id: {
+    book_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -84,226 +342,316 @@ const Book = sequelize.define('Book', {
         allowNull: false,
         validate: {
             notEmpty: true,
-            len: [3, 255]
+            len: [1, 255]
         }
+    },
+    author_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
     },
     isbn: {
         type: DataTypes.STRING(20),
-        unique: true
-    },
-    publishedDate: {
-        type: DataTypes.DATE
-    },
-    price: {
-        type: DataTypes.DECIMAL(10, 2),
+        unique: true,
         validate: {
-            min: 0
+            is: /^[\d-]+$/   // uniquement chiffres et tirets
         }
     },
-    inStock: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
+    publication_year: {
+        type: DataTypes.INTEGER,
+        validate: {
+            min: 1000,
+            max: new Date().getFullYear() + 1
+        }
+    },
+    pages: {
+        type: DataTypes.INTEGER,
+        validate: {
+            min: 1
+        }
     }
 }, {
     tableName: 'books',
-    timestamps: true
+    timestamps: true,   // created_at / updated_at
+    underscored: true
 });
 
 module.exports = Book;
 ```
 
-### Associations
-
-```javascript
-// models/associations.js
-const Book = require('./Book');
-const Author = require('./Author');
-const Publisher = require('./Publisher');
-const Category = require('./Category');
-
-// 1:N - Un auteur a plusieurs livres
-Author.hasMany(Book, { 
-    foreignKey: 'authorId',
-    as: 'books'
-});
-
-Book.belongsTo(Author, { 
-    foreignKey: 'authorId',
-    as: 'author'
-});
-
-// 1:N - Un éditeur a plusieurs livres
-Publisher.hasMany(Book, { foreignKey: 'publisherId' });
-Book.belongsTo(Publisher, { foreignKey: 'publisherId' });
-
-// N:M - Livres et Catégories
-Book.belongsToMany(Category, { 
-    through: 'BookCategories',
-    foreignKey: 'bookId'
-});
-
-Category.belongsToMany(Book, { 
-    through: 'BookCategories',
-    foreignKey: 'categoryId'
-});
-
-module.exports = { Book, Author, Publisher, Category };
-```
-
 ### CRUD avec Sequelize
 
+Les exemples suivants s'exécutent à l'intérieur d'une fonction `async` (p. ex. dans un contrôleur ou un service).
+
 ```javascript
+const { Book, Author } = require('./models');
+
 // CREATE
-const book = await Book.create({
-    title: 'New Book',
-    isbn: '978-1234567890',
-    price: 29.99,
-    authorId: 1
+const newBook = await Book.create({
+    title: 'Der Hobbit',
+    author_id: 1,
+    isbn: '978-3-423-21212-0',
+    publication_year: 1937,
+    pages: 336
 });
 
-// READ
-const books = await Book.findAll();
+// READ - tous
+const allBooks = await Book.findAll();
 
-const book = await Book.findByPk(1);
-
-const books = await Book.findAll({
-    where: {
-        price: {
-            [Op.gte]: 20
-        }
-    },
-    include: [{
-        model: Author,
-        as: 'author'
-    }]
+// READ - avec filtre
+const tolkienBooks = await Book.findAll({
+    where: { author_id: 1 }
 });
 
-// UPDATE
-await book.update({ price: 24.99 });
+// READ - un seul enregistrement
+const book = await Book.findByPk(1);   // clé primaire
+const hobbit = await Book.findOne({
+    where: { isbn: '978-3-423-21212-0' }
+});
 
-// Ou
+// UPDATE - avec condition WHERE
 await Book.update(
-    { price: 24.99 },
-    { where: { id: 1 } }
+    { publication_year: 1938 },
+    { where: { book_id: 1 } }
 );
 
-// DELETE
-await book.destroy();
+// UPDATE - mettre à jour une instance
+book.publication_year = 1938;
+await book.save();
+// ou: await book.update({ publication_year: 1938 });
 
-// Ou
+// DELETE - avec condition WHERE
 await Book.destroy({
-    where: { id: 1 }
+    where: { book_id: 1 }
 });
+// ou supprimer une instance: await hobbit.destroy();
 ```
 
-### Requêtes avancées
+### Requêtes avancées avec Sequelize
 
 ```javascript
-// Opérateurs
 const { Op } = require('sequelize');
 
+// WHERE avec opérateurs
+const modernBooks = await Book.findAll({
+    where: {
+        publication_year: {
+            [Op.gte]: 2000,   // >= 2000
+            [Op.lte]: 2024    // <= 2024
+        }
+    }
+});
+
 // AND
-const books = await Book.findAll({
+const longModernBooks = await Book.findAll({
     where: {
         [Op.and]: [
-            { price: { [Op.gte]: 20 } },
-            { inStock: true }
+            { publication_year: { [Op.gte]: 1900 } },
+            { pages: { [Op.gt]: 300 } }
         ]
     }
 });
 
 // OR
-const books = await Book.findAll({
+const selectedBooks = await Book.findAll({
     where: {
         [Op.or]: [
-            { authorId: 1 },
-            { price: { [Op.lt]: 10 } }
+            { author_id: 1 },
+            { pages: { [Op.lt]: 150 } }
         ]
     }
 });
 
 // LIKE
-const books = await Book.findAll({
+const hobbitBooks = await Book.findAll({
     where: {
-        title: {
-            [Op.like]: '%Harry%'
-        }
+        title: { [Op.like]: '%Hobbit%' }
     }
 });
 
 // IN
-const books = await Book.findAll({
+const booksOfAuthors = await Book.findAll({
     where: {
-        authorId: {
-            [Op.in]: [1, 2, 3]
-        }
+        author_id: { [Op.in]: [1, 2, 3] }
     }
+});
+
+// ORDER BY
+const sortedBooks = await Book.findAll({
+    order: [
+        ['publication_year', 'DESC'],
+        ['title', 'ASC']
+    ]
+});
+
+// LIMIT et OFFSET (pagination: page 3 avec 10 entrées chacune)
+const pageThree = await Book.findAll({
+    limit: 10,
+    offset: 20
+});
+
+// SELECT de champs spécifiques
+const titles = await Book.findAll({
+    attributes: ['title', 'isbn']
 });
 ```
 
 ### Agrégations
 
 ```javascript
-// COUNT
-const count = await Book.count();
+const { sequelize } = require('./config/database');
 
-const count = await Book.count({
-    where: { inStock: true }
+// COUNT
+const totalBooks = await Book.count();
+const tolkienCount = await Book.count({
+    where: { author_id: 1 }
 });
 
-// SUM
-const total = await Book.sum('price');
+// SUM, MAX, MIN
+const totalPages = await Book.sum('pages');
+const maxPages = await Book.max('pages');
+const oldestYear = await Book.min('publication_year');
 
-// MAX, MIN, AVG
-const maxPrice = await Book.max('price');
-const minPrice = await Book.min('price');
-const avgPrice = await Book.avg('price');
+// AVG (pas de raccourci dédié, donc aggregate)
+const avgPages = await Book.aggregate('pages', 'AVG');
 
 // GROUP BY
-const result = await Book.findAll({
+const booksPerAuthor = await Book.findAll({
     attributes: [
-        'authorId',
-        [sequelize.fn('COUNT', sequelize.col('id')), 'bookCount']
+        'author_id',
+        [sequelize.fn('COUNT', sequelize.col('book_id')), 'book_count']
     ],
-    group: ['authorId']
+    group: ['author_id'],
+    raw: true
 });
 ```
 
+### Associations (relations) dans Sequelize
+
+Les relations sont définies de manière centralisée dans **models/index.js** (comme dans le projet de démonstration).
+
+**Relation 1:N** (un auteur a plusieurs livres) et **relation N:M** (livres et catégories via `book_categories`):
+
+```javascript
+// models/index.js
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
+const Book = require('./Book');
+const Author = require('./Author');
+const Category = require('./Category');
+
+// 1:N - un auteur a plusieurs livres
+Author.hasMany(Book, {
+    foreignKey: 'author_id',
+    as: 'books'
+});
+
+Book.belongsTo(Author, {
+    foreignKey: 'author_id',
+    as: 'author'
+});
+
+// N:M - table de liaison
+const BookCategory = sequelize.define('BookCategory', {
+    book_id: { type: DataTypes.INTEGER, primaryKey: true },
+    category_id: { type: DataTypes.INTEGER, primaryKey: true }
+}, {
+    tableName: 'book_categories',
+    timestamps: false
+});
+
+Book.belongsToMany(Category, {
+    through: BookCategory,
+    foreignKey: 'book_id',
+    otherKey: 'category_id',
+    as: 'categories'
+});
+
+Category.belongsToMany(Book, {
+    through: BookCategory,
+    foreignKey: 'category_id',
+    otherKey: 'book_id',
+    as: 'books'
+});
+
+module.exports = { sequelize, Book, Author, Category, BookCategory };
+```
+
+**Utiliser les relations:**
+
+```javascript
+// Auteurs avec leurs livres
+const authors = await Author.findAll({
+    include: [{ model: Book, as: 'books' }]
+});
+
+// Livres avec auteur et catégories
+const books = await Book.findAll({
+    include: [
+        { model: Author, as: 'author', attributes: ['name', 'country'] },
+        { model: Category, as: 'categories', through: { attributes: [] } }
+    ]
+});
+
+// Filtre sur la table liée (INNER JOIN)
+const englishBooks = await Book.findAll({
+    include: [{
+        model: Author,
+        as: 'author',
+        where: { country: 'England' }
+    }]
+});
+
+// Catégorie avec tous ses livres
+const category = await Category.findByPk(1, {
+    include: [{ model: Book, as: 'books' }]
+});
+
+// Méthodes générées par la relation N:M
+const book = await Book.findByPk(1);
+await book.setCategories([1, 2]);   // attribuer les catégories 1 et 2
+```
+
 ### Transactions
+
+Plusieurs opérations sont exécutées ensemble ou annulées ensemble.
 
 ```javascript
 const t = await sequelize.transaction();
 
 try {
     const book = await Book.create({
-        title: 'New Book',
-        price: 29.99
+        title: 'Farm der Tiere',
+        author_id: 2,
+        isbn: '978-3-257-20057-7',
+        publication_year: 1945,
+        pages: 144
     }, { transaction: t });
-    
-    await Author.update(
-        { bookCount: sequelize.literal('bookCount + 1') },
-        { where: { id: book.authorId }, transaction: t }
-    );
-    
+
+    // Attribuer les catégories dans la même transaction
+    await book.addCategories([2, 5], { transaction: t });
+
     await t.commit();
-    
+
 } catch (err) {
-    await t.rollback();
+    await t.rollback();   // annuler toutes les modifications
     throw err;
 }
 ```
 
-## Migrations
+## Migrations avec Sequelize
 
-### Initialisation
+Les migrations permettent des modifications versionnées de la base de données.
+
+### Initialiser Sequelize CLI
 
 ```bash
-# Initialiser Sequelize
+# Initialiser Sequelize CLI (sequelize-cli est déjà installé)
 npx sequelize-cli init
 ```
 
 Structure créée:
-```
+
+```text
 project/
 ├── config/
 │   └── config.json
@@ -320,12 +668,14 @@ npx sequelize-cli migration:generate --name create-books-table
 
 ### Fichier de migration
 
+La migration pour `authors` doit être exécutée avant celle pour `books`, car `books.author_id` y fait référence.
+
 ```javascript
-// migrations/20240101-create-books.js
+// migrations/20241010120000-create-books-table.js
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable('books', {
-            id: {
+            book_id: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
@@ -334,44 +684,42 @@ module.exports = {
                 type: Sequelize.STRING(255),
                 allowNull: false
             },
-            isbn: {
-                type: Sequelize.STRING(20),
-                unique: true
-            },
-            authorId: {
+            author_id: {
                 type: Sequelize.INTEGER,
+                allowNull: true,
                 references: {
                     model: 'authors',
-                    key: 'id'
+                    key: 'author_id'
                 },
                 onUpdate: 'CASCADE',
                 onDelete: 'SET NULL'
             },
-            publishedDate: {
-                type: Sequelize.DATE
+            isbn: {
+                type: Sequelize.STRING(20),
+                unique: true
             },
-            price: {
-                type: Sequelize.DECIMAL(10, 2)
+            publication_year: {
+                type: Sequelize.INTEGER
             },
-            inStock: {
-                type: Sequelize.BOOLEAN,
-                defaultValue: true
+            pages: {
+                type: Sequelize.INTEGER
             },
-            createdAt: {
+            created_at: {
                 type: Sequelize.DATE,
-                allowNull: false
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             },
-            updatedAt: {
+            updated_at: {
                 type: Sequelize.DATE,
-                allowNull: false
+                allowNull: false,
+                defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
             }
         });
-        
-        // Ajouter un index
+
+        // Index pour une colonne fréquemment recherchée
         await queryInterface.addIndex('books', ['title']);
-        await queryInterface.addIndex('books', ['authorId']);
     },
-    
+
     down: async (queryInterface, Sequelize) => {
         await queryInterface.dropTable('books');
     }
@@ -393,6 +741,8 @@ npx sequelize-cli db:migrate:undo:all
 
 ## Seeders
 
+Les seeders remplissent la base de données avec des données d'exemple ou de test.
+
 ### Créer un seeder
 
 ```bash
@@ -402,29 +752,31 @@ npx sequelize-cli seed:generate --name demo-books
 ### Fichier seeder
 
 ```javascript
-// seeders/20240101-demo-books.js
+// seeders/20241010130000-demo-books.js
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         await queryInterface.bulkInsert('books', [
             {
-                title: 'The Hobbit',
-                isbn: '978-0547928227',
-                price: 14.99,
-                authorId: 1,
-                createdAt: new Date(),
-                updatedAt: new Date()
+                title: 'Der Hobbit',
+                author_id: 1,
+                isbn: '978-3-423-21212-0',
+                publication_year: 1937,
+                pages: 336,
+                created_at: new Date(),
+                updated_at: new Date()
             },
             {
                 title: '1984',
-                isbn: '978-0451524935',
-                price: 13.99,
-                authorId: 2,
-                createdAt: new Date(),
-                updatedAt: new Date()
+                author_id: 2,
+                isbn: '978-3-548-23440-9',
+                publication_year: 1949,
+                pages: 336,
+                created_at: new Date(),
+                updated_at: new Date()
             }
         ]);
     },
-    
+
     down: async (queryInterface, Sequelize) => {
         await queryInterface.bulkDelete('books', null, {});
     }
@@ -441,51 +793,162 @@ npx sequelize-cli db:seed:all
 npx sequelize-cli db:seed:undo:all
 ```
 
+## Prisma - ORM moderne
+
+**Prisma** est un ORM plus récent avec une approche TypeScript-first. Le schéma est défini dans un fichier dédié, à partir duquel un client typé est généré.
+
+### Installation
+
+```bash
+npm install @prisma/client
+npm install -D prisma
+npx prisma init
+npx prisma generate   # générer le client à partir du schéma
+```
+
+### Définir le schéma
+
+**prisma/schema.prisma**
+
+```prisma
+// Schéma complet avec catégories: Lektion 11/prisma/prisma/schema.prisma
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Author {
+  id        Int      @id @default(autoincrement()) @map("author_id")
+  name      String   @db.VarChar(255)
+  country   String?  @db.VarChar(100)
+  books     Book[]
+
+  @@map("authors")
+}
+
+model Book {
+  id              Int      @id @default(autoincrement()) @map("book_id")
+  title           String   @db.VarChar(255)
+  authorId        Int?     @map("author_id")
+  isbn            String?  @unique @db.VarChar(20)
+  publicationYear Int?     @map("publication_year")
+  pages           Int?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  author          Author?  @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@map("books")
+}
+```
+
+### Utiliser Prisma Client
+
+```javascript
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+// CREATE (avec liaison à un auteur existant)
+const newBook = await prisma.book.create({
+    data: {
+        title: 'Der Herr der Ringe',
+        isbn: '978-3-608-93830-2',
+        publicationYear: 1954,
+        pages: 1216,
+        author: { connect: { id: 1 } }
+    }
+});
+
+// READ
+const books = await prisma.book.findMany();
+const book = await prisma.book.findUnique({
+    where: { id: 1 }
+});
+
+// UPDATE
+const updated = await prisma.book.update({
+    where: { id: 1 },
+    data: { publicationYear: 1938 }
+});
+
+// DELETE
+await prisma.book.delete({
+    where: { id: 1 }
+});
+
+// Avec relations
+const author = await prisma.author.findUnique({
+    where: { id: 1 },
+    include: { books: true }
+});
+```
+
+## Comparaison des ORM
+
+| Fonctionnalité | Sequelize | Prisma | TypeORM |
+|----------------|-----------|--------|---------|
+| **TypeScript** | Pris en charge | Natif | Natif |
+| **Migrations** | Oui | Oui | Oui |
+| **Relations** | Bon | Excellent | Bon |
+| **Performance** | Bonne | Très bonne | Bonne |
+| **Courbe d'apprentissage** | Moyenne | Faible | Élevée |
+| **Communauté** | Grande | En croissance | Grande |
+| **Idéal pour** | JavaScript | TypeScript | TypeScript Enterprise |
+
 ## Comparaison: SQL brut vs ORM
 
 ### SQL brut
 
+Avantages:
+
+- ✅ Contrôle total
+- ✅ Performance optimale
+- ✅ Requêtes complexes faciles
+
+Inconvénients:
+
+- ❌ Risque d'injection SQL (si aucune requête préparée n'est utilisée)
+- ❌ Plus de code
+- ❌ Changement de base de données difficile
+
 ```javascript
-// Avantages
-✅ Contrôle total
-✅ Performance optimale
-✅ Requêtes complexes faciles
-
-// Inconvénients
-❌ Risque d'injection SQL
-❌ Plus de code
-❌ Changements de DB difficiles
-
 const [books] = await pool.query(`
-    SELECT b.*, a.name as author_name
+    SELECT b.*, a.name AS author_name
     FROM books b
-    INNER JOIN authors a ON b.author_id = a.id
-    WHERE b.price > ?
+    INNER JOIN authors a ON b.author_id = a.author_id
+    WHERE b.pages > ?
     ORDER BY b.title
-`, [20]);
+`, [300]);
 ```
 
 ### ORM (Sequelize)
 
+Avantages:
+
+- ✅ Code plus propre
+- ✅ Protection contre l'injection SQL
+- ✅ Migrations gérées
+- ✅ Abstraction de la base de données
+
+Inconvénients:
+
+- ❌ Overhead de performance
+- ❌ Courbe d'apprentissage
+- ❌ Moins de contrôle
+
 ```javascript
-// Avantages
-✅ Code plus propre
-✅ Protection SQL injection
-✅ Migrations gérées
-✅ Abstraction DB
-
-// Inconvénients
-❌ Overhead de performance
-❌ Courbe d'apprentissage
-❌ Moins de contrôle
-
 const books = await Book.findAll({
     where: {
-        price: { [Op.gt]: 20 }
+        pages: { [Op.gt]: 300 }
     },
     include: [{
         model: Author,
-        as: 'author'
+        as: 'author',
+        attributes: ['name'],
+        required: true   // INNER JOIN
     }],
     order: [['title', 'ASC']]
 });
@@ -494,110 +957,302 @@ const books = await Book.findAll({
 ### Quand utiliser quoi?
 
 **Utiliser SQL brut:**
+
 - Requêtes très complexes
 - Performance critique
-- Équipe expérimentée SQL
+- Équipe expérimentée en SQL
 
-**Utiliser ORM:**
-- Projet de taille moyenne/grande
+**Utiliser un ORM:**
+
+- Projets de taille moyenne à grande
 - Développement rapide
 - Équipe mixte (juniors/seniors)
 
 **Approche hybride:**
+
 ```javascript
-// Utiliser ORM pour CRUD simple
+const { QueryTypes } = require('sequelize');
+
+// ORM pour le CRUD simple
 const book = await Book.findByPk(1);
 
-// Utiliser SQL brut pour requêtes complexes
+// SQL brut pour les analyses complexes
 const stats = await sequelize.query(`
-    SELECT 
-        g.name,
-        COUNT(b.id) as book_count,
-        AVG(b.price) as avg_price
-    FROM genres g
-    LEFT JOIN books b ON g.id = b.genre_id
-    GROUP BY g.id
-    HAVING book_count > 10
-`, { type: QueryTypes.SELECT });
+    SELECT
+        c.name,
+        COUNT(b.book_id) AS book_count,
+        AVG(b.pages) AS avg_pages
+    FROM categories c
+    LEFT JOIN book_categories bc ON c.category_id = bc.category_id
+    LEFT JOIN books b ON bc.book_id = b.book_id
+    GROUP BY c.category_id, c.name
+    HAVING book_count > :minBooks
+`, {
+    replacements: { minBooks: 1 },
+    type: QueryTypes.SELECT
+});
+```
+
+## Pattern Service Layer
+
+Pour une logique métier complexe: une couche service entre le contrôleur et le modèle.
+
+```text
+Controller → Service → Model → Database
+```
+
+**services/bookService.js**
+
+```javascript
+const { Op } = require('sequelize');
+const { Book, Author } = require('../models');
+
+class BookService {
+    async getAllBooks(filters = {}) {
+        const { author, year, limit = 50 } = filters;
+
+        const where = {};
+        if (year) where.publication_year = year;
+
+        const authorInclude = { model: Author, as: 'author', attributes: ['author_id', 'name'] };
+        if (author) authorInclude.where = { name: { [Op.like]: `%${author}%` } };
+
+        return Book.findAll({ where, include: [authorInclude], limit: Number(limit) });
+    }
+
+    async getBookWithAuthor(bookId) {
+        return Book.findByPk(bookId, {
+            include: [{ model: Author, as: 'author' }]
+        });
+    }
+
+    async createBookWithValidation(bookData) {
+        // Validation
+        if (!bookData.title) {
+            throw new Error('Le titre est obligatoire');
+        }
+
+        // Vérifier si l'ISBN existe déjà
+        if (bookData.isbn) {
+            const existing = await Book.findOne({
+                where: { isbn: bookData.isbn }
+            });
+
+            if (existing) {
+                throw new Error('ISBN déjà existant');
+            }
+        }
+
+        // Vérifier si l'auteur existe
+        if (bookData.author_id) {
+            const author = await Author.findByPk(bookData.author_id);
+
+            if (!author) {
+                throw new Error('Auteur introuvable');
+            }
+        }
+
+        // Créer le livre
+        return Book.create(bookData);
+    }
+}
+
+module.exports = new BookService();
+```
+
+**Le contrôleur utilise le service:**
+
+```javascript
+const bookService = require('../services/bookService');
+
+exports.getAllBooks = async (req, res, next) => {
+    try {
+        const books = await bookService.getAllBooks(req.query);
+        res.json(books);
+    } catch (error) {
+        next(error);
+    }
+};
 ```
 
 ## Exercices pratiques
 
-### Exercice 1: Setup Sequelize
+### Exercice 1: Refactoring MVC
+
+Restructurer le projet d'API REST existant selon le pattern MVC:
+
+1. Créer le dossier `models/` avec les classes de modèle
+2. Déplacer la logique BD des contrôleurs vers les modèles
+3. Créer le dossier `services/` pour la logique métier
+4. Documenter la nouvelle structure
+
+### Exercice 2: Setup Sequelize
 
 1. Installer Sequelize et sequelize-cli
 2. Configurer la connexion
-3. Créer 3 modèles (Book, Author, Publisher)
-4. Définir les associations
-
-### Exercice 2: Migrations
-
-1. Créer des migrations pour toutes les tables
-2. Exécuter les migrations
-3. Créer des seeders avec données de test
-4. Exécuter les seeders
+3. Définir trois modèles (Book, Author, Category)
+4. Mettre en place les associations (1:N et N:M)
 
 ### Exercice 3: API avec Sequelize
 
-Convertir votre API existante pour utiliser Sequelize:
-1. Remplacer les requêtes SQL brutes
-2. Utiliser les associations
-3. Comparer les performances
+Convertir l'API existante pour utiliser Sequelize:
+
+1. Remplacer les requêtes SQL brutes par des appels Sequelize
+2. Réécrire les opérations CRUD
+3. Utiliser les associations (`include`)
+4. Comparer les performances (avec/sans ORM)
+
+### Exercice 4: Migrations et seeders
+
+1. Configurer Sequelize CLI
+2. Créer une migration pour chaque table
+3. Exécuter les migrations et tester up/down
+4. Créer et exécuter des seeders avec des données de test
 
 ## Bonnes pratiques
 
-### Modèles
+### 1. Configuration par environnement
 
 ```javascript
-// ✅ Bon - Validation au niveau du modèle
+// config/config.js
+module.exports = {
+    development: {
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+        host: process.env.DB_HOST,
+        dialect: 'mysql'
+    },
+    production: {
+        use_env_variable: 'DATABASE_URL',
+        dialect: 'mysql',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: true
+            }
+        }
+    }
+};
+```
+
+Pour que sequelize-cli utilise `config/config.js` au lieu de `config/config.json`, le chemin doit être indiqué dans un fichier `.sequelizerc`.
+
+### 2. Gestion des erreurs
+
+```javascript
+// middleware/errorHandler.js
+const { ValidationError, UniqueConstraintError } = require('sequelize');
+
+module.exports = (err, req, res, next) => {
+    console.error(err.stack);
+
+    // Vérifier d'abord: UniqueConstraintError hérite de ValidationError
+    if (err instanceof UniqueConstraintError) {
+        return res.status(409).json({
+            error: 'Enregistrement déjà existant'
+        });
+    }
+
+    if (err instanceof ValidationError) {
+        return res.status(400).json({
+            error: 'Erreur de validation',
+            details: err.errors.map(e => e.message)
+        });
+    }
+
+    res.status(500).json({ error: 'Erreur interne du serveur' });
+};
+```
+
+### 3. Injection de dépendances
+
+```javascript
+// controllers/BookController.js - améliorer la testabilité
+class BookController {
+    constructor(bookService) {
+        this.bookService = bookService;
+    }
+
+    // Arrow function: "this" reste lié même comme handler de route
+    getAllBooks = async (req, res, next) => {
+        try {
+            const books = await this.bookService.getAllBooks(req.query);
+            res.json(books);
+        } catch (error) {
+            next(error);
+        }
+    };
+}
+
+module.exports = BookController;
+
+// Production: injecter le vrai service
+// const controller = new BookController(require('../services/bookService'));
+// router.get('/', controller.getAllBooks);
+
+// Test: injecter un service fictif (mock)
+// const controller = new BookController({ getAllBooks: async () => [] });
+```
+
+### 4. Validation dans le modèle
+
+```javascript
+// ✅ Bon - validation au niveau du modèle
 const Book = sequelize.define('Book', {
     title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(255),
         allowNull: false,
         validate: {
             notEmpty: true,
-            len: [3, 255]
+            len: [1, 255]
         }
     }
 });
 
-// ❌ Éviter - Pas de validation
+// ❌ Éviter - pas de validation
 const Book = sequelize.define('Book', {
     title: DataTypes.STRING
 });
 ```
 
-### Requêtes
+### 5. Charger uniquement les champs nécessaires
 
 ```javascript
-// ✅ Bon - Inclure seulement les champs nécessaires
+// ✅ Bon - charger uniquement les champs nécessaires
 const books = await Book.findAll({
-    attributes: ['id', 'title', 'price'],
+    attributes: ['book_id', 'title', 'pages'],
     include: [{
         model: Author,
+        as: 'author',
         attributes: ['name']
     }]
 });
 
-// ❌ Éviter - SELECT *
+// ❌ Éviter - toutes les colonnes de toutes les tables (SELECT *)
 const books = await Book.findAll({
-    include: [Author]
+    include: [{ model: Author, as: 'author' }]
 });
 ```
 
-### Indexes
+### 6. Index
 
 ```javascript
-// ✅ Ajouter des index pour les colonnes fréquemment recherchées
+// ✅ Définir les index des colonnes fréquemment recherchées dans les options du modèle
 const Book = sequelize.define('Book', {
     title: {
-        type: DataTypes.STRING,
-        index: true
+        type: DataTypes.STRING(255),
+        allowNull: false
     },
     isbn: {
-        type: DataTypes.STRING,
-        unique: true
+        type: DataTypes.STRING(20),
+        unique: true   // unique crée automatiquement un index
     }
+}, {
+    tableName: 'books',
+    indexes: [
+        { fields: ['title'] }
+    ]
 });
 ```
 
@@ -609,35 +1264,50 @@ const Book = sequelize.define('Book', {
 |--------|-----|----------|
 | Lisibilité | ✅ Meilleure | ⚠️ Moyenne |
 | Performance | ⚠️ Overhead | ✅ Optimale |
-| Sécurité | ✅ Built-in | ⚠️ Manuel |
-| Courbe d'apprentissage | ⚠️ Raide | ✅ Familier |
+| Sécurité | ✅ Intégrée | ⚠️ Manuelle |
+| Courbe d'apprentissage | ⚠️ Raide | ✅ Familière |
 | Flexibilité | ⚠️ Limitée | ✅ Totale |
 
 ### Quand utiliser Sequelize
 
-✅ **Projets moyens/grands**
-✅ **Équipes mixtes**
-✅ **Développement rapide**
-✅ **Migrations fréquentes**
+- ✅ **Projets moyens à grands**
+- ✅ **Équipes mixtes**
+- ✅ **Développement rapide**
+- ✅ **Modifications fréquentes du schéma (migrations)**
 
 ## Devoirs
 
-1. **Convertir votre API** pour utiliser Sequelize
+1. **Convertir votre propre API** pour utiliser Sequelize
 2. **Créer des migrations** pour toutes les tables
-3. **Ajouter des seeders** avec données de test
-4. **Comparer les performances** SQL vs ORM
+3. **Ajouter des seeders** avec des données de test
+4. **Comparer les performances**: SQL brut vs ORM
 
-## Ressources
+## Checklist pour le crédit 10
 
-- [Sequelize Documentation](https://sequelize.org/)
+- [ ] Projet structuré selon le pattern MVC
+- [ ] Couche Model implémentée
+- [ ] Couche Controller implémentée
+- [ ] Couche Routes implémentée
+- [ ] ORM (Sequelize ou Prisma) intégré
+- [ ] Au moins 2 modèles avec relation
+- [ ] Migrations et seeders créés
+- [ ] Couche Service pour la logique complexe
+- [ ] Documentation de l'architecture
+
+## Ressources supplémentaires
+
+- [Documentation Sequelize](https://sequelize.org/)
 - [Sequelize CLI](https://github.com/sequelize/cli)
-- [TypeORM](https://typeorm.io/) (Alternative)
-- [Prisma](https://www.prisma.io/) (Alternative moderne)
+- [Documentation Prisma](https://www.prisma.io/docs)
+- [TypeORM](https://typeorm.io/) (alternative)
+- [MVC Pattern Explained](https://www.codecademy.com/article/mvc)
+- [Express Best Practices](https://expressjs.com/en/advanced/best-practice-performance.html)
 
 ## Prochaines étapes
 
-Dans la leçon 12:
-- MQTT pour IoT
+Dans la leçon 12, nous abordons l'intégration MQTT et les thèmes de sécurité dans le projet web:
+
+- MQTT pour l'IoT
 - Authentification JWT
 - Sécurité des API
 - Protection contre les attaques

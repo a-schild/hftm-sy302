@@ -94,13 +94,13 @@ GRANT privilege_type ON database.table TO 'user'@'host';
 **Basis-Rechte:**
 ```sql
 -- SELECT auf eine Datenbank
-GRANT SELECT ON library.* TO 'reader'@'localhost';
+GRANT SELECT ON hftm_library.* TO 'reader'@'localhost';
 
 -- SELECT, INSERT, UPDATE auf eine Tabelle
-GRANT SELECT, INSERT, UPDATE ON library.books TO 'editor'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON hftm_library.books TO 'editor'@'localhost';
 
 -- Alle Rechte auf eine Datenbank
-GRANT ALL PRIVILEGES ON library.* TO 'admin'@'localhost';
+GRANT ALL PRIVILEGES ON hftm_library.* TO 'admin'@'localhost';
 
 -- Rechte aktivieren
 FLUSH PRIVILEGES;
@@ -109,14 +109,14 @@ FLUSH PRIVILEGES;
 **Spezifische Spalten:**
 ```sql
 -- Nur bestimmte Spalten
-GRANT SELECT (title, author), UPDATE (title) 
-ON library.books TO 'limited_user'@'localhost';
+GRANT SELECT (Titel, AuthorsID), UPDATE (Titel) 
+ON hftm_library.books TO 'limited_user'@'localhost';
 ```
 
 **Mit GRANT OPTION:**
 ```sql
 -- User kann Rechte weitergeben
-GRANT SELECT, INSERT ON library.* TO 'manager'@'localhost' 
+GRANT SELECT, INSERT ON hftm_library.* TO 'manager'@'localhost' 
 WITH GRANT OPTION;
 ```
 
@@ -124,13 +124,13 @@ WITH GRANT OPTION;
 
 ```sql
 -- Einzelne Rechte entziehen
-REVOKE INSERT, UPDATE ON library.books FROM 'editor'@'localhost';
+REVOKE INSERT, UPDATE ON hftm_library.books FROM 'editor'@'localhost';
 
 -- Alle Rechte entziehen
-REVOKE ALL PRIVILEGES ON library.* FROM 'user'@'localhost';
+REVOKE ALL PRIVILEGES ON hftm_library.* FROM 'user'@'localhost';
 
 -- GRANT OPTION entziehen
-REVOKE GRANT OPTION ON library.* FROM 'manager'@'localhost';
+REVOKE GRANT OPTION ON hftm_library.* FROM 'manager'@'localhost';
 
 -- Rechte aktivieren
 FLUSH PRIVILEGES;
@@ -167,32 +167,32 @@ Legende: CRUD = Create, Read, Update, Delete; R = Read only; - = Kein Zugriff
 ```sql
 -- 1. Administrator
 CREATE USER 'db_admin'@'localhost' IDENTIFIED BY 'admin_pw';
-GRANT ALL PRIVILEGES ON library.* TO 'db_admin'@'localhost' 
+GRANT ALL PRIVILEGES ON hftm_library.* TO 'db_admin'@'localhost' 
 WITH GRANT OPTION;
 
 -- 2. Librarian
 CREATE USER 'librarian'@'localhost' IDENTIFIED BY 'lib_pw';
-GRANT SELECT, INSERT, UPDATE, DELETE ON library.books TO 'librarian'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON library.authors TO 'librarian'@'localhost';
-GRANT SELECT ON library.customers TO 'librarian'@'localhost';
-GRANT SELECT ON library.lends TO 'librarian'@'localhost';
-GRANT SELECT ON library.publishers TO 'librarian'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON hftm_library.books TO 'librarian'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON hftm_library.authors TO 'librarian'@'localhost';
+GRANT SELECT ON hftm_library.customers TO 'librarian'@'localhost';
+GRANT SELECT ON hftm_library.lends TO 'librarian'@'localhost';
+GRANT SELECT ON hftm_library.publishers TO 'librarian'@'localhost';
 
 -- 3. Customer Service
 CREATE USER 'customer_service'@'localhost' IDENTIFIED BY 'cs_pw';
-GRANT SELECT ON library.books TO 'customer_service'@'localhost';
-GRANT SELECT ON library.authors TO 'customer_service'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON library.customers TO 'customer_service'@'localhost';
-GRANT SELECT, INSERT, UPDATE, DELETE ON library.lends TO 'customer_service'@'localhost';
+GRANT SELECT ON hftm_library.books TO 'customer_service'@'localhost';
+GRANT SELECT ON hftm_library.authors TO 'customer_service'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON hftm_library.customers TO 'customer_service'@'localhost';
+GRANT SELECT, INSERT, UPDATE, DELETE ON hftm_library.lends TO 'customer_service'@'localhost';
 
 -- 4. Reader (Read-only)
 CREATE USER 'reader'@'localhost' IDENTIFIED BY 'reader_pw';
-GRANT SELECT ON library.books TO 'reader'@'localhost';
-GRANT SELECT ON library.authors TO 'reader'@'localhost';
+GRANT SELECT ON hftm_library.books TO 'reader'@'localhost';
+GRANT SELECT ON hftm_library.authors TO 'reader'@'localhost';
 
 -- 5. Reporter
 CREATE USER 'reporter'@'localhost' IDENTIFIED BY 'report_pw';
-GRANT SELECT ON library.* TO 'reporter'@'localhost';
+GRANT SELECT ON hftm_library.* TO 'reporter'@'localhost';
 
 -- Rechte aktivieren
 FLUSH PRIVILEGES;
@@ -291,11 +291,11 @@ COMMIT;
 START TRANSACTION;
 
 -- 1. Prüfen ob Buch verfügbar
-SELECT AmountInStock FROM books WHERE id = 42;
+SELECT AmountInStock FROM books WHERE ID = 42;
 -- Wenn AmountInStock > 0:
 
 -- 2. Bestand reduzieren
-UPDATE books SET AmountInStock = AmountInStock - 1 WHERE id = 42;
+UPDATE books SET AmountInStock = AmountInStock - 1 WHERE ID = 42;
 
 -- 3. Ausleihe eintragen
 INSERT INTO lends (CustomerID, BookID, Date_From, Date_To, Price)
@@ -388,13 +388,13 @@ Mit SAVEPOINT kann man innerhalb einer Transaktion Zwischenstände markieren.
 ```sql
 START TRANSACTION;
 
-INSERT INTO customers (name) VALUES ('Customer 1');
+INSERT INTO customers (Lastname, Firstname, LocationID) VALUES ('Customer 1', 'Test', 1);
 SAVEPOINT sp1;
 
-INSERT INTO customers (name) VALUES ('Customer 2');
+INSERT INTO customers (Lastname, Firstname, LocationID) VALUES ('Customer 2', 'Test', 1);
 SAVEPOINT sp2;
 
-INSERT INTO customers (name) VALUES ('Customer 3');
+INSERT INTO customers (Lastname, Firstname, LocationID) VALUES ('Customer 3', 'Test', 1);
 
 -- Nur bis sp2 zurück
 ROLLBACK TO SAVEPOINT sp2;
@@ -406,7 +406,7 @@ COMMIT;
 
 ## Autocommit
 
-MySQL/MariaDB hat standardmäßig **Autocommit aktiviert**. Jeder SQL-Befehl wird sofort committed.
+MySQL/MariaDB hat standardmässig **Autocommit aktiviert**. Jeder SQL-Befehl wird sofort committed.
 
 ```sql
 -- Autocommit Status prüfen
@@ -433,10 +433,10 @@ Transaktionen können Zeilen oder Tabellen sperren (locken).
 START TRANSACTION;
 
 -- Zeile für Update sperren
-SELECT * FROM books WHERE id = 42 FOR UPDATE;
+SELECT * FROM books WHERE ID = 42 FOR UPDATE;
 
 -- Jetzt kann kein anderer User diese Zeile ändern
-UPDATE books SET AmountInStock = AmountInStock - 1 WHERE id = 42;
+UPDATE books SET AmountInStock = AmountInStock - 1 WHERE ID = 42;
 
 COMMIT;  -- Lock wird freigegeben
 ```
@@ -447,7 +447,7 @@ COMMIT;  -- Lock wird freigegeben
 START TRANSACTION;
 
 -- Andere können lesen, aber nicht ändern
-SELECT * FROM books WHERE id = 42 LOCK IN SHARE MODE;
+SELECT * FROM books WHERE ID = 42 LOCK IN SHARE MODE;
 
 -- ...
 
@@ -458,10 +458,10 @@ COMMIT;
 
 ```sql
 -- Tabelle für Schreiben sperren
-LOCK TABLES books WRITE;
+LOCK TABLES lends WRITE;
 
 -- Nur diese Session kann schreiben
-UPDATE books SET Price = Price * 1.1;
+UPDATE lends SET Price = Price * 1.1;
 
 -- Lock freigeben
 UNLOCK TABLES;
@@ -542,7 +542,7 @@ Teste verschiedene Isolation Levels:
 
 ✅ **DO:**
 - Transaktionen kurz halten
-- Nur nötige Operationen einschließen
+- Nur nötige Operationen einschliessen
 - Error-Handling implementieren
 - COMMIT nicht vergessen
 
@@ -558,7 +558,7 @@ Teste verschiedene Isolation Levels:
 - Principle of Least Privilege (nur nötige Rechte)
 - Separate User für Applikationen
 - Starke Passwörter
-- Regelmäßige Audits
+- Regelmässige Audits
 
 ❌ **DON'T:**
 - root-User in Produktion verwenden
