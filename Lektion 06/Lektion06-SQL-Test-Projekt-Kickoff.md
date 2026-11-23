@@ -1,13 +1,15 @@
-# Lektion 6: SQL-Test & Projekt-Kickoff
+# Lektion 6: SQL-Repetition & Projekt-Kickoff
 
 ## Übersicht
 
-**Teil 1:** Theorieprüfung zu Datenbanken und SQL (90 Minuten)
+**Teil 1:** SQL-Repetition und Beispieltest als Vorbereitung auf die Theorieprüfung in Unit 7 (90 Minuten)
 **Teil 2:** Projekt-Kickoff und Themenwahl (30 Minuten)
 
-## Teil 1: SQL-Test (30% der Gesamtnote)
+## Teil 1: Vorbereitung auf die Theorieprüfung SQL
 
-### Test-Format
+Die Theorieprüfung findet in **Unit 7** statt (vor dem Node.js-Teil). Heute repetieren wir den Stoff und lösen einen Beispieltest.
+
+### Format der Theorieprüfung (Unit 7)
 
 - **Dauer:** 90 Minuten
 - **Gewichtung:** 30% der Gesamtnote
@@ -126,7 +128,7 @@
 4. Top 5 Kunden nach Bestellwert
 ```
 
-### Beispiel-Test
+### Beispieltest (zum Üben)
 
 #### Aufgabe 1: ER-Diagramm (8 Punkte)
 
@@ -241,7 +243,7 @@ b) Schreibe eine Transaktion für folgendes Szenario:
 
 ## Teil 2: Projekt-Kickoff
 
-Nach dem Test starten wir mit dem Hauptprojekt des Kurses!
+Nach der Repetition starten wir mit dem Hauptprojekt des Kurses!
 
 ### Projektübersicht
 
@@ -426,7 +428,8 @@ mein-projekt/
 
 ### Nächste Woche (Unit 7)
 
-- Detailliertes ER-Diagramm
+- **Theorieprüfung SQL** (90 Minuten, 30% der Gesamtnote)
+- Detailliertes ER-Diagramm (Abgabe DB-Design in Unit 8)
 - SQL-Script für Tabellen
 - Node.js Projekt aufsetzen
 - Erste API-Endpoints
@@ -516,7 +519,7 @@ Im Moodle findest du Beispiel-Projekte von vorherigen Semestern zur Inspiration.
 
 ## Checkliste für heute
 
-- [ ] Test abgegeben
+- [ ] Beispieltest gelöst und mit den Lösungshinweisen verglichen
 - [ ] Thema gewählt
 - [ ] Erste Ideen notiert
 - [ ] Anforderungen überlegt
@@ -531,16 +534,17 @@ Im Moodle findest du Beispiel-Projekte von vorherigen Semestern zur Inspiration.
 4. Normalisierung prüfen
 
 **Für Unit 7:**
+- Theorieprüfung SQL: Stoff von Lektion 1–5 repetieren
 - Node.js installieren
 - MariaDB läuft
 - Text-Editor bereit (VS Code empfohlen)
 
 ## Zusammenfassung
 
-- **Test:** 30% der Note, Grundlagen abgeprüft
+- **Theorieprüfung (Unit 7):** 30% der Note, Grundlagen abgeprüft
 - **Projekt:** 50% der Note, praktische Anwendung
 - **Credits:** 20% der Note, kontinuierliche Mitarbeit
 - **Start:** Heute mit Themenwahl
 - **Ziel:** Funktionierende Webanwendung mit DB
 
-Viel Erfolg beim Test und beim Projekt! 🚀
+Viel Erfolg bei der Prüfungsvorbereitung und beim Projekt! 🚀

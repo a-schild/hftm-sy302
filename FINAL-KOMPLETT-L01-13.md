@@ -101,7 +101,7 @@ SY302 Databases/Calude/
 - ACID detailliert
 - Übung 5: Berechtigungskonzept
 
-**Lektion 6: SQL Test & Projektstart**
+**Lektion 6: SQL-Repetition & Projektstart**
 - Test-Vorbereitung
 - Mock-Tests
 - Projekt-Themen

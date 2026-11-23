@@ -1,6 +1,8 @@
 # Übung 7: Node.js und Datenbanken - Lösungen
 
-## Credit 7: Node.js mit der HFTM Library (10 Punkte)
+## Credit 6: Node.js mit der HFTM Library (10 Punkte)
+
+*Bewertung: Die Punkte in dieser Übung sind ein internes Bewertungsraster. Für die Note wird jeder Credit auf 0–5 Punkte skaliert (fristgerechte, vollständige Abgabe = 5 Punkte, nicht abgegeben = 0 Punkte).*
 
 Die Lösungen beziehen sich auf die praktischen Übungen aus Lektion 7. Alle Abfragen verwenden die Tabellen und Spalten der HFTM Library genau so, wie sie im Dump `SQL-Dumps/HFTM Library.sql` definiert sind:
 
@@ -782,7 +784,7 @@ Sicher, Anzahl Treffer: 0
 
 ---
 
-## Bewertungsraster Credit 7
+## Bewertungsraster Credit 6
 
 | Übung | Punkte | Kriterien |
 |---|---|---|
@@ -811,7 +813,7 @@ Sicher, Anzahl Treffer: 0
   - [ ] `node injection.js`
 - [ ] Kommentare im Code
 
-**Naming:** `Credit7_Vorname_Nachname.zip`
+**Naming:** `Credit6_Vorname_Nachname.zip`
 
 **Deadline:** Siehe Moodle
 

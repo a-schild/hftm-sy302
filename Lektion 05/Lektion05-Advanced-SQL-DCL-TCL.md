@@ -604,7 +604,7 @@ SAVEPOINT                   -- Zwischenstand
 
 ## Vorbereitung auf Test
 
-In Lektion 6 findet der **SQL-Test** statt!
+In Unit 7 findet die **Theorieprüfung SQL** statt! Lektion 6 dient der Repetition.
 
 **Themen:**
 - Datenmodellierung (ER-Diagramm, Normalisierung)
@@ -624,7 +624,7 @@ In Lektion 6 findet der **SQL-Test** statt!
 ## Nächste Schritte
 
 In Lektion 6:
-- SQL-Test (30% der Gesamtnote)
+- SQL-Repetition und Beispieltest als Vorbereitung auf die Theorieprüfung (Unit 7, 30% der Gesamtnote)
 - Projekt-Kickoff
 - Thema wählen
 - DB-Design starten

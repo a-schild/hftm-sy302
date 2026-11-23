@@ -28,9 +28,9 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 **Pfad:** `Lektion 05/Lektion05-Advanced-SQL-DCL-TCL.md`
 **Themen:** GRANT, REVOKE, Transactions, ACID, Berechtigungen
 
-### ✅ Lektion 6: SQL Test & Projektstart
+### ✅ Lektion 6: SQL-Repetition & Projektstart
 **Pfad:** `Lektion 06/Lektion06-SQL-Test-Projekt-Kickoff.md`
-**Themen:** Testvorbereitung, Projektthemen, Anforderungen
+**Themen:** Repetition und Beispieltest für die Theorieprüfung (Unit 7), Projektthemen, Anforderungen
 
 ### ✅ Lektion 7: Node.js und Datenbanken
 **Pfad:** `Lektion 07/Lektion07-NodeJS-Databases.md`
@@ -79,7 +79,7 @@ Alle 13 Lektionen sind in **Deutsch** und **Französisch** erstellt!
 ### ✅ Leçon 5: SQL Avancé (DCL & TCL)
 **Pfad:** `Lektion 05/Lecon05-SQL-Avance-DCL-TCL-FR.md`
 
-### ✅ Leçon 6: Test SQL & Lancement du projet
+### ✅ Leçon 6: Révision SQL & Lancement du projet
 **Pfad:** `Lektion 06/Lecon06-Test-SQL-Lancement-Projet-FR.md`
 
 ### ✅ Leçon 7: Node.js et Bases de données
@@ -130,7 +130,7 @@ Die Markdown-Dateien sind die Quelle. Die PDFs werden mit der HFTM-Vorlage
 Fusszeile Dateiname/Seite/Datum). Word-Dokumente werden nicht mehr gepflegt.
 
 ```powershell
-python tools/build-exports.py                               # Lektion 01-13 + Checklisten
+python tools/build-exports.py                               # Lektion 01-13, Checklisten, Uebungen
 python tools/build-exports.py "Lektion 08/Lektion08-REST-API.md"   # einzelne Datei
 ```
 
@@ -194,25 +194,27 @@ SY302 Databases/
 
 ---
 
-## Kursziele (13 Wochen)
+## Kursplanung (13 Units)
 
-### Wochen 1-6: SQL & Grundlagen (30% der Note: Test)
-- Datenbankdesign
-- SQL DDL & DML
-- JOINs & Aggregationen
-- Transaktionen
-- **Test in Woche 6**
+| Unit | Thema | Specials |
+|------|-------|----------|
+| 1 | Daten / Datenbanken / DBMS | Credit 1 |
+| 2 | Datenbankdesign, SQL DDL | Credit 2 |
+| 3 | SQL DML | Credit 3 |
+| 4 | SQL JOIN / UNION | Credit 4 |
+| 5 | SQL DCL / TCL | Credit 5 |
+| 6 | SQL-Repetition | Projektstart |
+| 7 | Theorieprüfung SQL / Node.js + DB | Theorieprüfung SQL, Credit 6 |
+| 8 | REST API | Abgabe DB-Design, Credit 7 |
+| 9 | KI / AI, Projektarbeit | Credit 8 |
+| 10 | NoSQL & MongoDB | Credit 9 |
+| 11 | Express / REST API / ORM | Credit 10 |
+| 12 | MQTT, Sicherheit | Abgabe Projekt auf GitLab (nach Unit 12) |
+| 13 | Datenschutz, Backups, Kursabschluss | Präsentation Projekt |
 
-### Wochen 7-12: Backend & Projekt (50% der Note: Projekt)
-- Node.js + Express
-- REST API
-- MongoDB
-- Sicherheit
-- **Projekt entwickeln**
+Die konkreten Daten stehen in der Kursplanung auf Moodle (der Kurs wird jährlich durchgeführt).
 
-### Woche 13: Abschluss (20% der Note: Credits)
-- Präsentationen
-- **Finale Bewertung**
+**Credits:** Jeder Credit wird mit 0–5 Punkten bewertet; eine fristgerechte, vollständige Abgabe gibt 5 Punkte, eine nicht abgegebene 0 Punkte, eine verspätete höchstens 5 Punkte. Die Punkteraster in `Uebungen/` sind interne Bewertungsraster und werden auf 0–5 Punkte skaliert.
 
 ---
 
@@ -220,8 +222,8 @@ SY302 Databases/
 
 | Komponente | Gewichtung | Details |
 |------------|-----------|---------|
-| **Credits** | 20% | Wöchentliche Hausaufgaben |
-| **Test SQL** | 30% | Woche 6 (90 Minuten) |
+| **Credits** | 20% | Credit 1–10, je 0–5 Punkte |
+| **Theorieprüfung SQL** | 30% | Unit 7 (90 Minuten) |
 | **Projekt** | 50% | API + Frontend + DB + Präsentation |
 | **Total** | 100% | |
 

@@ -1,6 +1,8 @@
 # Übung 8: REST API mit Express - Lösungen
 
-## Credit 8: REST API für die HFTM Library (10 Punkte)
+## Credit 7: REST API für die HFTM Library (10 Punkte)
+
+*Bewertung: Die Punkte in dieser Übung sind ein internes Bewertungsraster. Für die Note wird jeder Credit auf 0–5 Punkte skaliert (fristgerechte, vollständige Abgabe = 5 Punkte, nicht abgegeben = 0 Punkte).*
 
 Die Lösungen beziehen sich auf die praktischen Übungen aus Lektion 8 und bauen auf dem Projekt aus Lektion 7 auf. Es gelten dieselben Konventionen wie in der Lektion:
 
@@ -1134,7 +1136,7 @@ curl http://localhost:3000/api/stats/books-by-genre
 
 ---
 
-## Bewertungsraster Credit 8
+## Bewertungsraster Credit 7
 
 | Übung | Punkte | Kriterien |
 |---|---|---|
@@ -1159,7 +1161,7 @@ curl http://localhost:3000/api/stats/books-by-genre
 - [ ] Screenshots der getesteten Endpunkte, inkl. mindestens 2 Fehlerfällen
 - [ ] `README.md` mit der API-Dokumentation
 
-**Naming:** `Credit8_Vorname_Nachname.zip`
+**Naming:** `Credit7_Vorname_Nachname.zip`
 
 **Deadline:** Siehe Moodle
 

@@ -1,5 +1,12 @@
 # Lektion 7: Node.js und Datenbanken
 
+## Ablauf
+
+**Teil 1:** Theorieprüfung zu Datenbanken und SQL (90 Minuten, 30% der Gesamtnote)
+**Teil 2:** Node.js und Datenbanken
+
+Prüfungsthemen, Format und einen Beispieltest findest du in Lektion 6, Teil 1.
+
 ## Lernziele
 
 Die/der Studierende ist in der Lage...

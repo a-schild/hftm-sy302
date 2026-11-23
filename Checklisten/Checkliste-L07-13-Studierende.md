@@ -2,6 +2,11 @@
 
 ## Checklist 7: Lektion 7 - Node.js und Datenbanken
 
+### Theorieprüfung SQL (Teil 1, 90 Min., 30% der Gesamtnote)
+- [ ] Stoff von Lektion 1–5 repetiert (siehe Lektion 6, Teil 1)
+- [ ] Beispieltest aus Lektion 6 gelöst
+- [ ] Ausgeruht und rechtzeitig da
+
 ### Node.js Setup
 - [ ] Node.js installiert (Version geprüft)
 - [ ] npm funktioniert
@@ -26,7 +31,7 @@
 - [ ] Prepared Statements verwendet
 - [ ] Async/Await korrekt
 
-### Credit 7
+### Credit 6
 - [ ] Projektstruktur korrekt
 - [ ] Alle CRUD-Funktionen implementiert
 - [ ] Testskript funktioniert
@@ -37,6 +42,11 @@
 ---
 
 ## Checklist 8: Lektion 8 - REST API mit Express
+
+### Abgabe DB-Design (Unit 8)
+- [ ] ER-Diagramm des Projekts
+- [ ] SQL-Script (CREATE TABLE)
+- [ ] Abgegeben
 
 ### Express Setup
 - [ ] Express installiert
@@ -71,7 +81,7 @@
 - [ ] Bücher mit Autoren verknüpft
 - [ ] Getestet
 
-### Credit 8
+### Credit 7
 - [ ] Alle 5 CRUD-Endpoints funktionieren
 - [ ] JOIN-Endpoint implementiert
 - [ ] Postman-Collection exportiert
@@ -97,6 +107,9 @@
 - [ ] ER-Diagramm erstellt
 - [ ] SQL-DDL-Skript geschrieben
 - [ ] Datenbank implementiert
+
+### Credit 8
+- [ ] Abgegeben (Aufgaben siehe Lektion 9, «Checkliste für Credit 8»)
 
 ---
 
@@ -129,6 +142,9 @@
 - [ ] SQL oder NoSQL gewählt (mit Begründung)
 - [ ] Implementierung begonnen
 
+### Credit 9
+- [ ] Abgegeben (Aufgaben siehe Lektion 10, «Checkliste für Credit 9»)
+
 ---
 
 ## Checklist 11: Lektion 11 - ORM & Sequelize
@@ -154,6 +170,9 @@
 - [ ] Alle CRUD-Endpoints funktionieren
 - [ ] JOINs/Relationen implementiert
 - [ ] Fehlerbehandlung vorhanden
+
+### Credit 10
+- [ ] Abgegeben (Aufgaben siehe Lektion 11, «Checkliste für Credit 10»)
 
 ---
 
@@ -223,7 +242,7 @@
 - [ ] Fragen vorbereitet
 
 ### Abgabe
-- [ ] Code auf GitHub/GitLab
+- [ ] Code auf GitLab (Abgabe nach Unit 12, Termin gemäss Kursplanung)
 - [ ] README.md vollständig
 - [ ] SQL-Dump
 - [ ] Datei .env.example
@@ -268,15 +287,15 @@
 
 ## Projekt-Timeline
 
-| Woche | Meilensteine | Erledigt |
+| Unit | Meilensteine | Erledigt |
 |-------|--------------|----------|
 | 6 | Thema gewählt | ☐ |
-| 7 | Node.js Setup, DB-Verbindung | ☐ |
-| 8 | REST API CRUD | ☐ |
-| 9 | DB-Design finalisiert | ☐ |
+| 7 | Theorieprüfung SQL, Node.js Setup, DB-Verbindung | ☐ |
+| 8 | DB-Design abgegeben, REST API CRUD | ☐ |
+| 9 | Projektarbeit (mit KI-Unterstützung) | ☐ |
 | 10 | Backend vollständig | ☐ |
 | 11 | Frontend 50% | ☐ |
-| 12 | Frontend vollständig, Doku | ☐ |
+| 12 | Frontend vollständig, Doku, Abgabe auf GitLab | ☐ |
 | 13 | Präsentation | ☐ |
 
 ---
@@ -385,7 +404,7 @@ mysqldump -u root -p dbname > dump.sql
 **Tools:**
 - Postman für API-Tests
 - VS Code für die Entwicklung
-- GitHub für die Versionskontrolle
+- GitLab für die Versionskontrolle
 - Figma für UI-Design (optional)
 
 ---

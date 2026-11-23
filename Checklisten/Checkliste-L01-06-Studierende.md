@@ -185,7 +185,7 @@
 
 ---
 
-## Checklist 6: Test-Vorbereitung
+## Checklist 6: Vorbereitung Theorieprüfung (Unit 7)
 
 ### Wiederholung Theorie
 - [ ] ER-Diagramme: Ich kann sie zeichnen und lesen
@@ -229,7 +229,7 @@
 - [ ] Mock-Test durchgeführt
 - [ ] Zeitmanagement geübt (90 Minuten)
 
-### Am Test-Tag
+### Am Prüfungstag (Unit 7)
 - [ ] Ausgeruht und rechtzeitig da
 - [ ] Stift und Papier dabei
 - [ ] Ruhe bewahren
@@ -239,18 +239,21 @@
 
 ---
 
-## Master-Checklist: Credits 1-6
+## Master-Checklist: Credits 1-5
 
-| Credit | Thema | Abgabedatum | Status | Note |
+| Credit | Thema | Abgabedatum | Status | Punkte (0–5) |
 |--------|-------|-------------|--------|------|
 | Credit 1 | Grundlagen | __________ | ☐ | ____ |
 | Credit 2 | Datenbankdesign | __________ | ☐ | ____ |
 | Credit 3 | SQL DML | __________ | ☐ | ____ |
 | Credit 4 | JOINs & UNION | __________ | ☐ | ____ |
 | Credit 5 | DCL & TCL | __________ | ☐ | ____ |
-| Credit 6 | Test | __________ | ☐ | ____ |
 
-**Credits gesamt: ___ / 20% der Gesamtnote**
+**Credits gesamt (Credit 1–10): ___ / 20% der Gesamtnote**
+
+Jeder Credit wird mit 0–5 Punkten bewertet, eine fristgerechte, vollständige Abgabe mit 5 Punkten. Nicht abgegebene Credits geben 0 Punkte.
+
+**Theorieprüfung SQL (Unit 7): ___ / 30% der Gesamtnote**
 
 ---
 

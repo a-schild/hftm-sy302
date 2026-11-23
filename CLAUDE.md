@@ -14,5 +14,11 @@
 - Markdown ist die Quelle; PDFs mit `python tools/build-exports.py [datei.md ...]` erzeugen
   (pandoc + Word, Vorlage `Vorlage/Vorlage_KleineDokumente.dotx`). Keine .docx mehr pflegen.
 - Markdown wird als `gfm+hard_line_breaks` gelesen: aufeinanderfolgende Zeilen bleiben getrennte Zeilen.
-- Offene Frage (Stand 2026-11): Credit-Nummerierung ab Lektion 7 – Lektionen sagen L07=Credit 6 … L11=Credit 10,
-  die Checklisten L07-13 sagen L07=Credit 7, L08=Credit 8 (L01-06-Checklisten: Credit 6 = SQL-Test).
+
+## Kursplanung (verbindlich, siehe README-Uebersicht.md)
+- Unit N = Lektion N. Credits: L01–L05 = Credit 1–5, L06 keiner (Repetition + Projektstart),
+  L07 = Theorieprüfung SQL (30%) + Credit 6, L08 = Abgabe DB-Design + Credit 7, L09–L11 = Credit 8–10.
+  Projektabgabe auf GitLab nach Unit 12, Präsentation in Unit 13.
+- Jeder Credit 0–5 Punkte (20% total); Punkte in `Uebungen/` sind interne Raster.
+- Keine konkreten Daten in die Unterlagen schreiben (Kurs läuft jährlich).
+- Offene Punkte stehen in `TODO.md`.

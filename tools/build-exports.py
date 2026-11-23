@@ -55,6 +55,7 @@ DEFAULT_GLOBS = [
     "Lektion 12/*.md",
     "Lektion 13/*.md",
     "Checklisten/*.md",
+    "Uebungen/*.md",
 ]
 
 LABELS = {

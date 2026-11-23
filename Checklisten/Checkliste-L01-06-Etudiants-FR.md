@@ -185,7 +185,7 @@
 
 ---
 
-## Liste 6: Préparation au test
+## Liste 6: Préparation à l'examen théorique (unité 7)
 
 ### Révision théorie
 - [ ] Diagrammes ER: Je peux les dessiner et les lire
@@ -229,7 +229,7 @@
 - [ ] Mock-test effectué
 - [ ] Gestion du temps pratiquée (90 minutes)
 
-### Le jour du test
+### Le jour de l'examen (unité 7)
 - [ ] Reposé et à l'heure
 - [ ] Stylo et papier avec moi
 - [ ] Rester calme
@@ -239,18 +239,21 @@
 
 ---
 
-## Liste maîtresse: Credits 1-6
+## Liste maîtresse: Credits 1-5
 
-| Credit | Thème | Date de remise | Statut | Note |
+| Credit | Thème | Date de remise | Statut | Points (0–5) |
 |--------|-------|----------------|--------|------|
 | Credit 1 | Fondamentaux | __________ | ☐ | ____ |
 | Credit 2 | Conception BDD | __________ | ☐ | ____ |
 | Credit 3 | SQL DML | __________ | ☐ | ____ |
 | Credit 4 | JOINs & UNION | __________ | ☐ | ____ |
 | Credit 5 | DCL & TCL | __________ | ☐ | ____ |
-| Credit 6 | Test | __________ | ☐ | ____ |
 
-**Total Credits: ___ / 20% de la note finale**
+**Total Credits (Credit 1–10): ___ / 20% de la note finale**
+
+Chaque credit est évalué de 0 à 5 points; une remise complète dans les délais donne 5 points. Les credits non remis donnent 0 point.
+
+**Examen théorique SQL (unité 7): ___ / 30% de la note finale**
 
 ---
 

@@ -2,6 +2,11 @@
 
 ## Liste 7: Leçon 7 - Node.js et Bases de données
 
+### Examen théorique SQL (partie 1, 90 min., 30% de la note totale)
+- [ ] Matière des leçons 1–5 révisée (voir leçon 6, partie 1)
+- [ ] Test d'exemple de la leçon 6 résolu
+- [ ] Reposé(e) et à l'heure
+
 ### Configuration Node.js
 - [ ] Node.js installé (version vérifiée)
 - [ ] npm fonctionne
@@ -26,7 +31,7 @@
 - [ ] Prepared Statements utilisés
 - [ ] Async/Await correct
 
-### Credit 7
+### Credit 6
 - [ ] Structure du projet correcte
 - [ ] Toutes les fonctions CRUD implémentées
 - [ ] Script de test fonctionne
@@ -37,6 +42,11 @@
 ---
 
 ## Liste 8: Leçon 8 - API REST avec Express
+
+### Remise du design DB (unité 8)
+- [ ] Diagramme ER du projet
+- [ ] Script SQL (CREATE TABLE)
+- [ ] Remis
 
 ### Configuration Express
 - [ ] Express installé
@@ -71,7 +81,7 @@
 - [ ] Livres liés aux auteurs
 - [ ] Testé
 
-### Credit 8
+### Credit 7
 - [ ] Tous les 5 endpoints CRUD fonctionnent
 - [ ] Endpoint JOIN implémenté
 - [ ] Collection Postman exportée
@@ -97,6 +107,9 @@
 - [ ] Diagramme ER créé
 - [ ] Script SQL DDL écrit
 - [ ] Base de données implémentée
+
+### Credit 8
+- [ ] Remis (tâches voir leçon 9, «Liste de contrôle pour le crédit 8»)
 
 ---
 
@@ -129,6 +142,9 @@
 - [ ] SQL ou NoSQL choisi (avec justification)
 - [ ] Implémentation commencée
 
+### Credit 9
+- [ ] Remis (tâches voir leçon 10, «Liste de contrôle pour le Credit 9»)
+
 ---
 
 ## Liste 11: Leçon 11 - ORM & Sequelize
@@ -154,6 +170,9 @@
 - [ ] Tous les endpoints CRUD fonctionnent
 - [ ] JOINs/Relations implémentés
 - [ ] Gestion des erreurs présente
+
+### Credit 10
+- [ ] Remis (tâches voir leçon 11, «Checklist pour le crédit 10»)
 
 ---
 
@@ -223,7 +242,7 @@
 - [ ] Questions préparées
 
 ### Soumission
-- [ ] Code sur GitHub/GitLab
+- [ ] Code sur GitLab (remise après l'unité 12, date selon la planification du cours)
 - [ ] README.md complet
 - [ ] Dump SQL
 - [ ] Fichier .env.example
@@ -268,15 +287,15 @@
 
 ## Timeline du projet
 
-| Semaine | Jalons | Terminé |
+| Unité | Jalons | Terminé |
 |---------|--------|---------|
 | 6 | Thème choisi | ☐ |
-| 7 | Node.js setup, connexion DB | ☐ |
-| 8 | API REST CRUD | ☐ |
-| 9 | Design DB finalisé | ☐ |
+| 7 | Examen théorique SQL, Node.js setup, connexion DB | ☐ |
+| 8 | Design DB remis, API REST CRUD | ☐ |
+| 9 | Travail de projet (avec l'aide de l'IA) | ☐ |
 | 10 | Backend complet | ☐ |
 | 11 | Frontend 50% | ☐ |
-| 12 | Frontend complet, Docs | ☐ |
+| 12 | Frontend complet, Docs, remise sur GitLab | ☐ |
 | 13 | Présentation | ☐ |
 
 ---
@@ -385,7 +404,7 @@ mysqldump -u root -p dbname > dump.sql
 **Outils:**
 - Postman pour les tests API
 - VS Code pour le développement
-- GitHub pour le contrôle de version
+- GitLab pour le contrôle de version
 - Figma pour le design UI (optionnel)
 
 ---

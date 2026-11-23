@@ -604,7 +604,7 @@ SAVEPOINT                   -- État intermédiaire
 
 ## Préparation au test
 
-Dans la leçon 6, le **test SQL** aura lieu!
+L'**examen théorique SQL** aura lieu à l'unité 7! La leçon 6 sert de révision.
 
 **Thèmes:**
 - Modélisation de données (diagramme ER, normalisation)
@@ -624,7 +624,7 @@ Dans la leçon 6, le **test SQL** aura lieu!
 ## Prochaines étapes
 
 Dans la leçon 6:
-- Test SQL (30% de la note totale)
+- Révision SQL et test d'exemple pour se préparer à l'examen théorique (unité 7, 30% de la note totale)
 - Lancement du projet
 - Choix du thème
 - Démarrer le design DB

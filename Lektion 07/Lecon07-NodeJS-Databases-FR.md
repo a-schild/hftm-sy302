@@ -1,5 +1,12 @@
 # Leçon 7: Node.js et bases de données
 
+## Déroulement
+
+**Partie 1:** Examen théorique sur les bases de données et SQL (90 minutes, 30% de la note totale)
+**Partie 2:** Node.js et bases de données
+
+Les thèmes d'examen, le format et un test d'exemple se trouvent dans la leçon 6, partie 1.
+
 ## Objectifs d'apprentissage
 
 L'étudiant(e) est capable de...

@@ -2,6 +2,8 @@
 
 ## Credit 3 - HFTM Library Operations (10 Punkte)
 
+*Bewertung: Die Punkte in dieser Übung sind ein internes Bewertungsraster. Für die Note wird jeder Credit auf 0–5 Punkte skaliert (fristgerechte, vollständige Abgabe = 5 Punkte, nicht abgegeben = 0 Punkte).*
+
 ### Vorbereitung
 
 Stelle sicher, dass die HFTM Library Datenbank installiert ist:

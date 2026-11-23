@@ -1,13 +1,15 @@
-# Leçon 6: Test SQL & Lancement du projet
+# Leçon 6: Révision SQL & Lancement du projet
 
 ## Vue d'ensemble
 
-**Partie 1:** Examen théorique sur les bases de données et SQL (90 minutes)
+**Partie 1:** Révision SQL et test d'exemple pour se préparer à l'examen théorique de l'unité 7 (90 minutes)
 **Partie 2:** Lancement du projet et choix du thème (30 minutes)
 
-## Partie 1: Test SQL (30% de la note totale)
+## Partie 1: Préparation à l'examen théorique SQL
 
-### Format du test
+L'examen théorique a lieu à l'**unité 7** (avant la partie Node.js). Aujourd'hui, nous révisons la matière et résolvons un test d'exemple.
+
+### Format de l'examen théorique (unité 7)
 
 - **Durée:** 90 minutes
 - **Pondération:** 30% de la note totale
@@ -126,7 +128,7 @@
 4. Top 5 des clients par valeur de commande
 ```
 
-### Exemple de test
+### Test d'exemple (pour s'exercer)
 
 #### Exercice 1: Diagramme ER (8 points)
 
@@ -241,7 +243,7 @@ b) Écrivez une transaction pour le scénario suivant:
 
 ## Partie 2: Lancement du projet
 
-Après le test, nous commençons le projet principal du cours!
+Après la révision, nous commençons le projet principal du cours!
 
 ### Vue d'ensemble du projet
 
@@ -426,7 +428,8 @@ my-project/
 
 ### Semaine prochaine (Unit 7)
 
-- Diagramme ER détaillé
+- **Examen théorique SQL** (90 minutes, 30% de la note totale)
+- Diagramme ER détaillé (remise du design DB à l'unité 8)
 - Script SQL pour les tables
 - Configurer le projet Node.js
 - Premiers endpoints API
@@ -516,7 +519,7 @@ Dans Moodle, vous trouverez des exemples de projets de semestres précédents po
 
 ## Checklist pour aujourd'hui
 
-- [ ] Test remis
+- [ ] Test d'exemple résolu et comparé avec les conseils de solution
 - [ ] Thème choisi
 - [ ] Premières idées notées
 - [ ] Exigences réfléchies
@@ -531,16 +534,17 @@ Dans Moodle, vous trouverez des exemples de projets de semestres précédents po
 4. Vérifier la normalisation
 
 **Pour Unit 7:**
+- Examen théorique SQL: réviser la matière des leçons 1–5
 - Node.js installé
 - MariaDB fonctionne
 - Éditeur de texte prêt (VS Code recommandé)
 
 ## Résumé
 
-- **Test:** 30% de la note, bases testées
+- **Examen théorique (unité 7):** 30% de la note, bases testées
 - **Projet:** 50% de la note, application pratique
 - **Credits:** 20% de la note, travail continu
 - **Début:** Aujourd'hui avec le choix du thème
 - **Objectif:** Application web fonctionnelle avec DB
 
-Bonne chance pour le test et pour le projet! 🚀
+Bonne chance pour la préparation à l'examen et pour le projet! 🚀
