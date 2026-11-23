@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Fahrzeugverleih" id="MariaDb-2358" database="MariaDb" >
+	<schema name="instance" catalogname="Autoverleih" >
+		<table name="car" prior="Car" >
+			<column name="car_id" prior="Car_ID" type="INT" jt="4" mandatory="y" />
+			<column name="serialnumber" prior="SerialNumber" type="VARCHAR" length="20" jt="12" mandatory="y" />
+			<column name="numberofseats" prior="NumberOfSeats" type="INT" jt="4" />
+			<column name="brand" prior="Brand" type="VARCHAR" length="20" jt="12" />
+			<column name="color" prior="Color" type="VARCHAR" length="20" jt="12" />
+			<column name="licenseplate" prior="LicensePlate" type="VARCHAR" length="10" jt="12" />
+			<index name="pk_car" unique="PRIMARY_KEY" >
+				<column name="car_id" />
+			</index>
+		</table>
+		<table name="carrental" prior="CarRental" >
+			<column name="customer_id" prior="Customer_ID" type="INT" jt="4" mandatory="y" />
+			<column name="car_id" prior="Car_ID" type="INT" jt="4" mandatory="y" />
+			<column name="startrental" prior="StartRental" type="DATE" jt="91" mandatory="y" />
+			<column name="endrental" prior="EndRental" type="DATE" jt="91" />
+			<column name="startkmcounter" prior="StartKmCounter" type="INT" jt="4" />
+			<column name="endkmcounter" prior="EndKmCounter" type="INT" jt="4" />
+			<column name="remarks" prior="Remarks" type="VARCHAR" length="4096" jt="12" />
+			<index name="pk_carrental" unique="PRIMARY_KEY" >
+				<column name="customer_id" />
+				<column name="car_id" />
+				<column name="startrental" />
+			</index>
+			<fk name="fk_carrental_customer" virtual="y" to_schema="Autoverleih.instance" to_table="customer" >
+				<fk_column name="customer_id" pk="customer_id" />
+			</fk>
+			<fk name="fk_carrental_car" virtual="y" to_schema="Autoverleih.instance" to_table="car" >
+				<fk_column name="car_id" pk="car_id" />
+			</fk>
+		</table>
+		<table name="carservice" prior="CarService" >
+			<column name="carservice_id" prior="CarService_ID" type="INT" jt="4" mandatory="y" />
+			<column name="car_id" prior="Car_ID" type="INT" jt="4" mandatory="y" />
+			<column name="servicestart" prior="ServiceStart" type="DATE" jt="91" mandatory="y" />
+			<column name="serviceend" prior="ServiceEnd" type="DATE" jt="91" />
+			<column name="servicecosts" prior="ServiceCosts" type="DECIMAL" length="8" decimal="2" jt="3" />
+			<column name="warrantyservice" prior="WarrantyService" type="BOOLEAN" jt="-7" />
+			<column name="servicereason" prior="ServiceReason" type="VARCHAR" length="4096" jt="12" />
+			<index name="pk_carservice" unique="PRIMARY_KEY" >
+				<column name="carservice_id" />
+				<column name="car_id" />
+			</index>
+			<fk name="fk_carservice_car" virtual="y" to_schema="Autoverleih.instance" to_table="car" >
+				<fk_column name="car_id" pk="car_id" />
+			</fk>
+		</table>
+		<table name="customer" prior="Customer" >
+			<column name="customer_id" prior="Customer_ID" type="INT" jt="4" mandatory="y" />
+			<column name="firstname" prior="Firstname" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="lastname" prior="Lastname" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="address" prior="Address" type="VARCHAR" length="30" jt="12" />
+			<column name="mobilephone" prior="MobilePhone" type="VARCHAR" length="10" jt="12" mandatory="y" />
+			<column name="zip" prior="ZIP" type="VARCHAR" length="10" jt="12" mandatory="y" />
+			<column name="city" prior="City" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<index name="pk_customer" unique="PRIMARY_KEY" >
+				<column name="customer_id" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-2211" confirmed="y" show_relation="name" >
+		<entity schema="Autoverleih.instance" name="car" color="C1D8EE" x="736" y="64" />
+		<entity schema="Autoverleih.instance" name="carrental" color="C1D8EE" x="400" y="48" />
+		<entity schema="Autoverleih.instance" name="carservice" color="C1D8EE" x="384" y="272" />
+		<entity schema="Autoverleih.instance" name="customer" color="C1D8EE" x="48" y="48" />
+	</layout>
+</project>

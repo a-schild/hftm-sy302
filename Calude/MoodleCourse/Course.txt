@@ -1,0 +1,944 @@
+Bearbeitung von Kurs: VZSY302 - Databases - Master | hftm-moodle
+
+    03 - SY302 Datenbanken / Bases de données
+    SY302 Datenbanken 
+
+    Datenbanken spielen in unserer computerisierten Welt eine entscheidende Rolle und sind für viele Aspekte unseres täglichen Lebens und unserer Wirtschaft von zentraler Bedeutung.
+
+    Datenbanken bieten eine strukturierte Methode zur Organisation und Verwaltung grosser Datenmengen.
+
+    Sie ermöglichen die effiziente Speicherung, Aktualisierung und Abfrage von Informationen und gewährleisten so einen geordneten Zugriff auf relevante Informationen.
+
+    Diese Fähigkeiten und Kenntnisse werden im Rahmen dieses Kurses vermittelt. 
+
+Icon Forum
+Ankündigungen Forum
+Icon Forum
+Ankündigungen Forum
+Icon Feedback
+Kursbewertung HFTM Feedback
+
+    Alle aufklappen
+    Alle zuklappen
+
+    Hinweis: Ein Klick auf den Abschnittsnamen blendet den Inhalt ein oder aus.
+
+    Willkommen!
+
+    Willkommen zu diesem Kurs über Datenbanken. Als Dozent freue ich mich, Euch im Rahmen dieses Kurses begleiten und unterstützen zu können.
+
+    Im Kurs werden wir lernen, was Daten sind, wie diese im Computer gespeichert und verarbeitet werden und wie diese dann in einem Webprojekt eingebunden werden können. 
+
+Icon Forum
+Hilfe Forum
+	 Hast du Fragen? Brauchst du Unterstützung? Fehlen dir Informationen?
+Dann nutze dieses Forum!  
+
+ 
+Icon Test
+Semesterendprüfung Test
+
+Allgemeine Informationen und Motivation
+
+Auf der rechten Seite im Block 'Curriculum' findet Ihr das Curriculum dieses Kurses mit unter anderem die Lernzielen...
+📆Kursplanung
+Unit 	Date 	Thema / thème 	Specials
+1 	14.10. 	Daten / Datenbanken / DBMS 	Credit 1
+2 	16.10. 	Datenbankdesign , SQL DDL 	Credit 2
+3 	21.10. 	SQL - DML 	Credit 3
+4 	28.10. 	SQL - JOIN - UNION 	Credit 4
+5 	30.10. 	More SQL DCL / TCL 	Credit 5
+6 	4.11. 	Test DB Design and SQL 	
+
+Theorieprüfung SQL
+
+Projektstart
+7 	11.11. 	NodeJS + DB 	Credit 6
+8 	13.11. 	REST API 	Deliver DB design, Credit 7
+9 	18.11. 	KI / AI, work on project 	Credit 8
+10 	25.11. 	NoSQL Einblick & MongoDB Basics 	Credit 9
+11 	27.11. 	Express / REST API / ORM 	Credit 10
+12 	2.12. 	MQTT Anbindung - Sicherheit 	Abgabe Projekt
+13 	9.12. 	Datenschutz, Backups, Kursabschluss 	Präsentation Projekt
+
+🎯 Kursbewertung:
+
+    Theorieprüfung zu Daten / Datenbanken und SQL, Gewichtung 30%
+    Abgabe von Aufgaben, Gewichtung 20%
+    Projekt Umsetzung Datenbank und Webseite, Gewichtung 50%
+
+🏗 Aufgaben / Credits
+
+    Die fristgerechte Abgabe von Aufgaben wird mit 5 Punkten bewertet
+    Nicht abgegebene Aufgaben geben 0 Punkte
+    Verspätet Abgabe von Aufgaben maximal 5 Punkte
+    Abgaben werden je nach Inhalt zwischen 0-5 Punkten bewertet
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+Datenbank Theorie Script deutch Datei
+Icon Datei
+Script sur la théorie des bases de données en français Datei
+Icon Datei
+DVD Thek DATA Datei
+Icon Datei
+SQL cheet sheet Datei
+
+The SQL language
+
+ 
+
+    https://www.w3schools.com/sql/default.asp
+
+01 .:. Was sind Daten und Datenbanksysteme?
+Was sind Daten und Datenbanksysteme? 
+Data - Wikipedia
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Den Nutzen von Datenbanken zu erklären 
+    Die unterschiedlichen Datenbankarten mit ihren Grundeigenschaften aufzulisten 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Vorbereitungsauftrag °1 Credit 1-10 Aufgabe
+
+    Schaut euch die beiden Videos zu Daten und Datenbanken an.
+    Schreibt auf, wo ihr in der letzten Woche überall Daten verwendet habt und wo ihr Daten "geliefert" habt. Mindestens je 5 Stück.
+    Wo werden diese Daten gespeichert? (Geographische Lage und bei welchen Firmen/Behörden/...
+    Die Liste als Credit 1 abgeben
+
+ 
+ 
+
+ 
+ 
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °1 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+SY302-01 Data Terms Datei
+Icon Datei
+SY302-01 - KassaBonTotal Datei
+ 
+
+Nehmen Sie die Datei KassaBonTotal.xlsx und analysieren sie das erste Blatt auf:
+
+    Inhalt, was für Informationen sind vorhanden?
+    Syntax, ist eine Syntax erkennbar, ist diese Stimmig/Einheitlich?
+    Redundanzen, Hat es Redundanzen in der Tabelle?, wenn ja welche?
+    Sind die Daten Konsistent, wenn nein, wo hat es Inkonsistenzen und was haben 
+    diese für Auswirkungen
+
+20 Minuten, anschliessendes Besprechen
+
+ 
+
+	
+	
+Hausaufgaben zur Nachbereitung 
+	
+ 
+	
+
+Wir empfehlen, das Gelernte aus der Vorbereitung und dem Präsenz-Unterricht noch einmal Revue passieren zu lassen und ggf. Lücken zu erkennen resp. aufzuarbeiten! 
+
+ 
+
+Was sind Redundanzen?
+
+ 
+
+     
+
+02 .:. Datenbankdesign, SQL DDL
+
+💽Datenbankdesign 
+
+Damit Daten vom Computer effizient und richtig verarbeitet werden können, müssen diese in einem bestimmten Format gespeichert werden.
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Den Datenbankdesignprozess zu erklären 
+    Eine relationale Datenbank mit 3 Tabellen zu modelieren 
+    Ein ERD lesen und zu erstellen 
+    Ein einfaches ERD mittels SQL Befehlen umzusetzen 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Vorbereitungsauftrag °2 Credit 2-10 Aufgabe
+
+    Schau dir die zwei Datenbank Videos an
+    Ermittle aus der Gewässerkarte Nord des Kantons Bern, welche Daten vorhanden sind und liste diese auf
+    Gewässerkarte BE-Nord
+    Jeweils auch den Datentyp angeben
+    Abgabe der Excel Liste als Lösung zu Credit 2-10
+
+Database design process
+
+ 
+ 
+
+DB Normalisierung
+
+ 
+ 
+
+ 
+ 
+
+	
+ 
+	
+Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °2 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+Anforderungen Datenbank Ärztezentrum Datei
+Icon Datei
+Exigences base de données centre médical Datei
+
+    	
+    	
+    Hausaufgaben zur Nachbereitung 
+    	
+     
+    	
+
+    Wir empfehlen, das Gelernte aus der Vorbereitung und dem Präsenz-Unterricht noch einmal Revue passieren zu lassen und ggf. Lücken zu erkennen resp. aufzuarbeiten!
+
+    Fertigstellen des DB Design für die Gewässerkarte
+
+     
+
+     
+
+03 .:. SQL DDL / DML
+
+SQL Language, DDL commands
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Die DDL Befehle zu erklären und anzuwenden
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Vorbereitungsauftrag °3 Credit 3-10 Aufgabe
+
+    Schau dir das Datenbank SQL Video an
+    Nimm die Liste der Daten aus dem Vorbereitungsauftrag 2 und definiere die Datentypen dazu
+    Abgabe der Liste als Lösung zu Credit 3-10
+    Installation von MariaDB Server und Heidi SQL auf dem Laptop
+
+MariaDB Server download (Write down the password of your DB server)
+
+HeidiSQL download
+
+ 
+ 
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °4 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+HFTM Library SQL DDL and Data Script Datei
+Icon Datei
+DML Tasks Datei
+
+    	
+    	
+    Hausaufgaben zur Nachbereitung 
+    	
+     
+    	
+
+    Fertigstellen der SQL DML Abfragen 
+
+     
+
+04 .:. SQL DML - JOIN / UNION
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Einfache SQL DML Befehle zu verwenden 
+    Eine einfache Datenbank mit Daten zu füllen und Abfragen auszuführen
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Vorbereitungsauftrag °4 Credit 4-10 Aufgabe
+
+    Implementiert die Datenbank zum Ärztezentrum aus dem Unterricht in MariaDB
+    In jeder Tabelle mindestens 5 Datensätze einfügen
+    DB dump der Datenbank in eine .sql Datei machen
+    Hochladen des Dump als Lösung
+    Die Liste als Credit 4 abgeben
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °4 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+Task HFTM Library DML-Joins Datei
+
+    	
+    	
+    Hausaufgaben zur Nachbereitung 
+    	
+     
+    	
+
+    Finish the HFTM Library DML-JOINS tasks
+
+05 .:. Advanced SQL Topics DCL - TCL
+
+Icon StudentQuiz
+Vorbereitungsauftrag °5 Credit 5-10 StudentQuiz
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Berechtigungen im Datenbanksystem umzusetzen
+    Zu erkennen wann Transaktionen in SQL Datenbanken eingesetzt werden sollen
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+
+Was sind Transaktionen im Datenbankumfeld
+
+ 
+ 
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °5 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+
+    	
+    	
+    Hausaufgaben zur Nachbereitung 
+    	
+     
+    	
+
+    Vorbereiten auf Prüfung 
+
+     
+
+06 .:. 1. Prüfung, Kickoff project
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Den Einsatzzweck von Transaktionen zu erklären 
+    Ein Berechtigungskonzept und die entsprechende Berechtigungmatrix zu erstellen 
+    Umsetzung einer Berechtigungsmatrix mittels DCL
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °6 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+DCL Script Datei
+	
+	
+SQL Prüfung 1 
+	
+ 
+	
+
+Icon Aufgabe
+SQL Test Aufgabe
+
+07 .:. NodeJS and Databases
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Von Javascript aus auf eine SQL Datenbank zuzugreiffen 
+    Eine einfache Datenbank von Javascript aus mit Daten zu füllen und Abfragen auszuführen 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+
+    Installation von Node.JS und npm auf dem Laptop
+    Video zur NodeJS + npm Einführung anschauen
+
+ 
+ 
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °7 Textseite
+	
+	
+Hausaufgaben zur Nachbereitung 
+	
+ 
+	
+
+Wir empfehlen, das Gelernte aus der Vorbereitung und dem Präsenz-Unterricht noch einmal Revue passieren zu lassen und ggf. Lücken zu erkennen resp. aufzuarbeiten! 
+
+ 
+Icon Aufgabe
+Nachbearbeitungsauftrag °6 Credit 6-10 Aufgabe
+
+08 .:. REST API
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Die Grundidee von REST zu erklären 
+    Ein einfaches REST API zu entwerfen und mittels Javascript umzusetzen 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Abgabe des DB Designs für das Webproject Credit 7-10 Aufgabe
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Program Präsenz °8 Textseite
+
+    	
+    	
+    Hausaufgaben zur Nachbereitung 
+    	
+     
+    	
+
+    Implementierung 1-2 REST Endpoints für Projekt-DB
+
+09 .:. AI/KI - Dataprotection - Work on project
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Die aktuellen KI Tools im Datenbankumfeld richtig einzusetzen
+    Die Grenzen der KI Tools zu erkennen
+    Die gelernte Theorie im Projekt anzuwenden 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °9 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+KI im Datenbankumfeld Datei
+
+10 .:. NoSQL & MongoDB Basics
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Andere Datenbanken zu verwenden 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Vorbereitungsauftrag °9 Credit 9-10 Aufgabe
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °9 Textseite
+
+11 .:. Frameworks for JS / REST API
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Ein geeignetes Framework für den DB Zugriff zu evaluieren 
+    Ein geeignetes Framework zur Umsetzung eines REST API zu evaluieren 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+Icon Aufgabe
+Vorbereitungsauftrag °11 Credit -10 Aufgabe
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °11 Textseite
+
+    	
+    	
+    Hausaufgaben zur Nachbereitung 
+    	
+     
+    	
+
+    Refactoring eines Teils des Projekts mit MVC-Pattern
+
+     
+
+     
+
+12 .:. MQTT connection and security
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Mittels Javascript auf einen MQTT Server zuzugreifen 
+    Die grundenlegenden Sicherheitsthemen im Datenbankumfeld zu erklären 
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+
+Am Webprojekt arbeiten
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °12 Textseite
+
+ 
+	
+
+	
+
+ 
+	
+
+ Dokumente   
+Icon Datei
+Sequrity in webprojects Datei
+
+13 .:. Presentation project - Course end
+
+	
+ 
+	
+ Lernziele 
+	
+ 
+	
+ Der/die Studierende ist in der Lage... 
+
+    Ein Backupkonzept für eine Datenbank zu erstellen und umzusetzen 
+    Kennt die wichtigsten Begriffe zum Datenschutz und deren Auswirkung auf Applikationen und Datenbanken / Datenbestände
+
+	
+ 
+	
+ Vorbereitung auf Präsenz   
+
+Präsentation vorbereiten
+
+	
+ 
+	
+ Präsenzveranstaltung 
+Icon Textseite
+Programm Präsenz °13 Textseite
+
+14 .:. Webprojekt: Dynamische Webanwendung mit REST API
+
+	
+	
+Projektauftrag 
+	
+ 
+	
+
+Ausgangslage
+
+Sie erhalten eine statische HTML-Webseite als Vorlage. Ihre Aufgabe ist es, diese Seite in eine dynamische, datenbankgestützte Webanwendung umzuwandeln.
+
+Alternativ kann auch ein eigenes Webprojekt eingebracht werden, es muss aber die Projektziele erfüllen.
+
+ 
+
+ 
+  	
+ 
+	
+Projektziele 
+
+1. Datenbankdesign (15 Punkte)
+
+    Erstellen Sie ein ER-Diagramm mit 4-5 Entitäten
+    Die Tabellen müssen in Beziehung zueinander stehen (mind. 2x 1:N, 1x N:M)
+    Normalisierung bis 3. Normalform
+    Dokumentation der Tabellen mit Datentypen und Constraints
+
+2. Datenbank-Implementation (10 Punkte)
+
+    Umsetzung in MariaDB/MySQL
+    SQL-Script für Tabellenerstellung (CREATE TABLE)
+    Testdaten einfügen (mind. 5 Datensätze pro Tabelle)
+    Abgabe als .sql Dump-Datei
+
+3. REST API Backend (30 Punkte)
+
+Entwickeln Sie ein Node.js Backend mit folgenden Anforderungen:
+Technische Requirements:
+
+    Framework: Express.js
+    Datenbankanbindung: mysql2 oder Sequelize/Prisma
+    Umgebungsvariablen: .env für DB-Credentials
+    Fehlerbehandlung mit passenden HTTP-Status-Codes
+
+API-Endpoints (mind.):
+
+Mindestens eine Ressource muss alle CRUD-Operationen unterstützen:
+
+GET    /api/[resource]          - Alle Datensätze abrufen
+GET    /api/[resource]/:id      - Einen Datensatz abrufen
+POST   /api/[resource]          - Neuen Datensatz erstellen
+PUT    /api/[resource]/:id      - Datensatz aktualisieren
+DELETE /api/[resource]/:id      - Datensatz löschen
+
+Weitere Endpoints:
+
+    Mind. 2 Endpoints mit JOIN-Operationen (verknüpfte Tabellen)
+
+ 
+
+ 
+
+ 
+
+Sie können sich ein eigenes Thema wählen oder eines der folgenden verwenden:
+Vorschlag 1: Bibliotheksverwaltung
+
+Entitäten: Bücher, Autoren, Genres, Ausleihen, Benutzer
+
+Statische Vorlage: Bücherliste mit Detailansicht
+
+CRUD-Funktionen:
+
+    Bücher verwalten (hinzufügen, bearbeiten, löschen)
+    Ausleihen erfassen
+    Suche nach Titel/Autor/Genre
+
+Vorschlag 2: Event-Manager
+
+Entitäten: Events, Veranstalter, Locations, Teilnehmer, Kategorien
+
+Statische Vorlage: Event-Kalender
+
+CRUD-Funktionen:
+
+    Events erstellen und verwalten
+    Teilnehmer anmelden/abmelden
+    Filterung nach Datum/Kategorie
+
+Vorschlag 3: Rezeptverwaltung
+
+Entitäten: Rezepte, Zutaten, Kategorien, Bewertungen, Autoren
+
+Statische Vorlage: Rezept-Website
+
+CRUD-Funktionen:
+
+    Rezepte hinzufügen/bearbeiten
+    Zutaten verwalten
+    Bewertungen abgeben
+
+Vorschlag 4: Projektmanagement-Tool (Simplified)
+
+Entitäten: Projekte, Tasks, Team-Mitglieder, Status, Prioritäten
+
+Statische Vorlage: Kanban-Board
+
+CRUD-Funktionen:
+
+    Tasks erstellen/verschieben
+    Team-Mitglieder zuweisen
+    Status aktualisieren
+
+Vorschlag 5: Fahrzeugverwaltung
+
+Entitäten: Fahrzeuge, Besitzer, Services, Reparaturen, Werkstätten
+
+Statische Vorlage: Fahrzeug-Dashboard
+
+CRUD-Funktionen:
+
+    Fahrzeuge registrieren
+    Services dokumentieren
+    Service-Historie anzeigen
+
+     
+
+Meilensteine und Abgaben
+Woche 	Meilenstein 	Abgabe
+Unit 6 	Themenwahl 	-
+Unit 8 	DB-Design 	ER-Diagramm + SQL-Script
+Unit 9-11 	Projektarbeit 	-
+Unit 12 	Komplettes Projekt 	Code, Doku, DB-Dump
+Unit 13 	Präsentation 	Live-Demo
+
+    Gesamtpunktzahl: 75 Punkte
+    Kriterium 	Max. Punkte 	Bewertungskriterien
+    1. Datenbankdesign 	15 	 
+    ER-Diagramm vollständig 	5 	Alle Entitäten, Attribute, Beziehungen korrekt dargestellt
+    Normalisierung 	4 	1NF (1P), 2NF (1.5P), 3NF (1.5P)
+    Beziehungen korrekt 	3 	PK/FK korrekt, Kardinalitäten sinnvoll
+    Datentypen passend 	3 	Korrekte SQL-Datentypen, Constraints (NOT NULL, UNIQUE)
+    2. Datenbank-Implementation 	10 	 
+    SQL-Script funktionsfähig 	4 	CREATE TABLE Statements fehlerfrei
+    Testdaten vorhanden 	3 	Mind. 5 Datensätze pro Tabelle, realistisch
+    Constraints umgesetzt 	3 	Foreign Keys, Primary Keys korrekt
+    3. REST API Backend 	30 	 
+    CRUD vollständig (eine Ressource) 	10 	Alle 5 Operationen (GET all, GET :id, POST, PUT, DELETE) funktionieren
+    JOIN-Operationen 	10 	Mind. 2 Endpoints mit verknüpften Tabellen
+    Prepared Statements 	5 	SQL-Injection Schutz
+    API-Dokumentation 	5 	README oder Postman / OpenAPI / Swagger Collection
+    4. Frontend-Anbindung 	25 	 
+    GET - Daten anzeigen 	5 	Daten werden dynamisch geladen und dargestellt
+    POST - Erstellen 	7 	Formular funktioniert, Daten werden gespeichert
+    PUT - Bearbeiten 	7 	Datensätze können editiert werden
+    DELETE - Löschen 	6 	Löschen mit Bestätigung funktioniert
+    6. Präsentation 	20 	 
+    Live-Demo funktioniert 	8 	Alle CRUD-Operationen gezeigt
+    DB-Design erklärt 	4 	ER-Diagramm verständlich präsentiert
+    Fachfragen beantwortet 	4 	Technische Konzepte verstanden
+    Zeit eingehalten 	2 	5-7 Minuten
+    Professionalität 	2 	Vorbereitung, Sprache, Auftreten
+
+Alle auswählen
+
+0 ausgewählt
+
+ 
+Hilfe für Studierende
+
+ 
+
+coaching-4-students
+
+Rund ums Studium
+
+ 
+
+ 
+
+ 
+
+Ferienplan
+
+Stundenplan | WebUntis
+
+ 
+
+ 
+
+ 
+
+Mensa | Cafeteria
+
+FAQ
+
+ 
+
+ 
+
+AGB | Datenschutz | Impressum | © 2025 hftm
+MoodleDocs für diese Seite
+Laden Sie die mobile App

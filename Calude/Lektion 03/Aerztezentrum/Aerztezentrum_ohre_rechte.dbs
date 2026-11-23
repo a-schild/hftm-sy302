@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Aerztezentrum" id="Project-1bc" database="MySql" >
+	<schema name="aerztezentrum" >
+		<table name="behandlung" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="name" type="VARCHAR" length="100" jt="12" />
+			<column name="kassenpflichtig" type="BIT" jt="-7" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="preis" type="DECIMAL" length="16" decimal="4" jt="3" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_behandlung" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="geschichte" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="kunde_id" type="INT" jt="4" />
+			<column name="behandlung_id" type="INT" jt="4" />
+			<column name="medikament_id" type="INT" jt="4" />
+			<column name="mitarbeiter_id" type="INT" jt="4" />
+			<column name="behandlung_menge" type="DECIMAL" length="8" decimal="2" jt="3" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="medikament_menge" type="INT" jt="4" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="abgerechnet_am" prior="abgerechnet" type="DATETIME" jt="93" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="bemerkung" type="LONG VARCHAR" jt="-1" />
+			<column name="medikament_abgegeben_am" type="DATETIME" jt="93" />
+			<column name="behandlung_ausgefuehrt_am" type="DATETIME" jt="93" />
+			<index name="pk_geschichte" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_geschichte_behandlung" to_schema="aerztezentrum" to_table="behandlung" >
+				<fk_column name="behandlung_id" pk="id" />
+			</fk>
+			<fk name="fk_geschichte_medikament" to_schema="aerztezentrum" to_table="medikament" >
+				<fk_column name="medikament_id" pk="id" />
+			</fk>
+			<fk name="fk_geschichte_mitarbeiter" to_schema="aerztezentrum" to_table="mitarbeiter" >
+				<fk_column name="mitarbeiter_id" pk="id" />
+			</fk>
+			<fk name="fk_geschichte_kunde" to_schema="aerztezentrum" to_table="kunde" >
+				<fk_column name="kunde_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="jobart" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="titel" prior="jobtitel" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="krankenkasse" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="name" type="VARCHAR" length="100" jt="12" />
+			<column name="adresse" type="VARCHAR" length="100" jt="12" />
+			<column name="plz" type="VARCHAR" length="10" jt="12" />
+			<column name="ort" type="VARCHAR" length="50" jt="12" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_krankenkasse" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="kunde" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="krankenkasse_id" type="INT" jt="4" />
+			<column name="vorname" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="nachname" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="adresse" type="VARCHAR" length="100" jt="12" />
+			<column name="plz" type="VARCHAR" length="10" jt="12" mandatory="y" />
+			<column name="ort" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="geburtsdatum" type="DATE" jt="91" />
+			<column name="krankenkassenkarte" type="VARCHAR" length="20" jt="12" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_kunde" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_kunde_krankenkasse" to_schema="aerztezentrum" to_table="krankenkasse" >
+				<fk_column name="krankenkasse_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="kunde_mitarbeiter" prior="kunde_mtarbeiter_" >
+			<column name="kunde_id" type="INT" jt="4" mandatory="y" />
+			<column name="mitarbeiter_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_kunde_mitarbeiter" unique="PRIMARY_KEY" >
+				<column name="kunde_id" />
+				<column name="mitarbeiter_id" />
+			</index>
+			<fk name="fk_kunde_mitarbeiter_kunde" to_schema="aerztezentrum" to_table="kunde" >
+				<fk_column name="kunde_id" pk="id" />
+			</fk>
+			<fk name="fk_kunde_mitarbeiter_mitarbeiter" to_schema="aerztezentrum" to_table="mitarbeiter" >
+				<fk_column name="mitarbeiter_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="medikament" prior="behandlung_0" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="name" type="VARCHAR" length="100" jt="12" />
+			<column name="kassenpflichtig" type="BIT" jt="-7" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="lagerbestand" type="INT" jt="4" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<column name="preis" type="DECIMAL" length="16" decimal="4" jt="3" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_behandlung_0" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="mitarbeiter" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="jobart_id" type="INT" jt="4" mandatory="y" />
+			<column name="vorname" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="nachname" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_jobart" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="pk_mitarbeiter" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_mitarbeiter_jobart" to_schema="aerztezentrum" to_table="jobart" >
+				<fk_column name="jobart_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="privategeschichte" prior="tbl" >
+			<column name="id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="kunde_id" type="INT" jt="4" />
+			<column name="mitarbeiter_id" type="INT" jt="4" />
+			<column name="privatebemerkung" prior="bemerkung" type="LONG VARCHAR" jt="-1" />
+			<column name="erstellt_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="erstellt_durch" type="VARCHAR" length="30" jt="12" />
+			<column name="geaendert_am" type="DATETIME" jt="93" >
+				<defo><![CDATA[CURRENT_TIMESTAMP]]></defo>
+			</column>
+			<column name="geaendert_durch" type="VARCHAR" length="30" jt="12" />
+			<index name="pk_privategeschichte" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<fk name="fk_privategeschichte_mitarbeiter" to_schema="aerztezentrum" to_table="mitarbeiter" >
+				<fk_column name="mitarbeiter_id" pk="id" />
+			</fk>
+			<fk name="fk_privategeschichte_kunde" to_schema="aerztezentrum" to_table="kunde" >
+				<fk_column name="kunde_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<view name="dbs_validate_view" >
+			<view_script><![CDATA[CREATE VIEW ${fullName} AS SELECT id, medikament_id, behandlung_id from geschichte]]></view_script>
+		</view>
+		<view name="v_geschichte_sekretariat" >
+			<comment><![CDATA[Berechtigung RU für Sekretariat]]></comment>
+			<view_script><![CDATA[CREATE VIEW ${fullName} AS SELECT id, kunde_id, medikament_id, behandlung_id, medikament_abgegeben_am, behandlung_ausgefuehrt_am from geschichte]]></view_script>
+			<column name="id" type="INT" />
+			<column name="medikament_id" type="INT" />
+			<column name="behandlung_id" type="INT" />
+			<column name="medikament_abgegeben_am" type="DATETIME" />
+			<column name="behandlung_ausgefuehrt_am" type="DATETIME" />
+			<column name="kunde_id" type="INT" />
+		</view>
+	</schema>
+	<layout name="Default Layout" id="Layout-e92" joined_routing="y" show_relation="columns" >
+		<entity schema="aerztezentrum" name="behandlung" color="C1D8EE" x="640" y="384" >
+			<column name="id" />
+			<column name="name" />
+			<column name="kassenpflichtig" />
+			<column name="preis" />
+		</entity>
+		<entity schema="aerztezentrum" name="geschichte" color="C1D8EE" x="288" y="400" >
+			<column name="id" />
+			<column name="kunde_id" />
+			<column name="behandlung_id" />
+			<column name="medikament_id" />
+			<column name="mitarbeiter_id" />
+			<column name="behandlung_menge" />
+			<column name="medikament_menge" />
+			<column name="abgerechnet_am" />
+			<column name="bemerkung" />
+			<column name="medikament_abgegeben_am" />
+			<column name="behandlung_ausgefuehrt_am" />
+		</entity>
+		<entity schema="aerztezentrum" name="jobart" color="C1D8EE" x="48" y="480" >
+			<column name="id" />
+			<column name="titel" />
+		</entity>
+		<entity schema="aerztezentrum" name="krankenkasse" color="C1D8EE" x="896" y="96" >
+			<column name="id" />
+			<column name="name" />
+			<column name="adresse" />
+			<column name="plz" />
+			<column name="ort" />
+		</entity>
+		<entity schema="aerztezentrum" name="kunde" color="C1D8EE" x="640" y="96" >
+			<column name="id" />
+			<column name="krankenkasse_id" />
+			<column name="vorname" />
+			<column name="nachname" />
+			<column name="adresse" />
+			<column name="plz" />
+			<column name="ort" />
+			<column name="geburtsdatum" />
+			<column name="krankenkassenkarte" />
+		</entity>
+		<entity schema="aerztezentrum" name="kunde_mitarbeiter" color="C1D8EE" x="304" y="48" />
+		<entity schema="aerztezentrum" name="medikament" color="3986C1" x="656" y="512" >
+			<column name="id" />
+			<column name="name" />
+			<column name="kassenpflichtig" />
+			<column name="lagerbestand" />
+			<column name="preis" />
+		</entity>
+		<entity schema="aerztezentrum" name="mitarbeiter" color="C1D8EE" x="48" y="288" >
+			<column name="id" />
+			<column name="jobart_id" />
+			<column name="vorname" />
+			<column name="nachname" />
+		</entity>
+		<entity schema="aerztezentrum" name="privategeschichte" color="C1D8EE" x="288" y="208" >
+			<column name="id" />
+			<column name="kunde_id" />
+			<column name="mitarbeiter_id" />
+			<column name="privatebemerkung" />
+		</entity>
+		<entity schema="aerztezentrum" name="v_geschichte_sekretariat" color="3986C1" x="832" y="320" />
+	</layout>
+	<layout name="MySql" id="Layout-2697" show_relation="columns" />
+	<layout name="PostgreSQL" id="Layout-74c" show_relation="columns" />
+</project>

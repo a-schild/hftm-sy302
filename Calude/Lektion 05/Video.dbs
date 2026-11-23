@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="VideoDB" database="MySql" id="Project6649700" >
+	<schema name="VideoDB" >
+		<table name="Filmstudio" >
+			<column name="filmstudio_id" prior="Filmstudio_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="company_name" prior="Firmenname" type="VARCHAR" length="100" decimal="0" />
+			<index name="Pk_Filmstudio" unique="PRIMARY_KEY" >
+				<column name="filmstudio_id" />
+			</index>
+		</table>
+		<table name="Video" >
+			<column name="video_id" type="INT" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Filmstudio_id" type="INT" length="0" decimal="0" mandatory="y" />
+			<column name="titel" prior="Titel" type="VARCHAR" length="200" decimal="0" />
+			<column name="play_length" prior="Spieldauer" type="INT" length="0" decimal="0" />
+			<column name="date_created" prior="Erstellungsjahr" type="INT" length="0" decimal="0" />
+			<index name="Pk_Videos" unique="PRIMARY_KEY" >
+				<column name="video_id" />
+			</index>
+			<index name="idx_Video" unique="NORMAL" >
+				<column name="Filmstudio_id" />
+			</index>
+			<fk name="Fk_Video" to_schema="VideoDB" to_table="Filmstudio" >
+				<fk_column name="Filmstudio_id" pk="filmstudio_id" />
+			</fk>
+		</table>
+		<table name="country" prior="Land" >
+			<column name="isocode" type="CHAR" length="3" decimal="0" mandatory="y" />
+			<column name="Name" type="VARCHAR" length="100" decimal="0" />
+			<index name="Pk_Land" unique="PRIMARY_KEY" >
+				<column name="isocode" />
+			</index>
+		</table>
+		<table name="price" prior="Preis" >
+			<column name="isocode" type="CHAR" length="3" decimal="0" mandatory="y" />
+			<column name="video_id" type="INT" length="0" decimal="0" mandatory="y" />
+			<column name="lease_price" prior="Mietpreis" type="DECIMAL" length="16" decimal="4" />
+			<column name="purchase_price" prior="Kaufpreis" type="DECIMAL" length="16" decimal="4" />
+			<column name="first_release_date" prior="Ersteausstrahlung" type="DATE" length="0" decimal="0" />
+			<index name="idx_Preis" unique="NORMAL" >
+				<column name="isocode" />
+			</index>
+			<index name="idx_Preis_0" unique="NORMAL" >
+				<column name="video_id" />
+			</index>
+			<fk name="Fk_Preis" to_schema="VideoDB" to_table="country" >
+				<fk_column name="isocode" pk="isocode" />
+			</fk>
+			<fk name="Fk_Preis_0" to_schema="VideoDB" to_table="Video" >
+				<fk_column name="video_id" pk="video_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="VideoDB" id="Layout6649700" joined_routing="y" show_column_type="y" show_relation="columns" >
+		<comment><![CDATA[VideoDB]]></comment>
+		<entity schema="VideoDB" name="country" color="B2CDF7" x="57" y="247" />
+		<entity schema="VideoDB" name="price" color="B2CDF7" x="76" y="57" />
+		<entity schema="VideoDB" name="Video" color="B2CDF7" x="456" y="76" />
+		<entity schema="VideoDB" name="Filmstudio" color="B2CDF7" x="399" y="247" />
+	</layout>
+</project>

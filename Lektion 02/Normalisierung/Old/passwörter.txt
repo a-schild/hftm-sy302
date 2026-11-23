@@ -1,0 +1,3 @@
+"Daten Aufgabe 3.xlsx"   ->   TI4-S1
+"Daten Aufgabe 4.xlsx"   ->   TI4-NF2
+"Daten Aufgabe 4 Lösungen.xlsx"   ->   TI4-LOESUNG

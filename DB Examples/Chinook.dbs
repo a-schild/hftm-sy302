@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MariaDb" id="MariaDb-1e4f" database="MariaDb" >
+	<schema name="chinook_autoincrement" >
+		<table name="album" row_count="347" spec="" >
+			<column name="AlbumId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Title" type="VARCHAR" length="160" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="ArtistId" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_album" unique="PRIMARY_KEY" >
+				<column name="AlbumId" />
+			</index>
+			<index name="IFK_AlbumArtistId" unique="NORMAL" >
+				<column name="ArtistId" />
+			</index>
+			<fk name="FK_AlbumArtistId" to_schema="chinook_autoincrement" to_table="artist" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="ArtistId" pk="ArtistId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=348 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="artist" row_count="275" spec="" >
+			<column name="ArtistId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Name" type="VARCHAR" length="120" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<index name="pk_artist" unique="PRIMARY_KEY" >
+				<column name="ArtistId" />
+			</index>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="customer" row_count="59" spec="" >
+			<column name="CustomerId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="FirstName" type="VARCHAR" length="40" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="LastName" type="VARCHAR" length="20" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Company" type="VARCHAR" length="80" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Address" type="VARCHAR" length="70" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="City" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="State" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Country" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="PostalCode" type="VARCHAR" length="10" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Phone" type="VARCHAR" length="24" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Fax" type="VARCHAR" length="24" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Email" type="VARCHAR" length="60" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="SupportRepId" type="INT" length="11" jt="4" />
+			<index name="pk_customer" unique="PRIMARY_KEY" >
+				<column name="CustomerId" />
+			</index>
+			<index name="IFK_CustomerSupportRepId" unique="NORMAL" >
+				<column name="SupportRepId" />
+			</index>
+			<fk name="FK_CustomerSupportRepId" to_schema="chinook_autoincrement" to_table="employee" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="SupportRepId" pk="EmployeeId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="employee" row_count="8" spec="" >
+			<column name="EmployeeId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="LastName" type="VARCHAR" length="20" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="FirstName" type="VARCHAR" length="20" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Title" type="VARCHAR" length="30" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="ReportsTo" type="INT" length="11" jt="4" />
+			<column name="BirthDate" type="DATETIME" jt="93" />
+			<column name="HireDate" type="DATETIME" jt="93" />
+			<column name="Address" type="VARCHAR" length="70" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="City" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="State" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Country" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="PostalCode" type="VARCHAR" length="10" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Phone" type="VARCHAR" length="24" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Fax" type="VARCHAR" length="24" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Email" type="VARCHAR" length="60" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<index name="pk_employee" unique="PRIMARY_KEY" >
+				<column name="EmployeeId" />
+			</index>
+			<index name="IFK_EmployeeReportsTo" unique="NORMAL" >
+				<column name="ReportsTo" />
+			</index>
+			<fk name="FK_EmployeeReportsTo" to_schema="chinook_autoincrement" to_table="employee" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="ReportsTo" pk="EmployeeId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="genre" row_count="25" spec="" >
+			<column name="GenreId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Name" type="VARCHAR" length="120" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<index name="pk_genre" unique="PRIMARY_KEY" >
+				<column name="GenreId" />
+			</index>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="invoice" row_count="412" spec="" >
+			<column name="InvoiceId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="CustomerId" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="InvoiceDate" type="DATETIME" jt="93" mandatory="y" />
+			<column name="BillingAddress" type="VARCHAR" length="70" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="BillingCity" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="BillingState" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="BillingCountry" type="VARCHAR" length="40" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="BillingPostalCode" type="VARCHAR" length="10" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Total" type="DECIMAL" length="10" decimal="2" jt="3" mandatory="y" />
+			<index name="pk_invoice" unique="PRIMARY_KEY" >
+				<column name="InvoiceId" />
+			</index>
+			<index name="IFK_InvoiceCustomerId" unique="NORMAL" >
+				<column name="CustomerId" />
+			</index>
+			<fk name="FK_InvoiceCustomerId" to_schema="chinook_autoincrement" to_table="customer" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="CustomerId" pk="CustomerId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=413 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="invoiceline" row_count="2240" spec="" >
+			<column name="InvoiceLineId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="InvoiceId" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="TrackId" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="UnitPrice" type="DECIMAL" length="10" decimal="2" jt="3" mandatory="y" />
+			<column name="Quantity" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_invoiceline" unique="PRIMARY_KEY" >
+				<column name="InvoiceLineId" />
+			</index>
+			<index name="IFK_InvoiceLineInvoiceId" unique="NORMAL" >
+				<column name="InvoiceId" />
+			</index>
+			<index name="IFK_InvoiceLineTrackId" unique="NORMAL" >
+				<column name="TrackId" />
+			</index>
+			<fk name="FK_InvoiceLineInvoiceId" to_schema="chinook_autoincrement" to_table="invoice" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="InvoiceId" pk="InvoiceId" />
+			</fk>
+			<fk name="FK_InvoiceLineTrackId" to_schema="chinook_autoincrement" to_table="track" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="TrackId" pk="TrackId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=2241 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="mediatype" row_count="5" spec="" >
+			<column name="MediaTypeId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Name" type="VARCHAR" length="120" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<index name="pk_mediatype" unique="PRIMARY_KEY" >
+				<column name="MediaTypeId" />
+			</index>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="playlist" row_count="18" spec="" >
+			<column name="PlaylistId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Name" type="VARCHAR" length="120" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<index name="pk_playlist" unique="PRIMARY_KEY" >
+				<column name="PlaylistId" />
+			</index>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="playlisttrack" row_count="8715" spec="" >
+			<column name="PlaylistId" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="TrackId" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_playlisttrack" unique="PRIMARY_KEY" >
+				<column name="PlaylistId" />
+				<column name="TrackId" />
+			</index>
+			<index name="IFK_PlaylistTrackPlaylistId" unique="NORMAL" >
+				<column name="PlaylistId" />
+			</index>
+			<index name="IFK_PlaylistTrackTrackId" unique="NORMAL" >
+				<column name="TrackId" />
+			</index>
+			<fk name="FK_PlaylistTrackPlaylistId" to_schema="chinook_autoincrement" to_table="playlist" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="PlaylistId" pk="PlaylistId" />
+			</fk>
+			<fk name="FK_PlaylistTrackTrackId" to_schema="chinook_autoincrement" to_table="track" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="TrackId" pk="TrackId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+		<table name="track" row_count="3503" spec="" >
+			<column name="TrackId" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Name" type="VARCHAR" length="200" jt="12" mandatory="y" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="AlbumId" type="INT" length="11" jt="4" />
+			<column name="MediaTypeId" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="GenreId" type="INT" length="11" jt="4" />
+			<column name="Composer" type="VARCHAR" length="220" jt="12" >
+				<column_options><![CDATA[CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci]]></column_options>
+			</column>
+			<column name="Milliseconds" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="Bytes" type="INT" length="11" jt="4" />
+			<column name="UnitPrice" type="DECIMAL" length="10" decimal="2" jt="3" mandatory="y" />
+			<index name="pk_track" unique="PRIMARY_KEY" >
+				<column name="TrackId" />
+			</index>
+			<index name="IFK_TrackAlbumId" unique="NORMAL" >
+				<column name="AlbumId" />
+			</index>
+			<index name="IFK_TrackGenreId" unique="NORMAL" >
+				<column name="GenreId" />
+			</index>
+			<index name="IFK_TrackMediaTypeId" unique="NORMAL" >
+				<column name="MediaTypeId" />
+			</index>
+			<fk name="FK_TrackAlbumId" to_schema="chinook_autoincrement" to_table="album" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="AlbumId" pk="AlbumId" />
+			</fk>
+			<fk name="FK_TrackGenreId" to_schema="chinook_autoincrement" to_table="genre" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="GenreId" pk="GenreId" />
+			</fk>
+			<fk name="FK_TrackMediaTypeId" to_schema="chinook_autoincrement" to_table="mediatype" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="MediaTypeId" pk="MediaTypeId" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=3504 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci]]></options>
+		</table>
+	</schema>
+	<layout name="Main Layout" id="Layout-23ec" joined_routing="y" show_relation="columns" >
+		<entity schema="chinook_autoincrement" name="album" color="BED3F4" x="208" y="240" />
+		<entity schema="chinook_autoincrement" name="artist" color="BED3F4" x="48" y="272" />
+		<entity schema="chinook_autoincrement" name="customer" color="C7F4BE" x="928" y="416" />
+		<entity schema="chinook_autoincrement" name="employee" color="C7F4BE" x="688" y="432" />
+		<entity schema="chinook_autoincrement" name="genre" color="BED3F4" x="192" y="448" />
+		<entity schema="chinook_autoincrement" name="invoice" color="C7F4BE" x="912" y="192" />
+		<entity schema="chinook_autoincrement" name="invoiceline" color="C7F4BE" x="688" y="176" />
+		<entity schema="chinook_autoincrement" name="mediatype" color="BED3F4" x="416" y="416" />
+		<entity schema="chinook_autoincrement" name="playlist" color="BED3F4" x="48" y="80" />
+		<entity schema="chinook_autoincrement" name="playlisttrack" color="BED3F4" x="240" y="80" />
+		<entity schema="chinook_autoincrement" name="track" color="BED3F4" x="400" y="208" />
+		<group name="employee" color="EEF7EC" >
+			<entity schema="chinook_autoincrement" name="invoiceline" />
+			<entity schema="chinook_autoincrement" name="invoice" />
+			<entity schema="chinook_autoincrement" name="customer" />
+			<entity schema="chinook_autoincrement" name="employee" />
+		</group>
+		<group name="track" color="ECF0F7" >
+			<entity schema="chinook_autoincrement" name="track" />
+			<entity schema="chinook_autoincrement" name="album" />
+			<entity schema="chinook_autoincrement" name="artist" />
+			<entity schema="chinook_autoincrement" name="mediatype" />
+			<entity schema="chinook_autoincrement" name="playlisttrack" />
+			<entity schema="chinook_autoincrement" name="playlist" />
+			<entity schema="chinook_autoincrement" name="genre" />
+		</group>
+	</layout>
+</project>

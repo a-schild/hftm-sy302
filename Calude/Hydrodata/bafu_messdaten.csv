@@ -1,0 +1,51 @@
+Station_ID,Station_Name,Gewässer,Region,Gewässertyp,Latitude,Longitude,Parameter,Unit,Messung_Nummer,Zeitstempel,Wert,Qualität,Datenquelle
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,1,2025-10-21T06:55:50.675077,164.59,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,2,2025-10-21T07:05:50.675077,93.53,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,3,2025-10-21T07:15:50.675077,19.17,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,4,2025-10-21T07:25:50.675077,138.58,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,5,2025-10-21T07:35:50.675077,50.46,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,6,2025-10-21T07:45:50.675077,127.58,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,7,2025-10-21T07:55:50.675077,128.87,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,8,2025-10-21T08:05:50.675077,24.02,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,9,2025-10-21T08:15:50.675077,43.92,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,10,2025-10-21T08:25:50.675077,149.02,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,11,2025-10-21T08:35:50.675077,35.52,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,12,2025-10-21T08:45:50.675077,198.79,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,13,2025-10-21T08:55:50.675077,25.46,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,14,2025-10-21T09:05:50.675077,56.12,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,15,2025-10-21T09:15:50.675077,42.42,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,16,2025-10-21T09:25:50.675077,90.65,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,17,2025-10-21T09:35:50.675077,100.18,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,18,2025-10-21T09:45:50.675077,45.41,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,19,2025-10-21T09:55:50.675077,85.24,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Durchfluss,m³/s,20,2025-10-21T10:05:50.675077,17.83,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,1,2025-10-21T06:55:50.675077,11.26,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,2,2025-10-21T07:05:50.675077,19.43,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,3,2025-10-21T07:15:50.675077,7.87,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,4,2025-10-21T07:25:50.675077,20.69,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,5,2025-10-21T07:35:50.675077,20.58,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,6,2025-10-21T07:45:50.675077,14.76,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,7,2025-10-21T07:55:50.675077,12.81,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,8,2025-10-21T08:05:50.675077,8.48,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,9,2025-10-21T08:15:50.675077,20.4,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,10,2025-10-21T08:25:50.675077,12.25,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,11,2025-10-21T08:35:50.675077,14.19,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,12,2025-10-21T08:45:50.675077,7.15,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,13,2025-10-21T08:55:50.675077,8.39,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,14,2025-10-21T09:05:50.675077,8.89,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,15,2025-10-21T09:15:50.675077,6.66,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,16,2025-10-21T09:25:50.675077,6.8,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,17,2025-10-21T09:35:50.675077,10.26,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,18,2025-10-21T09:45:50.675077,21.42,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,19,2025-10-21T09:55:50.675077,17.69,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Temperatur,°C,20,2025-10-21T10:05:50.675077,8.21,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,1,2025-10-21T06:55:50.675077,473.9,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,2,2025-10-21T07:05:50.675077,634.81,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,3,2025-10-21T07:15:50.675077,545.68,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,4,2025-10-21T07:25:50.675077,430.33,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,5,2025-10-21T07:35:50.675077,639.93,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,6,2025-10-21T07:45:50.675077,439.93,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,7,2025-10-21T07:55:50.675077,559.35,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,8,2025-10-21T08:05:50.675077,596.07,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,9,2025-10-21T08:15:50.675077,475.67,validated,BAFU
+2002,Thunersee - Interlaken,Thunersee,Nord-Bern,See,46.6365,8.1598,Wasserstand,m ü.M.,10,2025-10-21T08:25:50.675077,663.74,validated,BAFU

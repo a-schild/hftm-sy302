@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="VideoDB" id="Project6649700" database="MySql" >
+	<schema name="VideoDB" >
+		<table name="Filmstudio" >
+			<column name="filmstudio_id" prior="Filmstudio_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Firmenname" type="VARCHAR" length="100" decimal="0" jt="12" />
+			<index name="Pk_Filmstudio" unique="PRIMARY_KEY" >
+				<column name="filmstudio_id" />
+			</index>
+		</table>
+		<table name="Land" >
+			<column name="isocode" type="CHAR" length="3" decimal="0" jt="1" mandatory="y" />
+			<column name="Name" type="VARCHAR" length="100" decimal="0" jt="12" />
+			<index name="Pk_Land" unique="PRIMARY_KEY" >
+				<column name="isocode" />
+			</index>
+		</table>
+		<table name="Preis" >
+			<column name="isocode" type="CHAR" length="3" decimal="0" jt="1" mandatory="y" />
+			<column name="video_id" type="INT" length="0" decimal="0" jt="4" mandatory="y" />
+			<column name="Mietpreis" type="DECIMAL" length="16" decimal="4" jt="3" />
+			<column name="Kaufpreis" type="DECIMAL" length="16" decimal="4" jt="3" />
+			<column name="Ersteausstrahlung" type="DATE" length="0" decimal="0" jt="91" />
+			<index name="idx_Preis" unique="NORMAL" >
+				<column name="isocode" />
+			</index>
+			<index name="idx_Preis_0" unique="NORMAL" >
+				<column name="video_id" />
+			</index>
+			<fk name="Fk_Preis" to_schema="VideoDB" to_table="Land" >
+				<fk_column name="isocode" pk="isocode" />
+			</fk>
+			<fk name="Fk_Preis_0" to_schema="VideoDB" to_table="Video" >
+				<fk_column name="video_id" pk="video_id" />
+			</fk>
+		</table>
+		<table name="Video" >
+			<column name="video_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Filmstudio_id" type="INT" length="0" decimal="0" jt="4" mandatory="y" />
+			<column name="Titel" type="VARCHAR" length="200" decimal="0" jt="12" />
+			<column name="Spieldauer" type="INT" length="0" decimal="0" jt="4" />
+			<column name="Erstellungsjahr" type="INT" length="0" decimal="0" jt="4" />
+			<index name="Pk_Videos" unique="PRIMARY_KEY" >
+				<column name="video_id" />
+			</index>
+			<index name="idx_Video" unique="NORMAL" >
+				<column name="Filmstudio_id" />
+			</index>
+			<fk name="Fk_Video" to_schema="VideoDB" to_table="Filmstudio" >
+				<fk_column name="Filmstudio_id" pk="filmstudio_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="VideoDB" id="Layout6649700" joined_routing="y" show_column_type="y" show_relation="columns" >
+		<comment><![CDATA[VideoDB]]></comment>
+		<entity schema="VideoDB" name="Filmstudio" color="B2CDF7" x="416" y="256" />
+		<entity schema="VideoDB" name="Land" color="B2CDF7" x="48" y="256" />
+		<entity schema="VideoDB" name="Preis" color="B2CDF7" x="80" y="48" />
+		<entity schema="VideoDB" name="Video" color="B2CDF7" x="384" y="64" />
+		<script name="VideoDB-Struktur.sql" id="Editor-1753" language="SQL" file="file:/C:/Users/aschi/OneDrive%20-%20ipso!%20Bildung/Kursunterlagen/Modul%20164/06_LB/LB-02/VideoDB-Struktur.sql" />
+	</layout>
+</project>

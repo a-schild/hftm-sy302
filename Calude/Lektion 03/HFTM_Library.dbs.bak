@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MariaDb" id="MariaDb-2102" database="MariaDb" >
+	<schema name="hftm_library" >
+		<table name="authors" row_count="2261" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Firstname" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Lastname" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Address" type="VARCHAR" length="100" jt="12" />
+			<column name="LocationID" type="INT" length="11" jt="4" />
+			<column name="Email" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_authors" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="FK_Autoren_Ort" unique="NORMAL" options="USING BTREE" >
+				<column name="LocationID" />
+			</index>
+			<fk name="FK_authors_places" to_schema="hftm_library" to_table="places" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="LocationID" pk="ID" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=2262 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="authors_genres" row_count="2831" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="AuthorsID" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="GenresID" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_authors_genres" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="FK_Autoren_Genres_Autor" unique="NORMAL" options="USING BTREE" >
+				<column name="AuthorsID" />
+			</index>
+			<index name="FK_Autoren_Genres_Genre" unique="NORMAL" options="USING BTREE" >
+				<column name="GenresID" />
+			</index>
+			<fk name="FK_authors_genres_authors" to_schema="hftm_library" to_table="authors" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="AuthorsID" pk="ID" />
+			</fk>
+			<fk name="FK_authors_genres_genres" to_schema="hftm_library" to_table="genres" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="GenresID" pk="ID" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=2832 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="authors_publishers" row_count="3633" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="AuthorsID" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="PublishersID" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_authors_publishers" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="FK_Autoren_Verlage_Autor" unique="NORMAL" options="USING BTREE" >
+				<column name="AuthorsID" />
+			</index>
+			<index name="FK_Autoren_Verlage_Verlag" unique="NORMAL" options="USING BTREE" >
+				<column name="PublishersID" />
+			</index>
+			<fk name="FK_authors_publishers_authors" to_schema="hftm_library" to_table="authors" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="AuthorsID" pk="ID" />
+			</fk>
+			<fk name="FK_authors_publishers_publishers" to_schema="hftm_library" to_table="publishers" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="PublishersID" pk="ID" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=3634 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="books" row_count="9773" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="ISBN" type="CHAR" length="17" jt="1" />
+			<column name="Titel" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Published_Date" type="DATE" jt="91" />
+			<column name="AmountInStock" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="AuthorsID" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="PublishersID" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="GenresID" type="INT" length="11" jt="4" />
+			<index name="pk_books" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="FK_Buecher_Autor" unique="NORMAL" options="USING BTREE" >
+				<column name="AuthorsID" />
+			</index>
+			<index name="FK_Buecher_Verlag" unique="NORMAL" options="USING BTREE" >
+				<column name="PublishersID" />
+			</index>
+			<index name="FK_Buecher_Genre" unique="NORMAL" options="USING BTREE" >
+				<column name="GenresID" />
+			</index>
+			<fk name="FK_books_authors" to_schema="hftm_library" to_table="authors" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="AuthorsID" pk="ID" />
+			</fk>
+			<fk name="FK_books_genres" to_schema="hftm_library" to_table="genres" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="GenresID" pk="ID" />
+			</fk>
+			<fk name="FK_books_publishers" to_schema="hftm_library" to_table="publishers" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="PublishersID" pk="ID" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=9876 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="customers" row_count="1150" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Lastname" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Firstname" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Address" type="VARCHAR" length="100" jt="12" />
+			<column name="Email" type="VARCHAR" length="100" jt="12" />
+			<column name="Birthdate" type="DATE" jt="91" />
+			<column name="LocationID" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_customers" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="FK_Kunden_Ort" unique="NORMAL" options="USING BTREE" >
+				<column name="LocationID" />
+			</index>
+			<fk name="FK_customers_places" to_schema="hftm_library" to_table="places" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="LocationID" pk="ID" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=1151 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="genres" row_count="35" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Genre" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Fiction" type="TINYINT" length="4" jt="-6" mandatory="y" >
+				<defo><![CDATA[0]]></defo>
+			</column>
+			<index name="pk_genres" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="lends" row_count="274" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Date_From" type="DATETIME" jt="93" mandatory="y" />
+			<column name="Date_To" type="DATETIME" jt="93" mandatory="y" />
+			<column name="Price" type="FLOAT" jt="7" />
+			<column name="CustomerID" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="BookID" type="INT" length="11" jt="4" mandatory="y" />
+			<index name="pk_lends" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<index name="FK_Ausleihen_Kunde" unique="NORMAL" options="USING BTREE" >
+				<column name="CustomerID" />
+			</index>
+			<index name="FK_Ausleihen_Buch" unique="NORMAL" options="USING BTREE" >
+				<column name="BookID" />
+			</index>
+			<fk name="FK_lends_books" to_schema="hftm_library" to_table="books" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="BookID" pk="ID" />
+			</fk>
+			<fk name="FK_lends_customers" to_schema="hftm_library" to_table="customers" options="ON DELETE NO ACTION ON UPDATE NO ACTION" >
+				<fk_column name="CustomerID" pk="ID" />
+			</fk>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="places" row_count="3532" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="ZIP" type="INT" length="11" jt="4" mandatory="y" />
+			<column name="City" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<index name="pk_places" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<constraint name="CONSTRAINT_1" type="CHECK" options="" >
+				<string><![CDATA[`ZIP` >= 10000 and `ZIP` <= 99999]]></string>
+			</constraint>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=3533 DEFAULT CHARSET=utf8]]></options>
+		</table>
+		<table name="publishers" row_count="100" spec="" >
+			<column name="ID" type="INT" length="11" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="Name" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="Email" type="VARCHAR" length="100" jt="12" />
+			<column name="Phonenumber" type="VARCHAR" length="20" jt="12" />
+			<index name="pk_publishers" unique="PRIMARY_KEY" >
+				<column name="ID" />
+			</index>
+			<options><![CDATA[ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8]]></options>
+		</table>
+	</schema>
+	<layout name="Main Layout" id="Layout-239b" joined_routing="y" show_relation="columns" >
+		<entity schema="hftm_library" name="authors" color="BED3F4" x="672" y="384" />
+		<entity schema="hftm_library" name="authors_genres" color="BEF4BF" x="400" y="368" />
+		<entity schema="hftm_library" name="authors_publishers" color="BEF4BF" x="192" y="528" />
+		<entity schema="hftm_library" name="books" color="BED3F4" x="272" y="160" />
+		<entity schema="hftm_library" name="customers" color="BED3F4" x="720" y="144" />
+		<entity schema="hftm_library" name="genres" color="BED3F4" x="240" y="400" />
+		<entity schema="hftm_library" name="lends" color="BED3F4" x="496" y="80" />
+		<entity schema="hftm_library" name="places" color="BED3F4" x="880" y="320" />
+		<entity schema="hftm_library" name="publishers" color="BED3F4" x="48" y="256" />
+		<group name="HTML library" color="ECF0F7" >
+			<entity schema="hftm_library" name="books" />
+			<entity schema="hftm_library" name="lends" />
+			<entity schema="hftm_library" name="publishers" />
+			<entity schema="hftm_library" name="customers" />
+			<entity schema="hftm_library" name="authors" />
+			<entity schema="hftm_library" name="places" />
+			<entity schema="hftm_library" name="genres" />
+			<entity schema="hftm_library" name="authors_genres" />
+			<entity schema="hftm_library" name="authors_publishers" />
+		</group>
+	</layout>
+</project>

@@ -1,0 +1,72 @@
+// Prisma Schema for Library Management System
+// This file defines the database schema and relationships
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Author model - represents book authors
+model Author {
+  id         Int      @id @default(autoincrement()) @map("author_id")
+  name       String   @db.VarChar(255)
+  country    String?  @db.VarChar(100)
+  birthYear  Int?     @map("birth_year")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  books      Book[]
+
+  @@map("authors")
+}
+
+// Book model - represents books in the library
+model Book {
+  id              Int      @id @default(autoincrement()) @map("book_id")
+  title           String   @db.VarChar(255)
+  authorId        Int?     @map("author_id")
+  isbn            String?  @unique @db.VarChar(20)
+  publicationYear Int?     @map("publication_year")
+  pages           Int?
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  author          Author?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  categories      BookCategory[]
+
+  @@map("books")
+  @@index([authorId])
+}
+
+// Category model - represents book categories/genres
+model Category {
+  id          Int      @id @default(autoincrement()) @map("category_id")
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relationships
+  books       BookCategory[]
+
+  @@map("categories")
+}
+
+// Junction table for Many-to-Many relationship between Books and Categories
+model BookCategory {
+  bookId     Int  @map("book_id")
+  categoryId Int  @map("category_id")
+
+  // Relationships
+  book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([bookId, categoryId])
+  @@map("book_categories")
+}
