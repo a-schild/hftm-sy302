@@ -254,6 +254,49 @@ ORDER BY category;
 
 ## Credit 5: SQL Erweitert - Medizinisches Zentrum (10 Punkte)
 
+### Vorbereitung: Zusatztabellen
+
+Grundlage ist die Datenbank `medical_center` mit den Tabellen `patients`, `doctors` und `appointments` aus Lektion 2. Für Credit 5 werden zusätzlich die folgenden drei Tabellen benötigt:
+
+```sql
+USE medical_center;
+
+-- Krankengeschichte (nur für Ärzte sichtbar)
+CREATE TABLE medical_records (
+    record_id INT PRIMARY KEY AUTO_INCREMENT,
+    patient_id INT NOT NULL,
+    doctor_id INT NOT NULL,
+    record_date DATE NOT NULL,
+    diagnosis VARCHAR(255),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id)
+);
+
+-- Benachrichtigungen an Patienten (simuliert z.B. E-Mail/SMS)
+CREATE TABLE notifications (
+    notification_id INT PRIMARY KEY AUTO_INCREMENT,
+    patient_id INT NOT NULL,
+    appointment_id INT,
+    message VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (patient_id) REFERENCES patients(patient_id),
+    FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id)
+);
+
+-- Protokoll von Änderungen an Terminen
+CREATE TABLE appointment_logs (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    appointment_id INT NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    old_doctor_id INT,
+    new_doctor_id INT,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (appointment_id) REFERENCES appointments(appointment_id)
+);
+```
+
 ### Aufgabe 1: Berechtigungskonzept (5 Punkte)
 
 Erstelle ein vollständiges Berechtigungskonzept für das medizinische Zentrum.
@@ -315,10 +358,11 @@ Implementiere eine Transaktion für die Terminbuchung:
 ```sql
 START TRANSACTION;
 
--- 1. Prüfe ob Arzt verfügbar ist
--- 2. Erstelle Termin
--- 3. Aktualisiere Verfügbarkeit
--- 4. Sende Bestätigung (simuliert mit INSERT in notifications)
+-- 1. Prüfe, ob der Arzt zum gewünschten Zeitpunkt frei ist
+--    (frei = kein Termin mit Status 'scheduled' oder 'completed')
+-- 2. Erstelle den Termin nur, wenn der Zeitpunkt frei ist
+-- 3. Sende eine Bestätigung (simuliert mit INSERT in notifications),
+--    aber nur, wenn der Termin tatsächlich erstellt wurde
 
 -- Deine Lösung hier
 
@@ -326,12 +370,23 @@ COMMIT;
 -- Oder bei Fehler: ROLLBACK;
 ```
 
+**Hinweis:** `IF ... THEN ... END IF` ist nur innerhalb von Stored Procedures erlaubt. Löse die Bedingung deshalb mit `INSERT ... SELECT ... WHERE` und prüfe mit `ROW_COUNT()`, ob eine Zeile eingefügt wurde.
+
 ### Aufgabe 2b: Patientenüberweisung (1 Punkt)
 
-Transaktion für Überweisung von einem Arzt zu einem anderen:
+Transaktion für Überweisung eines Termins von einem Arzt zu einem anderen:
 
 ```sql
+START TRANSACTION;
+
+-- 1. Weise den Termin dem neuen Arzt zu
+-- 2. Protokolliere die Änderung in appointment_logs
+-- 3. Benachrichtige den Patienten (INSERT in notifications)
+-- Schritte 2 und 3 nur, wenn der Termin tatsächlich geändert wurde
+
 -- Deine Lösung hier
+
+COMMIT;
 ```
 
 ### Aufgabe 2c: ACID erklären (2 Punkte)
@@ -387,6 +442,7 @@ CREATE USER 'patient_user'@'localhost' IDENTIFIED BY 'patient_pw';
 GRANT SELECT ON medical_center.patients TO 'patient_user'@'localhost';
 GRANT SELECT ON medical_center.doctors TO 'patient_user'@'localhost';
 GRANT SELECT ON medical_center.appointments TO 'patient_user'@'localhost';
+GRANT SELECT ON medical_center.medical_records TO 'patient_user'@'localhost';
 
 FLUSH PRIVILEGES;
 ```
@@ -396,34 +452,38 @@ FLUSH PRIVILEGES;
 ```sql
 START TRANSACTION;
 
--- 1. Prüfe Verfügbarkeit
-SET @available = (
-    SELECT COUNT(*) 
-    FROM appointments 
-    WHERE doctor_id = 5 
-        AND appointment_date = '2024-12-15' 
-        AND appointment_time = '10:00:00'
-);
+-- 1. Prüfe Verfügbarkeit und sperre bestehende Termine des Arztes
+--    zu diesem Zeitpunkt (FOR UPDATE), damit keine parallele Buchung dazwischenkommt
+SELECT COUNT(*) INTO @belegt
+FROM appointments
+WHERE doctor_id = 5
+    AND appointment_date = '2024-12-15'
+    AND appointment_time = '10:00:00'
+    AND status <> 'cancelled'
+FOR UPDATE;
 
--- 2. Wenn verfügbar, erstelle Termin
-IF @available = 0 THEN
-    INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, reason, status)
-    VALUES (10, 5, '2024-12-15', '10:00:00', 'Routine checkup', 'scheduled');
-    
-    -- 3. Aktualisiere Verfügbarkeit (optional: availability table)
-    -- INSERT INTO availability...
-    
-    -- 4. Benachrichtigung erstellen
-    INSERT INTO notifications (patient_id, message, created_at)
-    VALUES (10, 'Termin bestätigt für 15.12.2024 um 10:00', NOW());
-    
-    COMMIT;
-    SELECT 'Termin erfolgreich gebucht' AS result;
-ELSE
-    ROLLBACK;
-    SELECT 'Termin nicht verfügbar' AS result;
-END IF;
+-- 2. Termin nur erstellen, wenn der Zeitpunkt frei ist
+INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, reason, status)
+SELECT 10, 5, '2024-12-15', '10:00:00', 'Routine checkup', 'scheduled'
+FROM DUAL
+WHERE @belegt = 0;
+
+-- ROW_COUNT() = 1, wenn der Termin eingefügt wurde
+SET @neuer_termin = IF(ROW_COUNT() = 1, LAST_INSERT_ID(), NULL);
+
+-- 3. Bestätigung nur bei erfolgreicher Buchung
+INSERT INTO notifications (patient_id, appointment_id, message)
+SELECT 10, @neuer_termin, 'Termin bestätigt für 15.12.2024 um 10:00'
+FROM DUAL
+WHERE @neuer_termin IS NOT NULL;
+
+-- 4. Resultat anzeigen
+SELECT IF(@neuer_termin IS NULL, 'Termin nicht verfügbar', 'Termin erfolgreich gebucht') AS result;
+
+COMMIT;
 ```
+
+**Erklärung:** Ohne Stored Procedure gibt es kein `IF ... THEN`. Die Bedingung steckt deshalb im `WHERE` der beiden `INSERT ... SELECT`: Ist der Zeitpunkt belegt, werden 0 Zeilen eingefügt und auch keine Benachrichtigung erstellt. Das `COMMIT` schliesst die Transaktion in beiden Fällen ab. In einer Applikation (z.B. Node.js, Lektion 7) würde man bei `@neuer_termin IS NULL` stattdessen `ROLLBACK` ausführen und dem Benutzer eine Fehlermeldung zeigen.
 
 ### Aufgabe 2b: Überweisung
 
@@ -434,22 +494,29 @@ SET @appointment_id = 123;
 SET @old_doctor_id = 5;
 SET @new_doctor_id = 8;
 
--- 1. Termin aktualisieren
-UPDATE appointments 
-SET doctor_id = @new_doctor_id,
-    status = 'scheduled'
-WHERE appointment_id = @appointment_id AND doctor_id = @old_doctor_id;
+-- 1. Termin aktualisieren (nur geplante Termine des bisherigen Arztes)
+UPDATE appointments
+SET doctor_id = @new_doctor_id
+WHERE appointment_id = @appointment_id
+    AND doctor_id = @old_doctor_id
+    AND status = 'scheduled';
 
--- 2. Log erstellen
-INSERT INTO appointment_logs (appointment_id, action, old_doctor_id, new_doctor_id, changed_at)
-VALUES (@appointment_id, 'doctor_change', @old_doctor_id, @new_doctor_id, NOW());
+SET @geaendert = ROW_COUNT();
+
+-- 2. Log erstellen (nur wenn der Termin geändert wurde)
+INSERT INTO appointment_logs (appointment_id, action, old_doctor_id, new_doctor_id)
+SELECT @appointment_id, 'doctor_change', @old_doctor_id, @new_doctor_id
+FROM DUAL
+WHERE @geaendert = 1;
 
 -- 3. Patient benachrichtigen
-INSERT INTO notifications (patient_id, message, created_at)
-SELECT patient_id, 
-       CONCAT('Ihr Termin wurde zu Dr. ', (SELECT name FROM doctors WHERE doctor_id = @new_doctor_id), ' übertragen'),
-       NOW()
-FROM appointments WHERE appointment_id = @appointment_id;
+INSERT INTO notifications (patient_id, appointment_id, message)
+SELECT a.patient_id, a.appointment_id,
+       CONCAT('Ihr Termin wurde zu ', d.name, ' übertragen')
+FROM appointments a
+JOIN doctors d ON d.doctor_id = a.doctor_id
+WHERE a.appointment_id = @appointment_id
+    AND @geaendert = 1;
 
 COMMIT;
 ```
