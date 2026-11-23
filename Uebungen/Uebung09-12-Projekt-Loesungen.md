@@ -94,36 +94,39 @@ const { body, param, query, validationResult } = require('express-validator');
 // Book Validation Rules
 const bookValidation = {
     create: [
-        body('title')
+        body('Titel')
             .trim()
-            .isLength({ min: 3, max: 200 })
-            .withMessage('Title must be 3-200 characters'),
-        body('author_id')
+            .isLength({ min: 3, max: 50 })
+            .withMessage('Titel must be 3-50 characters'),
+        body('AuthorsID')
             .isInt({ min: 1 })
-            .withMessage('Valid author_id is required'),
-        body('isbn')
+            .withMessage('Valid AuthorsID is required'),
+        body('PublishersID')
+            .isInt({ min: 1 })
+            .withMessage('Valid PublishersID is required'),
+        body('ISBN')
             .optional()
             .matches(/^[0-9-]{10,17}$/)
             .withMessage('Invalid ISBN format'),
-        body('price')
+        body('AmountInStock')
             .optional()
-            .isFloat({ min: 0, max: 9999.99 })
-            .withMessage('Price must be between 0 and 9999.99')
+            .isInt({ min: 0 })
+            .withMessage('AmountInStock must be an integer >= 0')
     ],
     
     update: [
         param('id')
             .isInt({ min: 1 })
             .withMessage('Valid ID required'),
-        body('title')
+        body('Titel')
             .optional()
             .trim()
-            .isLength({ min: 3, max: 200 })
-            .withMessage('Title must be 3-200 characters'),
-        body('price')
+            .isLength({ min: 3, max: 50 })
+            .withMessage('Titel must be 3-50 characters'),
+        body('AmountInStock')
             .optional()
-            .isFloat({ min: 0, max: 9999.99 })
-            .withMessage('Price must be between 0 and 9999.99')
+            .isInt({ min: 0 })
+            .withMessage('AmountInStock must be an integer >= 0')
     ],
     
     getById: [
@@ -295,7 +298,7 @@ ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
 **❌ NIEMALS SO:**
 ```javascript
 // GEFÄHRLICH - SQL Injection möglich!
-const query = `SELECT * FROM books WHERE title = '${req.body.title}'`;
+const query = `SELECT * FROM books WHERE Titel = '${req.body.Titel}'`;
 const [books] = await pool.query(query);
 ```
 
@@ -303,8 +306,8 @@ const [books] = await pool.query(query);
 ```javascript
 // SICHER - Prepared Statements
 const [books] = await pool.query(
-    'SELECT * FROM books WHERE title = ?',
-    [req.body.title]
+    'SELECT * FROM books WHERE Titel = ?',
+    [req.body.Titel]
 );
 ```
 
@@ -312,7 +315,7 @@ const [books] = await pool.query(
 ```javascript
 // User Input: '; DROP TABLE books; --
 // Ohne Prepared Statement würde ausgeführt:
-// SELECT * FROM books WHERE title = ''; DROP TABLE books; --'
+// SELECT * FROM books WHERE Titel = ''; DROP TABLE books; --'
 ```
 
 ---

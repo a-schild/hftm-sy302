@@ -671,4 +671,4 @@ In Lektion 5 lernen wir:
 - Advanced SQL (DCL, TCL)
 - Transaktionen und ACID
 - Berechtigungen und User-Management
-- Stored Procedures und Triggers (Einführung)
+- Isolation Levels, Locks und Deadlocks

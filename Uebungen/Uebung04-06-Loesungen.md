@@ -60,9 +60,9 @@ Zeige die 10 Autoren mit den meisten Büchern:
 -- Deine Lösung hier
 ```
 
-### Aufgabe 7: Durchschnittspreis pro Verlag (1 Punkt)
+### Aufgabe 7: Durchschnittlicher Ausleihpreis pro Verlag (1 Punkt)
 
-Berechne den Durchschnittspreis der Bücher pro Verlag:
+Berechne den durchschnittlichen Ausleihpreis (`lends.Price`) der Bücher pro Verlag:
 
 ```sql
 -- Deine Lösung hier
@@ -105,34 +105,35 @@ Zeige Statistiken: Anzahl Bücher pro Genre und gesamt:
 ```sql
 -- Aufgabe 1
 SELECT 
-    b.title,
-    a.firstname,
-    a.lastname
+    b.Titel,
+    a.Firstname,
+    a.Lastname
 FROM books b
-INNER JOIN authors a ON b.author_id = a.id
-ORDER BY b.title;
+INNER JOIN authors a ON b.AuthorsID = a.ID
+ORDER BY b.Titel;
 
 -- Aufgabe 2
 SELECT 
-    b.title,
-    CONCAT(a.firstname, ' ', a.lastname) AS author,
-    p.name AS publisher,
-    g.genre
+    b.Titel,
+    CONCAT(a.Firstname, ' ', a.Lastname) AS author,
+    p.Name AS publisher,
+    g.Genre
 FROM books b
-INNER JOIN authors a ON b.author_id = a.id
-INNER JOIN publishers p ON b.publisher_id = p.id
-INNER JOIN genres g ON b.genre_id = g.id
-ORDER BY b.title;
+INNER JOIN authors a ON b.AuthorsID = a.ID
+INNER JOIN publishers p ON b.PublishersID = p.ID
+INNER JOIN genres g ON b.GenresID = g.ID
+ORDER BY b.Titel;
 
 -- Aufgabe 3
+-- (Vorname je nach Erfassung 'J.K.' oder 'Joanne K.', daher nur über den Nachnamen)
 SELECT 
-    b.title,
-    b.published_date,
-    b.price
+    b.Titel,
+    b.Published_Date,
+    b.AmountInStock
 FROM books b
-INNER JOIN authors a ON b.author_id = a.id
-WHERE a.firstname = 'J.K.' AND a.lastname = 'Rowling'
-ORDER BY b.published_date;
+INNER JOIN authors a ON b.AuthorsID = a.ID
+WHERE a.Lastname = 'Rowling'
+ORDER BY b.Published_Date;
 ```
 
 ### Teil B: LEFT JOIN
@@ -140,20 +141,20 @@ ORDER BY b.published_date;
 ```sql
 -- Aufgabe 4
 SELECT 
-    a.firstname,
-    a.lastname,
-    a.email
+    a.Firstname,
+    a.Lastname,
+    a.Email
 FROM authors a
-LEFT JOIN books b ON a.id = b.author_id
-WHERE b.id IS NULL;
+LEFT JOIN books b ON a.ID = b.AuthorsID
+WHERE b.ID IS NULL;
 
 -- Aufgabe 5
 SELECT 
-    p.name AS publisher,
-    COUNT(b.id) AS book_count
+    p.Name AS publisher,
+    COUNT(b.ID) AS book_count
 FROM publishers p
-LEFT JOIN books b ON p.id = b.publisher_id
-GROUP BY p.id, p.name
+LEFT JOIN books b ON p.ID = b.PublishersID
+GROUP BY p.ID, p.Name
 ORDER BY book_count DESC;
 ```
 
@@ -162,38 +163,39 @@ ORDER BY book_count DESC;
 ```sql
 -- Aufgabe 6
 SELECT 
-    a.firstname,
-    a.lastname,
-    COUNT(b.id) AS book_count
+    a.Firstname,
+    a.Lastname,
+    COUNT(b.ID) AS book_count
 FROM authors a
-LEFT JOIN books b ON a.id = b.author_id
-GROUP BY a.id, a.firstname, a.lastname
+LEFT JOIN books b ON a.ID = b.AuthorsID
+GROUP BY a.ID, a.Firstname, a.Lastname
 ORDER BY book_count DESC
 LIMIT 10;
 
 -- Aufgabe 7
+-- books hat keine Preisspalte: Preis kommt aus lends.Price
 SELECT 
-    p.name AS publisher,
-    ROUND(AVG(b.price), 2) AS avg_price,
-    COUNT(b.id) AS book_count
+    p.Name AS publisher,
+    ROUND(AVG(l.Price), 2) AS avg_price,
+    COUNT(l.ID) AS lend_count
 FROM publishers p
-LEFT JOIN books b ON p.id = b.publisher_id
-GROUP BY p.id, p.name
-HAVING book_count > 0
+INNER JOIN books b ON p.ID = b.PublishersID
+INNER JOIN lends l ON b.ID = l.BookID
+GROUP BY p.ID, p.Name
 ORDER BY avg_price DESC;
 
 -- Aufgabe 8
 SELECT 
-    CONCAT(c.firstname, ' ', c.lastname) AS customer,
-    b.title AS book,
-    l.date_from,
-    l.date_to,
-    DATEDIFF(l.date_to, CURDATE()) AS days_remaining
+    CONCAT(c.Firstname, ' ', c.Lastname) AS customer,
+    b.Titel AS book,
+    l.Date_From,
+    l.Date_To,
+    DATEDIFF(l.Date_To, CURDATE()) AS days_remaining
 FROM lends l
-INNER JOIN customers c ON l.customer_id = c.id
-INNER JOIN books b ON l.book_id = b.id
-WHERE l.date_to >= CURDATE()
-ORDER BY l.date_to;
+INNER JOIN customers c ON l.CustomerID = c.ID
+INNER JOIN books b ON l.BookID = b.ID
+WHERE l.Date_To >= CURDATE()
+ORDER BY l.Date_To;
 ```
 
 ### Teil D: UNION
@@ -201,30 +203,30 @@ ORDER BY l.date_to;
 ```sql
 -- Aufgabe 9
 SELECT 
-    CONCAT(firstname, ' ', lastname) AS name,
-    email,
+    CONCAT(Firstname, ' ', Lastname) AS name,
+    Email,
     'Author' AS type
 FROM authors
-WHERE email IS NOT NULL
+WHERE Email IS NOT NULL
 
 UNION
 
 SELECT 
-    CONCAT(firstname, ' ', lastname) AS name,
-    email,
+    CONCAT(Firstname, ' ', Lastname) AS name,
+    Email,
     'Customer' AS type
 FROM customers
-WHERE email IS NOT NULL
+WHERE Email IS NOT NULL
 
 ORDER BY name;
 
 -- Aufgabe 10
 SELECT 
-    g.genre AS category,
-    COUNT(b.id) AS count
+    g.Genre AS category,
+    COUNT(b.ID) AS count
 FROM genres g
-LEFT JOIN books b ON g.id = b.genre_id
-GROUP BY g.id, g.genre
+LEFT JOIN books b ON g.ID = b.GenresID
+GROUP BY g.ID, g.Genre
 
 UNION ALL
 
@@ -435,8 +437,8 @@ SET @new_doctor_id = 8;
 -- 1. Termin aktualisieren
 UPDATE appointments 
 SET doctor_id = @new_doctor_id,
-    status = 'rescheduled'
-WHERE id = @appointment_id AND doctor_id = @old_doctor_id;
+    status = 'scheduled'
+WHERE appointment_id = @appointment_id AND doctor_id = @old_doctor_id;
 
 -- 2. Log erstellen
 INSERT INTO appointment_logs (appointment_id, action, old_doctor_id, new_doctor_id, changed_at)
@@ -445,9 +447,9 @@ VALUES (@appointment_id, 'doctor_change', @old_doctor_id, @new_doctor_id, NOW())
 -- 3. Patient benachrichtigen
 INSERT INTO notifications (patient_id, message, created_at)
 SELECT patient_id, 
-       CONCAT('Ihr Termin wurde zu Dr. ', (SELECT name FROM doctors WHERE id = @new_doctor_id), ' übertragen'),
+       CONCAT('Ihr Termin wurde zu Dr. ', (SELECT name FROM doctors WHERE doctor_id = @new_doctor_id), ' übertragen'),
        NOW()
-FROM appointments WHERE id = @appointment_id;
+FROM appointments WHERE appointment_id = @appointment_id;
 
 COMMIT;
 ```
@@ -558,6 +560,6 @@ Erstelle ein ER-Diagramm für ein Restaurant-Reservierungssystem:
 
 **Datum:** Siehe Moodle
 **Dauer:** 90 Minuten
-**Hilfsmittel:** Keine (außer Stift und Papier)
+**Hilfsmittel:** Keine (ausser Stift und Papier)
 **Gewichtung:** 30% der Gesamtnote
 **Format:** Schriftlich oder am Computer

@@ -1,633 +1,815 @@
 # Übung 7: Node.js und Datenbanken - Lösungen
 
-## Credit 7: Node.js Setup & Erste Schritte (10 Punkte)
+## Credit 7: Node.js mit der HFTM Library (10 Punkte)
 
-### Aufgabe 1: Node.js Installation & Projekt-Setup (3 Punkte)
+Die Lösungen beziehen sich auf die praktischen Übungen aus Lektion 7. Alle Abfragen verwenden die Tabellen und Spalten der HFTM Library genau so, wie sie im Dump `SQL-Dumps/HFTM Library.sql` definiert sind:
 
-#### a) Installation überprüfen (1 Punkt)
+| Tabelle | Spalten |
+|---|---|
+| `books` | `ID`, `ISBN`, `Titel`, `Published_Date`, `AmountInStock`, `AuthorsID`, `PublishersID`, `GenresID` |
+| `authors` | `ID`, `Firstname`, `Lastname`, `Address`, `LocationID`, `Email` |
+| `customers` | `ID`, `Lastname`, `Firstname`, `Address`, `Email`, `Birthdate`, `LocationID` |
+| `lends` | `ID`, `Date_From`, `Date_To`, `Price`, `CustomerID`, `BookID` |
+| `genres` | `ID`, `Genre`, `Fiction` |
+| `publishers` | `ID`, `Name`, `Email`, `Phonenumber` |
+| `places` | `ID`, `ZIP`, `City` |
 
-**Aufgabe:** Installiere Node.js und npm, überprüfe die Versionen.
-
-**Lösung:**
-```bash
-# Installation überprüfen
-node --version
-# Erwartete Ausgabe: v18.x.x oder höher
-
-npm --version
-# Erwartete Ausgabe: 9.x.x oder höher
-```
-
-**Screenshot:** Zeige beide Versionen im Terminal
-
-**Bewertung:**
-- 1 Punkt: Beide Befehle funktionieren und zeigen aktuelle Versionen
+**Hinweis:** Die Tabelle `books` hat keine Preisspalte. Ein Preis existiert nur pro Ausleihe (`lends.Price`). Der Bestand eines Buchs steht in `AmountInStock`.
 
 ---
 
-#### b) Neues Projekt initialisieren (1 Punkt)
+### Übung 1: Setup (2 Punkte)
 
-**Aufgabe:** Erstelle ein neues Node.js Projekt.
+#### a) Projekt erstellen und Packages installieren
 
-**Lösung:**
 ```bash
-# Verzeichnis erstellen
+# Projektordner erstellen (wird in Lektion 8 zum REST API erweitert)
 mkdir library-api
 cd library-api
 
-# Projekt initialisieren
+# npm-Projekt initialisieren
 npm init -y
+
+# Treiber für MariaDB/MySQL und dotenv installieren
+npm install mysql2 dotenv
 ```
 
-**Erwartetes Ergebnis:** package.json Datei wird erstellt
+Kontrolle der Installation:
 
-```json
-{
-  "name": "library-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-}
-```
-
-**Bewertung:**
-- 1 Punkt: package.json existiert und ist korrekt formatiert
-
----
-
-#### c) Dependencies installieren (1 Punkt)
-
-**Aufgabe:** Installiere die benötigten Packages.
-
-**Lösung:**
 ```bash
-npm install mysql2 dotenv express
-npm install --save-dev nodemon
+node --version   # z.B. v20.x.x oder neuer
+npm --version    # z.B. 10.x.x oder neuer
 ```
 
-**Erwartetes package.json:**
-```json
-{
-  "name": "library-api",
-  "version": "1.0.0",
-  "description": "Library API with Node.js",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "test": "node test-connection.js"
-  },
-  "dependencies": {
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "mysql2": "^3.6.5"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
-  "keywords": ["api", "database", "library"],
-  "author": "Dein Name",
-  "license": "ISC"
-}
-```
+#### b) .env und .gitignore
 
-**Bewertung:**
-- 1 Punkt: Alle Dependencies installiert, package.json korrekt
+**.env** (Werte an die eigene Installation anpassen):
 
----
-
-### Aufgabe 2: Projektstruktur & Datenbankverbindung (4 Punkte)
-
-#### a) Projektstruktur erstellen (1 Punkt)
-
-**Aufgabe:** Erstelle die folgende Struktur:
-
-```
-library-api/
-├── config/
-│   └── database.js
-├── controllers/
-│   └── bookController.js
-├── routes/
-│   └── bookRoutes.js
-├── .env
-├── .gitignore
-├── package.json
-├── server.js
-└── test-connection.js
-```
-
-**Lösung:**
-```bash
-mkdir config controllers routes
-touch config/database.js
-touch controllers/bookController.js
-touch routes/bookRoutes.js
-touch .env .gitignore server.js test-connection.js
-```
-
-**.gitignore:**
-```
-node_modules/
-.env
-*.log
-.DS_Store
-```
-
-**Bewertung:**
-- 1 Punkt: Alle Verzeichnisse und Dateien vorhanden, .gitignore korrekt
-
----
-
-#### b) Environment Variables (.env) (1 Punkt)
-
-**Aufgabe:** Erstelle die .env Datei mit Datenbank-Credentials.
-
-**Lösung .env:**
 ```env
-# Database Configuration
 DB_HOST=localhost
-DB_USER=root
+DB_USER=hftm_library
 DB_PASSWORD=dein_passwort
 DB_NAME=hftm_library
 DB_PORT=3306
-
-# Server Configuration
-PORT=3000
-NODE_ENV=development
 ```
 
-**Bewertung:**
-- 1 Punkt: .env Datei vorhanden mit allen erforderlichen Variablen
+**.gitignore:**
 
----
+```text
+node_modules/
+.env
+```
 
-#### c) Datenbankverbindung (config/database.js) (1 Punkt)
+Für die Abgabe zusätzlich eine `.env.example` mit denselben Schlüsseln, aber ohne echtes Passwort beilegen.
 
-**Aufgabe:** Erstelle einen Connection Pool für die Datenbank.
+#### c) Datenbankmodul db.js
 
-**Lösung config/database.js:**
+Identisch mit `db-nodejs-demo/db.js` aus der Lektion:
+
 ```javascript
-// config/database.js
+// db.js
 require('dotenv').config();
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2');
 
-// Erstelle Connection Pool
+// Connection Pool erstellen (effizient für mehrere Anfragen)
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    port: process.env.DB_PORT || 3306,
+    port: process.env.DB_PORT,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 0
+    queueLimit: 0
 });
 
-// Optional: Test connection beim Start
-pool.getConnection()
-    .then(connection => {
-        console.log('✅ Database connection pool created');
-        connection.release();
-    })
-    .catch(err => {
-        console.error('❌ Error creating database pool:', err.message);
-    });
+// Promise-Wrapper für async/await
+const promisePool = pool.promise();
 
-module.exports = pool;
+module.exports = promisePool;
 ```
 
-**Erklärung:**
-- `mysql.createPool()`: Erstellt einen Verbindungspool (effizienter als einzelne Verbindungen)
-- `waitForConnections: true`: Wartet, wenn alle Verbindungen belegt sind
-- `connectionLimit: 10`: Max. 10 gleichzeitige Verbindungen
-- `queueLimit: 0`: Unbegrenzte Warteschlange
+#### d) Verbindung testen (test-connection.js)
 
-**Bewertung:**
-- 1 Punkt: Connection Pool korrekt konfiguriert mit allen wichtigen Optionen
-
----
-
-#### d) Verbindung testen (test-connection.js) (1 Punkt)
-
-**Aufgabe:** Teste die Datenbankverbindung.
-
-**Lösung test-connection.js:**
 ```javascript
 // test-connection.js
-const pool = require('./config/database');
+const db = require('./db');
 
 async function testConnection() {
-    let connection;
-    
     try {
-        // Hole Verbindung aus Pool
-        connection = await pool.getConnection();
-        console.log('✅ Successfully connected to database');
-        
-        // Teste mit einfacher Query
-        const [rows] = await connection.query('SELECT 1 + 1 AS result');
-        console.log('✅ Test query result:', rows[0].result);
-        
-        // Zeige Datenbank-Info
-        const [info] = await connection.query('SELECT DATABASE() as db');
-        console.log('✅ Connected to database:', info[0].db);
-        
-        // Zeige Tabellen
-        const [tables] = await connection.query('SHOW TABLES');
-        console.log('✅ Available tables:', tables.length);
-        tables.forEach(table => {
-            console.log('  -', Object.values(table)[0]);
-        });
-        
-        console.log('\n🎉 Database connection test successful!');
-        process.exit(0);
-        
-    } catch (err) {
-        console.error('❌ Database connection test failed:');
-        console.error('Error:', err.message);
-        process.exit(1);
-        
+        const [rows] = await db.query('SELECT 1 + 1 AS result');
+        console.log('Datenbankverbindung erfolgreich!');
+        console.log('Test Query Result:', rows[0].result);
+
+        // Zusätzlich: verbundene Datenbank und Tabellen anzeigen
+        const [info] = await db.query('SELECT DATABASE() AS db');
+        console.log('Datenbank:', info[0].db);
+
+        const [tables] = await db.query('SHOW TABLES');
+        tables.forEach(table => console.log('  -', Object.values(table)[0]));
+    } catch (error) {
+        console.error('Fehler bei Datenbankverbindung:', error.message);
     } finally {
-        // Gebe Verbindung zurück an Pool
-        if (connection) connection.release();
+        await db.end(); // Pool schliessen, damit das Programm beendet wird
     }
 }
 
-// Führe Test aus
 testConnection();
 ```
 
-**Test ausführen:**
-```bash
-node test-connection.js
-```
-
 **Erwartete Ausgabe:**
-```
-✅ Successfully connected to database
-✅ Test query result: 2
-✅ Connected to database: hftm_library
-✅ Available tables: 8
+
+```text
+Datenbankverbindung erfolgreich!
+Test Query Result: 2
+Datenbank: hftm_library
   - authors
+  - authors_genres
+  - authors_publishers
   - books
   - customers
   - genres
   - lends
   - places
   - publishers
-  - authors_publishers
-
-🎉 Database connection test successful!
 ```
 
 **Bewertung:**
-- 1 Punkt: Test läuft erfolgreich durch, zeigt alle Tabellen
+- 1 Punkt: Projekt mit `package.json`, `mysql2` und `dotenv` installiert, `.env` nicht im Git
+- 1 Punkt: `test-connection.js` verbindet sich erfolgreich mit `hftm_library`
 
 ---
 
-### Aufgabe 3: CRUD Funktionen implementieren (3 Punkte)
+### Übung 2: CRUD-Operationen (3 Punkte)
 
-**Aufgabe:** Implementiere alle CRUD-Operationen für Bücher.
-
-#### Lösung: controllers/bookController.js
+#### authors.js
 
 ```javascript
-// controllers/bookController.js
-const pool = require('../config/database');
+// authors.js
+const db = require('./db');
 
-/**
- * CREATE - Neues Buch erstellen
- */
-async function createBook(title, authorId, isbn, price = null) {
+// Alle Autoren (die Tabelle ist gross, darum begrenzen)
+async function getAllAuthors() {
+    const [rows] = await db.query(
+        'SELECT * FROM authors ORDER BY Lastname, Firstname LIMIT 20'
+    );
+    return rows;
+}
+
+// Autor nach ID (undefined, wenn nicht vorhanden)
+async function getAuthorById(id) {
+    const [rows] = await db.query(
+        'SELECT * FROM authors WHERE ID = ?',
+        [id]
+    );
+    return rows[0];
+}
+
+// Neuen Autor erfassen, liefert die neue ID
+async function createAuthor(firstname, lastname, email) {
     try {
-        const [result] = await pool.query(
-            'INSERT INTO books (title, author_id, isbn, price) VALUES (?, ?, ?, ?)',
-            [title, authorId, isbn, price]
-        );
-        
-        console.log(`✅ Book created with ID: ${result.insertId}`);
+        const sql = `
+            INSERT INTO authors (Firstname, Lastname, Email)
+            VALUES (?, ?, ?)
+        `;
+        const [result] = await db.query(sql, [firstname, lastname, email]);
+        console.log('Autor hinzugefügt mit ID:', result.insertId);
         return result.insertId;
-        
-    } catch (err) {
-        console.error('❌ Error creating book:', err.message);
-        throw err;
+    } catch (error) {
+        console.error('Fehler beim Einfügen:', error.message);
+        throw error;
     }
 }
 
-/**
- * READ ALL - Alle Bücher abrufen
- */
-async function getAllBooks(limit = 10) {
+// Autor aktualisieren, liefert true, wenn eine Zeile betroffen war
+async function updateAuthor(id, firstname, lastname, email) {
     try {
-        const [books] = await pool.query(
-            'SELECT * FROM books LIMIT ?',
-            [limit]
-        );
-        
-        console.log(`✅ Retrieved ${books.length} books`);
-        return books;
-        
-    } catch (err) {
-        console.error('❌ Error getting books:', err.message);
-        throw err;
+        const sql = `
+            UPDATE authors
+            SET Firstname = ?, Lastname = ?, Email = ?
+            WHERE ID = ?
+        `;
+        const [result] = await db.query(sql, [firstname, lastname, email, id]);
+        console.log('Zeilen aktualisiert:', result.affectedRows);
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error('Fehler beim Aktualisieren:', error.message);
+        throw error;
     }
 }
 
-/**
- * READ ONE - Ein Buch nach ID abrufen
- */
-async function getBookById(id) {
+// Autor löschen
+async function deleteAuthor(id) {
     try {
-        const [books] = await pool.query(
-            'SELECT * FROM books WHERE id = ?',
+        const [result] = await db.query(
+            'DELETE FROM authors WHERE ID = ?',
             [id]
         );
-        
-        if (books.length === 0) {
-            throw new Error(`Book with ID ${id} not found`);
-        }
-        
-        console.log(`✅ Book found: ${books[0].title}`);
-        return books[0];
-        
-    } catch (err) {
-        console.error('❌ Error getting book:', err.message);
-        throw err;
-    }
-}
-
-/**
- * UPDATE - Buch aktualisieren
- */
-async function updateBook(id, title, price) {
-    try {
-        const [result] = await pool.query(
-            'UPDATE books SET title = ?, price = ? WHERE id = ?',
-            [title, price, id]
-        );
-        
-        if (result.affectedRows === 0) {
-            throw new Error(`Book with ID ${id} not found`);
-        }
-        
-        console.log(`✅ Book updated (ID: ${id}), rows affected: ${result.affectedRows}`);
+        console.log('Zeilen gelöscht:', result.affectedRows);
         return result.affectedRows > 0;
-        
-    } catch (err) {
-        console.error('❌ Error updating book:', err.message);
-        throw err;
-    }
-}
-
-/**
- * DELETE - Buch löschen
- */
-async function deleteBook(id) {
-    try {
-        const [result] = await pool.query(
-            'DELETE FROM books WHERE id = ?',
-            [id]
-        );
-        
-        if (result.affectedRows === 0) {
-            throw new Error(`Book with ID ${id} not found`);
+    } catch (error) {
+        // Autor wird noch in books, authors_genres oder authors_publishers verwendet
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            console.error('Autor kann nicht gelöscht werden: Er wird noch referenziert');
+        } else {
+            console.error('Fehler beim Löschen:', error.message);
         }
-        
-        console.log(`✅ Book deleted (ID: ${id}), rows affected: ${result.affectedRows}`);
-        return result.affectedRows > 0;
-        
-    } catch (err) {
-        console.error('❌ Error deleting book:', err.message);
-        throw err;
+        throw error;
     }
 }
 
-/**
- * Bonus: Bücher mit Autoren (JOIN)
- */
-async function getBooksWithAuthors(limit = 10) {
-    try {
-        const [books] = await pool.query(`
-            SELECT 
-                b.id,
-                b.title,
-                b.isbn,
-                b.price,
-                CONCAT(a.firstname, ' ', a.lastname) AS author_name,
-                a.id AS author_id
-            FROM books b
-            INNER JOIN authors a ON b.author_id = a.id
-            LIMIT ?
-        `, [limit]);
-        
-        console.log(`✅ Retrieved ${books.length} books with authors`);
-        return books;
-        
-    } catch (err) {
-        console.error('❌ Error getting books with authors:', err.message);
-        throw err;
-    }
-}
-
-module.exports = {
-    createBook,
-    getAllBooks,
-    getBookById,
-    updateBook,
-    deleteBook,
-    getBooksWithAuthors
-};
+module.exports = { getAllAuthors, getAuthorById, createAuthor, updateAuthor, deleteAuthor };
 ```
 
----
+#### books.js
 
-#### Test-Script für CRUD Funktionen
+```javascript
+// books.js
+const db = require('./db');
 
-**Erstelle: test-crud.js**
+// Alle Bücher (begrenzt auf 10)
+async function getAllBooks() {
+    const [rows] = await db.query('SELECT * FROM books LIMIT 10');
+    return rows;
+}
+
+// Buch nach ID suchen
+async function getBookById(id) {
+    const [rows] = await db.query(
+        'SELECT * FROM books WHERE ID = ?',
+        [id]
+    );
+    return rows[0];
+}
+
+// Neues Buch erfassen (Titel max. 50 Zeichen, ISBN im Format XXX-XX-XXXXX-XX-X)
+async function createBook(title, isbn, amountInStock, authorId, publisherId) {
+    try {
+        const sql = `
+            INSERT INTO books (Titel, ISBN, AmountInStock, AuthorsID, PublishersID)
+            VALUES (?, ?, ?, ?, ?)
+        `;
+        const [result] = await db.query(sql, [title, isbn, amountInStock, authorId, publisherId]);
+        console.log('Buch hinzugefügt mit ID:', result.insertId);
+        return result.insertId;
+    } catch (error) {
+        // AuthorsID oder PublishersID existiert nicht
+        if (error.code === 'ER_NO_REFERENCED_ROW_2') {
+            console.error('Autor oder Verlag existiert nicht');
+        } else {
+            console.error('Fehler beim Einfügen:', error.message);
+        }
+        throw error;
+    }
+}
+
+// Titel und ISBN eines Buchs ändern
+async function updateBook(id, title, isbn) {
+    try {
+        const sql = `
+            UPDATE books
+            SET Titel = ?, ISBN = ?
+            WHERE ID = ?
+        `;
+        const [result] = await db.query(sql, [title, isbn, id]);
+        console.log('Zeilen aktualisiert:', result.affectedRows);
+        return result.affectedRows > 0;
+    } catch (error) {
+        console.error('Fehler beim Aktualisieren:', error.message);
+        throw error;
+    }
+}
+
+// Buch löschen (scheitert, wenn Ausleihen in lends darauf verweisen)
+async function deleteBook(id) {
+    try {
+        const [result] = await db.query(
+            'DELETE FROM books WHERE ID = ?',
+            [id]
+        );
+        console.log('Zeilen gelöscht:', result.affectedRows);
+        return result.affectedRows > 0;
+    } catch (error) {
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            console.error('Buch kann nicht gelöscht werden: Es existieren Ausleihen');
+        } else {
+            console.error('Fehler beim Löschen:', error.message);
+        }
+        throw error;
+    }
+}
+
+module.exports = { getAllBooks, getBookById, createBook, updateBook, deleteBook };
+```
+
+#### Test-Script test-crud.js
+
+Das Script legt einen Testautor und ein Testbuch an, ändert beide und löscht sie am Schluss wieder. Das Buch muss vor dem Autor gelöscht werden, weil `books.AuthorsID` auf `authors.ID` verweist.
 
 ```javascript
 // test-crud.js
-const {
-    createBook,
-    getAllBooks,
-    getBookById,
-    updateBook,
-    deleteBook,
-    getBooksWithAuthors
-} = require('./controllers/bookController');
+const db = require('./db');
+const authors = require('./authors');
+const books = require('./books');
 
-async function testCRUD() {
-    console.log('='.repeat(50));
-    console.log('CRUD OPERATIONS TEST');
-    console.log('='.repeat(50));
-    
-    let newBookId;
-    
+async function testCrud() {
+    let authorId;
+    let bookId;
+
     try {
-        // 1. CREATE
-        console.log('\n1️⃣  CREATE: Creating new book...');
-        newBookId = await createBook(
-            'Node.js & Databases Test',
-            1, // Autor ID 1
-            'TEST-123-456',
-            29.99
-        );
-        console.log(`   Book created with ID: ${newBookId}`);
-        
-        // 2. READ ALL
-        console.log('\n2️⃣  READ ALL: Getting all books...');
-        const allBooks = await getAllBooks(5);
-        console.log(`   Found ${allBooks.length} books`);
-        allBooks.forEach(book => {
-            console.log(`   - ${book.title} (ID: ${book.id})`);
-        });
-        
-        // 3. READ ONE
-        console.log('\n3️⃣  READ ONE: Getting book by ID...');
-        const oneBook = await getBookById(newBookId);
-        console.log(`   Book: ${oneBook.title}`);
-        console.log(`   ISBN: ${oneBook.isbn}`);
-        console.log(`   Price: ${oneBook.price} CHF`);
-        
-        // 4. UPDATE
-        console.log('\n4️⃣  UPDATE: Updating book...');
-        await updateBook(newBookId, 'Node.js & Databases UPDATED', 34.99);
-        const updated = await getBookById(newBookId);
-        console.log(`   Updated title: ${updated.title}`);
-        console.log(`   Updated price: ${updated.price} CHF`);
-        
-        // 5. JOIN
-        console.log('\n5️⃣  JOIN: Getting books with authors...');
-        const booksWithAuthors = await getBooksWithAuthors(3);
-        booksWithAuthors.forEach(book => {
-            console.log(`   - "${book.title}" by ${book.author_name}`);
-        });
-        
-        // 6. DELETE
-        console.log('\n6️⃣  DELETE: Deleting test book...');
-        await deleteBook(newBookId);
-        console.log(`   Book deleted (ID: ${newBookId})`);
-        
-        console.log('\n' + '='.repeat(50));
-        console.log('✅ ALL CRUD OPERATIONS SUCCESSFUL!');
-        console.log('='.repeat(50));
-        
-        process.exit(0);
-        
-    } catch (err) {
-        console.error('\n' + '='.repeat(50));
-        console.error('❌ ERROR IN CRUD OPERATIONS:');
-        console.error(err.message);
-        console.error('='.repeat(50));
-        
-        // Cleanup: Lösche Test-Buch falls noch vorhanden
-        if (newBookId) {
-            try {
-                await deleteBook(newBookId);
-                console.log('🧹 Cleanup: Test book deleted');
-            } catch (cleanupErr) {
-                // Ignore cleanup errors
-            }
-        }
-        
-        process.exit(1);
+        // CREATE
+        authorId = await authors.createAuthor('Test', 'Autorin', 'test.autorin@example.com');
+        bookId = await books.createBook('Node.js und Datenbanken', '978-30-12345-67-8', 3, authorId, 1);
+
+        // READ
+        console.log('Autor:', await authors.getAuthorById(authorId));
+        console.log('Buch:', await books.getBookById(bookId));
+        console.log('Erste Bücher:', (await books.getAllBooks()).map(b => b.Titel));
+        console.log('Erste Autoren:', (await authors.getAllAuthors()).length);
+
+        // UPDATE
+        await authors.updateAuthor(authorId, 'Test', 'Autorin-Muster', 'test.muster@example.com');
+        await books.updateBook(bookId, 'Node.js und Datenbanken (2. Auflage)', '978-30-12345-67-9');
+        console.log('Geändertes Buch:', (await books.getBookById(bookId)).Titel);
+    } catch (error) {
+        console.error('Test fehlgeschlagen:', error.message);
+    } finally {
+        // DELETE (Aufräumen: zuerst das Buch, dann den Autor)
+        if (bookId) await books.deleteBook(bookId);
+        if (authorId) await authors.deleteAuthor(authorId);
+        await db.end();
     }
 }
 
-// Test ausführen
-testCRUD();
+testCrud();
 ```
 
-**Test ausführen:**
-```bash
-node test-crud.js
+**Bewertung:**
+- 1.5 Punkte: Alle 5 Funktionen für `authors` korrekt
+- 1.5 Punkte: Alle 5 Funktionen für `books` korrekt (Spaltennamen gemäss Dump, Platzhalter `?`)
+
+---
+
+### Übung 3: Erweiterte Abfragen in der HFTM Library (2 Punkte)
+
+```javascript
+// queries.js
+const db = require('./db');
+
+// 1. Bücher nach Titel suchen (Teilstring)
+async function searchBooksByTitle(searchTerm) {
+    const [rows] = await db.query(
+        'SELECT ID, Titel, ISBN, AmountInStock FROM books WHERE Titel LIKE ? ORDER BY Titel',
+        [`%${searchTerm}%`]
+    );
+    return rows;
+}
+
+// 2. Alle Bücher eines bestimmten Autors
+async function getBooksByAuthor(authorId) {
+    const [rows] = await db.query(
+        'SELECT ID, Titel, ISBN, Published_Date FROM books WHERE AuthorsID = ? ORDER BY Titel',
+        [authorId]
+    );
+    return rows;
+}
+
+// 3. Bücher mit Autoren (JOIN)
+async function getBooksWithAuthors() {
+    const sql = `
+        SELECT
+            b.ID,
+            b.Titel,
+            b.ISBN,
+            a.Firstname,
+            a.Lastname
+        FROM books b
+        INNER JOIN authors a ON b.AuthorsID = a.ID
+        ORDER BY b.Titel
+        LIMIT 20
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+// 4. Anzahl Bücher pro Autor (LEFT JOIN: auch Autoren ohne Bücher)
+async function getBookCountByAuthor() {
+    const sql = `
+        SELECT
+            a.ID,
+            a.Firstname,
+            a.Lastname,
+            COUNT(b.ID) AS BookCount
+        FROM authors a
+        LEFT JOIN books b ON b.AuthorsID = a.ID
+        GROUP BY a.ID, a.Firstname, a.Lastname
+        ORDER BY BookCount DESC, a.Lastname
+        LIMIT 20
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+// 5. Anzahl ausgeliehener Bücher pro Kunde (JOIN)
+async function getLendCountByCustomer() {
+    const sql = `
+        SELECT
+            c.ID,
+            c.Firstname,
+            c.Lastname,
+            COUNT(l.ID) AS LendCount
+        FROM customers c
+        INNER JOIN lends l ON l.CustomerID = c.ID
+        GROUP BY c.ID, c.Firstname, c.Lastname
+        ORDER BY LendCount DESC
+        LIMIT 20
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+// 6. Überfällige Ausleihen (Date_To in der Vergangenheit)
+async function getOverdueLoans() {
+    const sql = `
+        SELECT
+            l.ID,
+            l.Date_From,
+            l.Date_To,
+            DATEDIFF(NOW(), l.Date_To) AS DaysOverdue,
+            b.Titel,
+            c.Firstname,
+            c.Lastname
+        FROM lends l
+        INNER JOIN books b ON l.BookID = b.ID
+        INNER JOIN customers c ON l.CustomerID = c.ID
+        WHERE l.Date_To < NOW()
+        ORDER BY l.Date_To
+        LIMIT 50
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+module.exports = {
+    searchBooksByTitle,
+    getBooksByAuthor,
+    getBooksWithAuthors,
+    getBookCountByAuthor,
+    getLendCountByCustomer,
+    getOverdueLoans
+};
 ```
 
-**Erwartete Ausgabe:**
+**Hinweis zu 6:** Die Tabelle `lends` hat keine Spalte für "zurückgegeben". Darum gelten hier alle Ausleihen mit `Date_To` in der Vergangenheit als überfällig. Da die Beispieldaten aus den Jahren ab 2020 stammen, liefert die Abfrage viele Treffer.
+
+**Testaufruf (Beispiel):**
+
+```javascript
+// test-queries.js
+const db = require('./db');
+const q = require('./queries');
+
+async function main() {
+    try {
+        console.log(await q.searchBooksByTitle('Lost'));
+        console.log(await q.getBooksByAuthor(1252));
+        console.table(await q.getBookCountByAuthor());
+        console.table(await q.getLendCountByCustomer());
+        console.table((await q.getOverdueLoans()).slice(0, 5));
+    } catch (error) {
+        console.error(error.message);
+    } finally {
+        await db.end();
+    }
+}
+
+main();
 ```
-==================================================
-CRUD OPERATIONS TEST
-==================================================
 
-1️⃣  CREATE: Creating new book...
-✅ Book created with ID: 21
-   Book created with ID: 21
+**Bewertung:**
+- 1 Punkt: Abfragen 1-3 korrekt (LIKE mit Platzhalter, WHERE, JOIN)
+- 1 Punkt: Abfragen 4-6 korrekt (GROUP BY mit COUNT, JOIN über `lends`, Datumsvergleich)
 
-2️⃣  READ ALL: Getting all books...
-✅ Retrieved 5 books
-   Found 5 books
-   - The Great Gatsby (ID: 1)
-   - To Kill a Mockingbird (ID: 2)
-   - 1984 (ID: 3)
-   - Pride and Prejudice (ID: 4)
-   - The Catcher in the Rye (ID: 5)
+---
 
-3️⃣  READ ONE: Getting book by ID...
-✅ Book found: Node.js & Databases Test
-   Book: Node.js & Databases Test
-   ISBN: TEST-123-456
-   Price: 29.99 CHF
+### Übung 4: Transaktion (2 Punkte)
 
-4️⃣  UPDATE: Updating book...
-✅ Book updated (ID: 21), rows affected: 1
-✅ Book found: Node.js & Databases UPDATED
-   Updated title: Node.js & Databases UPDATED
-   Updated price: 34.99 CHF
+```javascript
+// lends.js
+const db = require('./db');
 
-5️⃣  JOIN: Getting books with authors...
-✅ Retrieved 3 books with authors
-   - "The Great Gatsby" by F. Scott Fitzgerald
-   - "To Kill a Mockingbird" by Harper Lee
-   - "1984" by George Orwell
+// Buch ausleihen: Bestand prüfen, Bestand reduzieren, Ausleihe erfassen
+async function lendBook(bookId, customerId, days = 30) {
+    const connection = await db.getConnection();
 
-6️⃣  DELETE: Deleting test book...
-✅ Book deleted (ID: 21), rows affected: 1
-   Book deleted (ID: 21)
+    try {
+        await connection.beginTransaction();
 
-==================================================
-✅ ALL CRUD OPERATIONS SUCCESSFUL!
-==================================================
+        // 1. Verfügbarkeit prüfen (Zeile für andere Transaktionen sperren)
+        const [books] = await connection.query(
+            'SELECT AmountInStock FROM books WHERE ID = ? FOR UPDATE',
+            [bookId]
+        );
+        if (books.length === 0 || books[0].AmountInStock < 1) {
+            throw new Error('Buch nicht verfügbar');
+        }
+
+        // 2. Bestand reduzieren
+        await connection.query(
+            'UPDATE books SET AmountInStock = AmountInStock - 1 WHERE ID = ?',
+            [bookId]
+        );
+
+        // 3. Ausleihe mit Ausleihdatum erfassen
+        const [result] = await connection.query(
+            `INSERT INTO lends (BookID, CustomerID, Date_From, Date_To)
+             VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL ? DAY))`,
+            [bookId, customerId, days]
+        );
+
+        await connection.commit();
+        console.log('Ausleihe erfolgreich, ID:', result.insertId);
+        return result.insertId;
+
+    } catch (error) {
+        // Bei Fehler (auch bei unbekannter CustomerID): alles rückgängig machen
+        await connection.rollback();
+        console.error('Ausleihe fehlgeschlagen:', error.message);
+        throw error;
+
+    } finally {
+        connection.release();
+    }
+}
+
+// Buch zurückgeben: Ausleihe abschliessen und Bestand wieder erhöhen
+async function returnBook(lendId) {
+    const connection = await db.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        // 1. Ausleihe suchen und sperren
+        const [lends] = await connection.query(
+            'SELECT BookID FROM lends WHERE ID = ? FOR UPDATE',
+            [lendId]
+        );
+        if (lends.length === 0) {
+            throw new Error('Ausleihe nicht gefunden');
+        }
+        const bookId = lends[0].BookID;
+
+        // 2. Ausleihe abschliessen
+        await connection.query(
+            'UPDATE lends SET Date_To = NOW() WHERE ID = ?',
+            [lendId]
+        );
+
+        // 3. Bestand wieder erhöhen
+        await connection.query(
+            'UPDATE books SET AmountInStock = AmountInStock + 1 WHERE ID = ?',
+            [bookId]
+        );
+
+        await connection.commit();
+        console.log('Rückgabe erfolgreich');
+        return true;
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('Rückgabe fehlgeschlagen:', error.message);
+        throw error;
+
+    } finally {
+        connection.release();
+    }
+}
+
+module.exports = { lendBook, returnBook };
 ```
+
+**Test:**
+
+```javascript
+// test-lends.js
+const db = require('./db');
+const { lendBook, returnBook } = require('./lends');
+
+async function main() {
+    try {
+        const [before] = await db.query('SELECT AmountInStock FROM books WHERE ID = ?', [2]);
+        console.log('Bestand vorher:', before[0].AmountInStock);
+
+        const lendId = await lendBook(2, 1, 14);   // Buch 2 an Kunde 1 für 14 Tage
+        const [during] = await db.query('SELECT AmountInStock FROM books WHERE ID = ?', [2]);
+        console.log('Bestand nach Ausleihe:', during[0].AmountInStock);
+
+        await returnBook(lendId);
+        const [after] = await db.query('SELECT AmountInStock FROM books WHERE ID = ?', [2]);
+        console.log('Bestand nach Rückgabe:', after[0].AmountInStock);
+
+        // Fehlerfall: Kunde existiert nicht, Rollback, Bestand bleibt gleich
+        await lendBook(2, 999999).catch(() => {});
+        const [check] = await db.query('SELECT AmountInStock FROM books WHERE ID = ?', [2]);
+        console.log('Bestand nach fehlgeschlagener Ausleihe:', check[0].AmountInStock);
+    } finally {
+        await db.end();
+    }
+}
+
+main();
+```
+
+Beim Fehlerfall schlägt das `INSERT` wegen des Fremdschlüssels `FK_lends_customers` fehl (`ER_NO_REFERENCED_ROW_2`). Dank Rollback wird auch die Reduktion von `AmountInStock` rückgängig gemacht.
+
+**Hinweis:** Weil `lends` keine Spalte für "zurückgegeben" besitzt, kann `returnBook()` eine Ausleihe nicht von einer bereits abgeschlossenen unterscheiden. Ein zweiter Aufruf mit derselben ID würde den Bestand erneut erhöhen. In einem echten Projekt sollte dafür eine Spalte (z.B. `Returned_Date`) ergänzt werden.
+
+**Bewertung:**
+- 1 Punkt: `lendBook()` mit `beginTransaction`, `commit`, `rollback` und `release`
+- 1 Punkt: `returnBook()` setzt `Date_To` und erhöht `AmountInStock` in einer Transaktion
+
+---
+
+### Übung 5: Eigene Datenbank (Ärztezentrum)
+
+Die Lösung hängt vom eigenen Datenbankentwurf ab. Das Beispiel verwendet die Tabellen `patients`, `doctors` und `appointments` aus Lektion 2 und dasselbe Modul `db.js` (mit `DB_NAME` auf die eigene Datenbank gesetzt).
+
+```javascript
+// aerztezentrum.js
+const db = require('./db');
+
+// 1. Patienten verwalten
+async function getAllPatients() {
+    const [rows] = await db.query('SELECT * FROM patients ORDER BY last_name, first_name');
+    return rows;
+}
+
+async function getPatientById(id) {
+    const [rows] = await db.query('SELECT * FROM patients WHERE patient_id = ?', [id]);
+    return rows[0];
+}
+
+async function createPatient(firstName, lastName, birthDate, email) {
+    const [result] = await db.query(
+        'INSERT INTO patients (first_name, last_name, birth_date, email) VALUES (?, ?, ?, ?)',
+        [firstName, lastName, birthDate, email]
+    );
+    return result.insertId;
+}
+
+async function updatePatient(id, firstName, lastName, birthDate, email) {
+    const [result] = await db.query(
+        `UPDATE patients
+         SET first_name = ?, last_name = ?, birth_date = ?, email = ?
+         WHERE patient_id = ?`,
+        [firstName, lastName, birthDate, email, id]
+    );
+    return result.affectedRows > 0;
+}
+
+async function deletePatient(id) {
+    const [result] = await db.query('DELETE FROM patients WHERE patient_id = ?', [id]);
+    return result.affectedRows > 0;
+}
+
+// 2. Termine abfragen (JOIN zu Ärzten und Patienten)
+async function getAppointments() {
+    const sql = `
+        SELECT
+            ap.appointment_id,
+            ap.appointment_date,
+            ap.appointment_time,
+            ap.status,
+            d.name AS doctor,
+            CONCAT(p.first_name, ' ', p.last_name) AS patient
+        FROM appointments ap
+        INNER JOIN doctors d ON ap.doctor_id = d.doctor_id
+        INNER JOIN patients p ON ap.patient_id = p.patient_id
+        ORDER BY ap.appointment_date, ap.appointment_time
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+// 3. Neuen Termin anlegen
+async function createAppointment(patientId, doctorId, date, time, reason) {
+    const [result] = await db.query(
+        `INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, reason)
+         VALUES (?, ?, ?, ?, ?)`,
+        [patientId, doctorId, date, time, reason]
+    );
+    return result.insertId;
+}
+
+// 4. Termin stornieren (Status setzen statt löschen, damit die Historie erhalten bleibt)
+async function cancelAppointment(appointmentId) {
+    const [result] = await db.query(
+        "UPDATE appointments SET status = 'cancelled' WHERE appointment_id = ?",
+        [appointmentId]
+    );
+    return result.affectedRows > 0;
+}
+
+module.exports = {
+    getAllPatients, getPatientById, createPatient, updatePatient, deletePatient,
+    getAppointments, createAppointment, cancelAppointment
+};
+```
+
+Diese Übung ist die Grundlage für das Ärztezentrum-API in Lektion 8 und wird dort bewertet.
+
+---
+
+### Übung 6: SQL-Injection testen (1 Punkt)
+
+```javascript
+// injection.js
+const db = require('./db');
+
+// 1. UNSICHER: Eingabe wird direkt in den SQL-String eingesetzt
+async function unsafeSearch(searchTerm) {
+    const sql = `SELECT ID, Titel FROM books WHERE Titel = '${searchTerm}'`;
+    console.log('SQL:', sql);
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+// 3. SICHER: Platzhalter, der Wert wird separat übergeben
+async function safeSearch(searchTerm) {
+    const sql = 'SELECT ID, Titel FROM books WHERE Titel = ?';
+    const [rows] = await db.query(sql, [searchTerm]);
+    return rows;
+}
+
+async function main() {
+    const attack = "' OR '1'='1";
+
+    try {
+        // 2. Injection-Versuch
+        const unsafe = await unsafeSearch(attack);
+        console.log('Unsicher, Anzahl Treffer:', unsafe.length);   // alle Bücher
+
+        const safe = await safeSearch(attack);
+        console.log('Sicher, Anzahl Treffer:', safe.length);       // 0
+
+        // Normale Suche funktioniert bei beiden gleich
+        console.log((await safeSearch('Paradise Lost')).length);  // 1
+    } finally {
+        await db.end();
+    }
+}
+
+main();
+```
+
+**Ausgabe (gekürzt):**
+
+```text
+SQL: SELECT ID, Titel FROM books WHERE Titel = '' OR '1'='1'
+Unsicher, Anzahl Treffer: <Anzahl aller Bücher>
+Sicher, Anzahl Treffer: 0
+1
+```
+
+**4. Dokumentation des Unterschieds:**
+
+- In der unsicheren Version wird der Text `' OR '1'='1` Teil des SQL-Befehls. Die Bedingung `'1'='1'` ist immer wahr, darum liefert die Abfrage alle Bücher.
+- In der sicheren Version ersetzt mysql2 den Platzhalter `?` durch einen korrekt escapten Wert. Die Datenbank sucht nach einem Buch, dessen `Titel` wörtlich `' OR '1'='1` lautet, und findet keines.
+- Ein Angriff mit mehreren Anweisungen (`'; DROP TABLE books; --`) scheitert bei mysql2 wegen `multipleStatements: false`. Das Auslesen fremder Daten funktioniert aber trotzdem, deshalb immer Platzhalter verwenden.
+
+**Bewertung:**
+- 1 Punkt: Unsichere und sichere Version, Injection nachgewiesen und Unterschied dokumentiert
 
 ---
 
 ## Bewertungsraster Credit 7
 
-| Aufgabe | Punkte | Kriterien |
-|---------|--------|-----------|
-| **1a** Installation | 1 | Node.js & npm installiert, Versionen stimmen |
-| **1b** Projekt Init | 1 | package.json korrekt erstellt |
-| **1c** Dependencies | 1 | Alle Packages installiert |
-| **2a** Struktur | 1 | Alle Verzeichnisse/Dateien vorhanden |
-| **2b** .env | 1 | Credentials korrekt konfiguriert |
-| **2c** Database Config | 1 | Connection Pool korrekt |
-| **2d** Test Connection | 1 | Verbindung erfolgreich getestet |
-| **3** CRUD Funktionen | 3 | Alle 5 Funktionen korrekt (CREATE, READ ALL, READ ONE, UPDATE, DELETE) |
+| Übung | Punkte | Kriterien |
+|---|---|---|
+| **1** Setup | 2 | Projekt, Packages, `.env`, Verbindung funktioniert |
+| **2** CRUD | 3 | Je 5 Funktionen für `authors` und `books`, Prepared Statements |
+| **3** Abfragen | 2 | Alle 6 Abfragen mit korrekten Tabellen und Spalten |
+| **4** Transaktion | 2 | `lendBook()` und `returnBook()` mit Commit/Rollback |
+| **6** SQL-Injection | 1 | Angriff gezeigt, sichere Variante, Unterschied dokumentiert |
 | **TOTAL** | **10** | |
+
+Übung 5 (Ärztezentrum) fliesst in die Bewertung des Ärztezentrum-API in Lektion 8 ein.
 
 ---
 
 ## Abgabe
 
-**Format:** ZIP-Datei mit komplettem Projekt
+**Format:** ZIP-Datei mit dem kompletten Projekt
 
 **Enthält:**
-- [ ] Alle Dateien (außer node_modules/)
-- [ ] .env.example (OHNE echte Credentials!)
-- [ ] Screenshots von:
-  - [ ] `node --version` und `npm --version`
-  - [ ] `node test-connection.js` Ausgabe
-  - [ ] `node test-crud.js` Ausgabe
-- [ ] README.md mit Installation Instructions
+- [ ] Alle Dateien (ohne `node_modules/`)
+- [ ] `.env.example` (OHNE echte Zugangsdaten!)
+- [ ] Screenshots oder Ausgaben von:
+  - [ ] `node test-connection.js`
+  - [ ] `node test-crud.js`
+  - [ ] `node test-queries.js` und `node test-lends.js`
+  - [ ] `node injection.js`
+- [ ] Kommentare im Code
 
 **Naming:** `Credit7_Vorname_Nachname.zip`
 
@@ -637,20 +819,16 @@ CRUD OPERATIONS TEST
 
 ## Tipps
 
-✅ **Do's:**
-- .env NIEMALS committen
-- Immer try-catch bei async Funktionen
-- Prepared Statements verwenden (?)
-- Connection aus Pool freigeben (.release())
-- Aussagekräftige Fehlermeldungen
+**Empfohlen:**
+- `.env` NIEMALS committen
+- Immer `try/catch` bei async-Funktionen
+- Prepared Statements (Platzhalter `?`) verwenden
+- Verbindungen aus dem Pool mit `release()` zurückgeben
+- Am Ende eines Scripts den Pool mit `db.end()` schliessen
+- Tabellen- und Spaltennamen genau wie im Dump schreiben (`Titel`, `AuthorsID`, `AmountInStock`)
 
-❌ **Don'ts:**
-- Credentials im Code
-- SQL Injection ermöglichen
+**Zu vermeiden:**
+- Zugangsdaten im Code
+- SQL-Strings mit Benutzereingaben zusammensetzen
 - Fehler ignorieren
-- Connection Pool nicht schließen
-- node_modules/ in Git committen
-
----
-
-**Viel Erfolg! 🚀**
+- `node_modules/` in Git committen

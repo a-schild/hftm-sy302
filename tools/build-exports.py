@@ -125,6 +125,7 @@ PANDOC = find_pandoc()
 
 KEEP_NEXT = "<w:keepNext/>"
 KEEP_LINES = "<w:keepLines/>"
+CODE_BG = "CCCCCC"  # background of code blocks: 20% grey
 
 
 # ------------------------------------------------------- reference document
@@ -169,6 +170,10 @@ def build_reference(template: Path, dest: Path, lang: str, author_name: str) -> 
                 for sid in ["Heading1", "Heading2", "Heading3", "Title"]:
                     xml = _patch_style(xml, sid, KEEP_NEXT + KEEP_LINES)
                 xml = _patch_style(xml, "Quellcode", KEEP_LINES + '<w:spacing w:after="160" w:line="240" w:lineRule="auto"/>')
+                # code background: 20% grey instead of the template's yellow
+                m = re.search(r'<w:style [^>]*w:styleId="Quellcode".*?</w:style>', xml, re.S)
+                if m:
+                    xml = xml[:m.start()] + re.sub(r'w:fill="[0-9A-Fa-f]{6}"', f'w:fill="{CODE_BG}"', m.group(0)) + xml[m.end():]
                 # widow/orphan control for all paragraphs (template switches it off in Normal)
                 xml = xml.replace('<w:widowControl w:val="0"/>', "<w:widowControl/>")
                 xml = xml.replace("</w:styles>", EXTRA_STYLES + "</w:styles>")

@@ -45,7 +45,7 @@ CREATE DATABASE hftm_library;
 USE hftm_library;
 
 -- 2. SQL-Script ausführen
-SOURCE /path/to/HFTM_Library.sql;
+SOURCE /path/to/HFTM Library.sql;   -- Datei liegt im Ordner "Lektion 03"
 
 -- 3. Tabellen prüfen
 SHOW TABLES;
