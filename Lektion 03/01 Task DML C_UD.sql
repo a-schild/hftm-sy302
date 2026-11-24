@@ -37,7 +37,7 @@ SELECT ID FROM Publishers
 WHERE Name = 'B & W Publishing';
 */
 /*
-SELECT ISBN, Title, Published_Date 
+SELECT ISBN, Titel, Published_Date 
 FROM books
 WHERE PublishersID= (SELECT ID FROM Publishers 
 WHERE Name = 'B & W Publishing');
@@ -121,7 +121,7 @@ INSERT INTO authors_genres
 	
 -- 4.6
 INSERT INTO books
-  (isbn, Title, Published_Date, AmountInStock, AutorID, PublishersID, GenresID)
+  (isbn, Titel, Published_Date, AmountInStock, AuthorsID, PublishersID, GenresID)
   VALUES 
   ('ISBN-00001', 'Wheel of time, Band 1', '1990-11-28', 100, 
      (SELECT id FROM authors WHERE firstname='Robert' AND lastname='Jordan'),
@@ -164,8 +164,8 @@ INSERT INTO lends
 --        TelefonNr='5-555-555-5555' WHERE Name='Sleepytown Press' 
 
 -- 5.2
--- SELECT * FROM books WHERE Title LIKE ' %';
--- UPDATE books SET Title= TRIM(Title) WHERE Title LIKE ' %';
+-- SELECT * FROM books WHERE Titel LIKE ' %';
+-- UPDATE books SET Titel= TRIM(Titel) WHERE Titel LIKE ' %';
 
 -- 5.3
 -- SELECT * FROM authors WHERE lastname='Murphy' AND firstname='Abdul';
@@ -180,7 +180,7 @@ UPDATE authors SET adresse='Kensington Street, 876',
 /*
 update books 
    SET GenresID=(SELECT id FROM genres WHERE Genre='Science fiction') 
-	WHERE Title='Nineteen Eighty Four';
+	WHERE Titel='Nineteen Eighty Four';
 */
 
 -- 5.5

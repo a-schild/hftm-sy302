@@ -809,8 +809,8 @@ Aujourd'hui a lieu la remise du design de la BD pour votre projet web.
 **Liste de contrôle:**
 
 - [ ] Diagramme ER avec 4-5 entités
-- [ ] Au moins 2x relations 1:N
-- [ ] Au moins 1x relation N:M
+- [ ] Au moins 5x relations 1:N
+- [ ] Au moins 2x relations N:M
 - [ ] Normalisation (3e forme normale)
 - [ ] Types de données définis
 - [ ] Primary Keys et Foreign Keys documentées

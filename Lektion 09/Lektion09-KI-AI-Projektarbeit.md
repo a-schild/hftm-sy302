@@ -809,8 +809,8 @@ Heute ist die Abgabe des DB-Designs für euer Webprojekt.
 **Checkliste:**
 
 - [ ] ER-Diagramm mit 4-5 Entitäten
-- [ ] Mindestens 2x 1:N Beziehungen
-- [ ] Mindestens 1x N:M Beziehung
+- [ ] Mindestens 5x 1:N Beziehungen
+- [ ] Mindestens 2x N:M Beziehungen
 - [ ] Normalisierung (3. Normalform)
 - [ ] Datentypen definiert
 - [ ] Primary Keys und Foreign Keys dokumentiert

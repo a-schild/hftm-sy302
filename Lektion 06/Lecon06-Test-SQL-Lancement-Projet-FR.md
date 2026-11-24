@@ -263,8 +263,8 @@ Après la révision, nous commençons le projet principal du cours!
 #### 1. Conception de base de données (15 points)
 
 - Diagramme ER avec 4-5 entités
-- Au moins 2× relations 1:N
-- Au moins 1× relation N:M
+- Au moins 5× relations 1:N
+- Au moins 2× relations N:M
 - Normalisation jusqu'à la 3ème forme normale
 - Script SQL pour la création des tables
 - Données de test
@@ -371,8 +371,8 @@ Vous pouvez également choisir votre propre thème, tant qu'il remplit les exige
 
 **Checklist thème personnel:**
 - [ ] 4-5 entités possibles?
-- [ ] Au moins 2× relations 1:N?
-- [ ] Au moins 1× relation N:M?
+- [ ] Au moins 5× relations 1:N?
+- [ ] Au moins 2× relations N:M?
 - [ ] Opérations CRUD pertinentes?
 - [ ] Intéressant pour vous?
 - [ ] Réalisable en 6 semaines?

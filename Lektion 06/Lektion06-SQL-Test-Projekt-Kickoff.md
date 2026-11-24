@@ -263,8 +263,8 @@ Nach der Repetition starten wir mit dem Hauptprojekt des Kurses!
 #### 1. Datenbankdesign (15 Punkte)
 
 - ER-Diagramm mit 4-5 Entitäten
-- Mindestens 2x 1:N Beziehungen
-- Mindestens 1x N:M Beziehung
+- Mindestens 5x 1:N Beziehungen
+- Mindestens 2x N:M Beziehungen
 - Normalisierung bis 3. Normalform
 - SQL-Script für Tabellenerstellung
 - Testdaten
@@ -371,8 +371,8 @@ Du kannst auch ein eigenes Thema wählen, solange es die Anforderungen erfüllt:
 
 **Checkliste eigenes Thema:**
 - [ ] 4-5 Entitäten möglich?
-- [ ] Mind. 2x 1:N Beziehungen?
-- [ ] Mind. 1x N:M Beziehung?
+- [ ] Mind. 5x 1:N Beziehungen?
+- [ ] Mind. 2x N:M Beziehungen?
 - [ ] CRUD-Operationen sinnvoll?
 - [ ] Interessant für dich?
 - [ ] Umsetzbar in 6 Wochen?
